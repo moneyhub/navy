@@ -14,6 +14,10 @@ class Environment {
     console.log('Launching', services)
   }
 
+  destroy() {
+    console.log('Destroying environment')
+  }
+
 }
 
 export function getEnvironment(envName: string = DEFAULT_ENVIRONMENT_NAME): Environment {
