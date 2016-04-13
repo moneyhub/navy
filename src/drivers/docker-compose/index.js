@@ -63,7 +63,7 @@ export default function createDockerComposeDriver(environment: Environment): Dri
     async port(service: string, privatePort: number, index: ?number): Promise {
       if (index == null) index = 1
 
-      const output = await exec('port', [service, privatePort, '--index=' + index])
+      const output = await exec('port', ['--index=' + index, service, privatePort])
 
       const port = output.substring(output.lastIndexOf(':') + 1).trim()
 
