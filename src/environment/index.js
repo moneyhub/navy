@@ -8,6 +8,7 @@ import {getState, saveState} from './state'
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
 import type {State} from './state'
+import type {ServiceList} from '../service'
 
 export type {State}
 
@@ -107,6 +108,22 @@ export class Environment {
 
   async destroy(): Promise<void> {
     await (await this.safeGetDriver()).destroy()
+  }
+
+  async ps(): Promise<ServiceList> {
+    return await (await this.safeGetDriver()).ps()
+  }
+
+  async start(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).start(services)
+  }
+
+  async stop(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).stop(services)
+  }
+
+  async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
+    return await (await this.safeGetDriver()).port(service, privatePort, index)
   }
 
 }

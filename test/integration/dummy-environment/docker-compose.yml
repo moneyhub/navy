@@ -1,5 +1,5 @@
 version: '2'
 
 services:
-  whalesay:
-    image: docker/whalesay
+  helloworld:
+    image: dockercloud/hello-world

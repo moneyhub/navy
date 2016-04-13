@@ -7,7 +7,7 @@
     "navy": "./bin/navy.js"
   },
   "options": {
-    "cucumber": "--strict --fail-fast -r ./preload.js -r ./environment.js -r ./hooks.js -r ./features -r ./steps ./features"
+    "cucumber": "--strict --fail-fast -r ./preload.js -r ./environment.js -r ./hooks.js -r ./chai.js -r ./features -r ./steps ./features"
   },
   "scripts": {
     "build": "rm -rf lib && babel src -d lib",
@@ -40,6 +40,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.7.2",
     "chai": "^3.5.0",
+    "chai-properties": "^1.2.1",
     "cucumber": "^0.10.2",
     "eslint": "^2.7.0",
     "eslint-config-standard": "^5.1.0",
@@ -52,6 +53,7 @@
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.4",
     "debug": "^2.2.0",
+    "lodash": "^4.10.0",
     "mkdirp": "^0.5.1"
   }
 }
