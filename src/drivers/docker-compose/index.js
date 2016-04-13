@@ -66,6 +66,26 @@ export default function createDockerComposeDriver(environment: Environment): Dri
       await exec('stop', services)
     },
 
+    async restart(services: ?Array<string>): Promise<void> {
+      await exec('restart', services)
+    },
+
+    async kill(services: ?Array<string>): Promise<void> {
+      await exec('kill', services)
+    },
+
+    async rm(services: ?Array<string>): Promise<void> {
+      if (!services) {
+        services = []
+      }
+
+      await exec('rm', ['-f', '-v', ...services])
+    },
+
+    async pull(services: ?Array<string>): Promise<void> {
+      await exec('pull', services)
+    },
+
     async port(service: string, privatePort: number, index: ?number): Promise {
       if (index == null) index = 1
 

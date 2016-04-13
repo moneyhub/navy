@@ -82,6 +82,30 @@ program
   .action(basicCliWrapper('stop'))
 
 program
+  .command('restart [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Restarts the given services')
+  .action(basicCliWrapper('restart'))
+
+program
+  .command('kill [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Kills the given services')
+  .action(basicCliWrapper('kill'))
+
+program
+  .command('rm [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Removes the given services')
+  .action(basicCliWrapper('rm'))
+
+program
+  .command('pull [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Pulls the given services\' images')
+  .action(basicCliWrapper('pull'))
+
+program
   .command('port <service> <port>')
   .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
   .description('Prints the external port for the given internal port of the given service')

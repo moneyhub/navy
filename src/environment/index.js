@@ -122,6 +122,22 @@ export class Environment {
     await (await this.safeGetDriver()).stop(services)
   }
 
+  async restart(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).restart(services)
+  }
+
+  async kill(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).kill(services)
+  }
+
+  async rm(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).rm(services)
+  }
+
+  async pull(services: ?Array<string>): Promise<void> {
+    await (await this.safeGetDriver()).pull(services)
+  }
+
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
     return await (await this.safeGetDriver()).port(service, privatePort, index)
   }
