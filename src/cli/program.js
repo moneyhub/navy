@@ -54,6 +54,29 @@ program
   .action(basicCliWrapper('ps'))
 
 program
+  .command('start [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Starts the given services')
+  .action(basicCliWrapper('start'))
+
+program
+  .command('stop [services...]')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Stops the given services')
+  .action(basicCliWrapper('stop'))
+
+program
+  .command('port <service> <port>')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .description('Prints the external port for the given internal port of the given service')
+  .action(basicCliWrapper('port'))
+  .on('--help', () => console.log(`
+  Examples:
+    $ navy port mywebserver 80
+    35821
+  `))
+
+program
   .command('help')
   .alias('*')
   .action(() => program.help())
