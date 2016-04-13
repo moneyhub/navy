@@ -52,6 +52,7 @@
   "dependencies": {
     "babel-runtime": "^6.6.1",
     "bluebird": "^3.3.4",
+    "commander": "^2.9.0",
     "debug": "^2.2.0",
     "lodash": "^4.10.0",
     "mkdirp": "^0.5.1"

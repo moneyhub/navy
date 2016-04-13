@@ -1,7 +1,16 @@
+/* @flow */
+
+import pkg from '../../package.json'
+import program from './program'
+
 const debug = require('debug')('navy:cli')
 
-debug('Start CLI')
+program.version(pkg.version)
 
-// TODO CLI
+program.parse(process.argv)
 
-debug('Exiting CLI')
+debug('Invoked CLI action')
+
+if (program.args.length === 0) {
+  program.help()
+}

@@ -32,7 +32,11 @@ export default function createDockerComposeDriver(environment: Environment): Dri
         additionalArgs.push(...getArgsFromOptions(opts, launchArgMap))
       }
 
-      await exec('up', ['-d', ...additionalArgs])
+      if (!services) {
+        services = []
+      }
+
+      await exec('up', ['-d', ...additionalArgs, ...services])
     },
 
     async destroy(): Promise<void> {

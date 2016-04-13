@@ -42,6 +42,8 @@ export async function saveState(normalisedEnvName: string, state: State): Promis
   const statePath = pathToState(normalisedEnvName)
   await mkdirp(path.dirname(statePath))
 
+  debug('Writing state for env ' + normalisedEnvName, statePath, state)
+
   await fsAsync.writeFileAsync(statePath, JSON.stringify(state, null, 2))
 }
 

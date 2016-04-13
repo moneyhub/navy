@@ -5,8 +5,6 @@ import {execAsync} from '../../util/exec-async'
 
 import type {ConfigProvider} from '../../config-provider'
 
-const debug = require('debug')('navy:docker-compose:exec')
-
 export type ComposeClient = {
   exec(command: string, args: any): Promise,
 }
@@ -25,8 +23,6 @@ export function createComposeClient(environment: Environment): ComposeClient {
         command,
         ...args,
       ]
-
-      debug('Executing ' + composeArgs.join(' '), args)
 
       return await execAsync('docker-compose', composeArgs)
     },

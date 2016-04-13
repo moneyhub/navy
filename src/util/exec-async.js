@@ -6,7 +6,11 @@ const debug = require('debug')('navy:exec')
 
 export function execAsync(command: string, args: Array<string> = []): Promise<string> {
   return new Promise((resolve, reject) => {
-    const childProcess = exec(command + ' ' + args.join(' '), (err, stdout, stderr) => {
+    const cmd = command + ' ' + args.join(' ')
+
+    debug('Executing ' + cmd)
+
+    const childProcess = exec(cmd, (err, stdout, stderr) => {
       if (err) {
         reject(err)
       } else {
