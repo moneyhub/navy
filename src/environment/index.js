@@ -3,7 +3,7 @@
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseEnvironmentName} from './util'
-import {getState} from './state'
+import {getState, saveState} from './state'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -27,7 +27,7 @@ export class Environment {
 
   async getState(): Promise<?State> {
     if (!this._cachedState) {
-      this._cachedState = await getState(this.name)
+      this._cachedState = await getState(this.normalisedName)
     }
 
     return this._cachedState
@@ -83,12 +83,30 @@ export class Environment {
     return createConfigProvider(this)
   }
 
-  async launch(services: Array<string>): Promise<void> {
-    console.log('Launching', services)
+  async isInitialised(): Promise<boolean> {
+    return await this.getState() != null
+  }
+
+  async initialise(
+    configProviderName: string = 'cwd',
+    configProviderOptions: ?Object = null,
+    driverName: string = 'docker-compose',
+  ): Promise<void> {
+    await saveState(this.normalisedName, {
+      driver: driverName,
+      configProvider: {
+        name: configProviderName,
+        opts: configProviderOptions,
+      },
+    })
+  }
+
+  async launch(services: Array<string>, opts: ?Object): Promise<void> {
+    await (await this.safeGetDriver()).launch(services, opts)
   }
 
   async destroy(): Promise<void> {
-    (await this.safeGetDriver()).destroy()
+    await (await this.safeGetDriver()).destroy()
   }
 
 }

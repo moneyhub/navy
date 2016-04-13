@@ -1,9 +1,9 @@
 export default function () {
   this.setDefaultTimeout(5 * 60 * 1000)
 
-  this.After(function () {
+  this.After(async function () {
     if (this.env) {
-      this.env.destroy()
+      await this.env.destroy()
     }
   })
 }

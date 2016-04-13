@@ -21,8 +21,14 @@ export default function createDockerComposeDriver(environment: Environment): Dri
   } = createComposeClient(environment)
 
   return {
-    async launch(services: Array<string>, opts: Object): Promise<void> {
-      await exec('up', ['-d', ...getArgsFromOptions(opts, launchArgMap)])
+    async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {
+      const additionalArgs = []
+
+      if (opts) {
+        additionalArgs.push(...getArgsFromOptions(opts, launchArgMap))
+      }
+
+      await exec('up', ['-d', ...additionalArgs])
     },
 
     async destroy(): Promise<void> {
