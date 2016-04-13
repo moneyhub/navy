@@ -1,24 +1,36 @@
 /* @flow */
 
 import {resolveDriverFromName} from '../driver'
+import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseEnvironmentName} from './util'
 import {getState} from './state'
 
 import type {Driver, CreateDriver} from '../driver'
-import type {StateType} from './state'
+import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
+import type {State} from './state'
 
-const debug = require('debug')('navy:environment')
+export type {State}
 
 const DEFAULT_ENVIRONMENT_NAME: string = 'dev'
 
-class Environment {
+export class Environment {
 
-  envName: string;
-  normalisedEnvName: string;
+  name: string;
+  normalisedName: string;
 
-  constructor(envName: string) {
-    this.envName = envName
-    this.normalisedEnvName = normaliseEnvironmentName(envName)
+  _cachedState: ?State;
+
+  constructor(name: string) {
+    this.name = name
+    this.normalisedName = normaliseEnvironmentName(name)
+  }
+
+  async getState(): Promise<?State> {
+    if (!this._cachedState) {
+      this._cachedState = await getState(this.name)
+    }
+
+    return this._cachedState
   }
 
   /**
@@ -26,11 +38,9 @@ class Environment {
    * Returns null if the environment hasn't been launched yet.
    */
   async getDriver(): Promise<?Driver> {
-    const envState: ?StateType = await getState(this.envName)
+    const envState: ?State = await this.getState()
 
-    debug('Got state', envState)
-
-    if (!envState) {
+    if (!envState || !envState.driver) {
       return null
     }
 
@@ -40,7 +50,7 @@ class Environment {
       return null
     }
 
-    return createDriver(this.envName)
+    return createDriver(this)
   }
 
   /**
@@ -56,11 +66,28 @@ class Environment {
     return driver
   }
 
-  async launch(services: Array<string>) {
+  async getConfigProvider(): Promise<?ConfigProvider> {
+    const envState: ?State = await this.getState()
+
+    if (!envState || !envState.configProvider || !envState.configProvider.name) {
+      return null
+    }
+
+    const createConfigProvider: ?CreateConfigProvider =
+      resolveConfigProviderFromName(envState.configProvider.name)
+
+    if (!createConfigProvider) {
+      return null
+    }
+
+    return createConfigProvider(this)
+  }
+
+  async launch(services: Array<string>): Promise<void> {
     console.log('Launching', services)
   }
 
-  async destroy() {
+  async destroy(): Promise<void> {
     (await this.safeGetDriver()).destroy()
   }
 

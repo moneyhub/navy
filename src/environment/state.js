@@ -23,7 +23,7 @@ export function pathToState(normalisedEnvName: string): string {
   return path.join(home, '.navy', 'environments', normalisedEnvName, 'state.json')
 }
 
-export async function getState(normalisedEnvName: string): Promise<?StateType> {
+export async function getState(normalisedEnvName: string): Promise<?State> {
   try {
     const pathForEnv = pathToState(normalisedEnvName)
     const file = (await fsAsync.readFileAsync(pathForEnv)).toString()
@@ -36,6 +36,10 @@ export async function getState(normalisedEnvName: string): Promise<?StateType> {
   }
 }
 
-export type StateType = {
-  driver: string,
+export type State = {
+  driver: ?string,
+  configProvider: ?{
+    name: ?string,
+    opts: ?Object,
+  },
 }
