@@ -65,8 +65,9 @@ program
 program
   .command('ps')
   .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('--json', 'output JSON instead of a table')
   .description('Lists the running services for an environment')
-  .action(basicCliWrapper('ps'))
+  .action(lazyRequire('./ps'))
 
 program
   .command('start [services...]')

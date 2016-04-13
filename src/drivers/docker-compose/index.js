@@ -50,7 +50,9 @@ export default function createDockerComposeDriver(environment: Environment): Dri
       const inspectResult = JSON.parse(inspectRaw)
 
       return inspectResult.map(service => ({
+        id: service.Id,
         name: service.Config.Labels['com.docker.compose.service'],
+        image: service.Config.Image,
         status: service.State.Running === true ? ServiceStatus.RUNNING : ServiceStatus.EXITED,
         raw: service,
       }))

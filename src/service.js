@@ -6,7 +6,9 @@ export const Status = {
 }
 
 export type Service = {
+  id: string,
   name: string,
+  image: string,
   status: string,
   raw: ?Object,
 }
