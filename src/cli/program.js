@@ -48,6 +48,21 @@ program
   `))
 
 program
+  .command('destroy')
+  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-f, --force', 'don\'t prompt before removing the environment')
+  .description('Destroys an environment and all related data and services')
+  .action(basicCliWrapper('destroy'))
+  .on('--help', () => console.log(`
+  This will destroy an entire environment and all of its data and services.
+
+  Examples:
+    $ navy destroy # destroy "dev" environment
+    $ navy destroy -e dev # destroy "dev" environment
+    $ navy destroy -e test # destroy "test" environment
+  `))
+
+program
   .command('ps')
   .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
   .description('Lists the running services for an environment')
