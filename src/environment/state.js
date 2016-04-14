@@ -14,6 +14,7 @@ type PromisifiedFS = {
 
 const fsAsync: PromisifiedFS = bluebird.promisifyAll(fs)
 const mkdirp = bluebird.promisify(require('mkdirp'))
+const rimraf = bluebird.promisify(require('rimraf'))
 
 export function pathToState(normalisedEnvName: string): string {
   const home = process.env.HOME
@@ -45,6 +46,12 @@ export async function saveState(normalisedEnvName: string, state: State): Promis
   debug('Writing state for env ' + normalisedEnvName, statePath, state)
 
   await fsAsync.writeFileAsync(statePath, JSON.stringify(state, null, 2))
+}
+
+export async function deleteState(normalisedEnvName: string): Promise<void> {
+  debug('Deleting state for env ' + normalisedEnvName)
+
+  await rimraf(path.dirname(pathToState(normalisedEnvName)))
 }
 
 export type State = {

@@ -3,7 +3,7 @@
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseEnvironmentName} from './util'
-import {getState, saveState} from './state'
+import {getState, saveState, deleteState} from './state'
 import {EnvironmentNotInitialisedError, NavyError} from '../errors'
 
 import type {Driver, CreateDriver} from '../driver'
@@ -107,12 +107,24 @@ export class Environment {
     })
   }
 
+  async delete(): Promise<void> {
+    await deleteState(this.normalisedName)
+  }
+
   async launch(services: Array<string>, opts: ?Object): Promise<void> {
     await (await this.safeGetDriver()).launch(services, opts)
   }
 
   async destroy(): Promise<void> {
-    await (await this.safeGetDriver()).destroy()
+    if (!await this.isInitialised()) {
+      throw new EnvironmentNotInitialisedError()
+    }
+
+    try {
+      await (await this.safeGetDriver()).destroy()
+    } catch (ex) {}
+
+    await this.delete()
   }
 
   async ps(): Promise<ServiceList> {
