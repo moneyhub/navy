@@ -1,18 +1,11 @@
 /* @flow */
 
-import fs from 'fs'
 import path from 'path'
 import bluebird from 'bluebird'
 
 const debug = require('debug')('navy:state')
 
-type PromisifiedFS = {
-  statAsync(path: any): Promise;
-  readFileAsync(path: any): Promise;
-  writeFileAsync(path: any, contents: string): Promise;
-}
-
-const fsAsync: PromisifiedFS = bluebird.promisifyAll(fs)
+const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 const rimraf = bluebird.promisify(require('rimraf'))
 
@@ -29,7 +22,7 @@ export function pathToState(normalisedEnvName: string): string {
 export async function getState(normalisedEnvName: string): Promise<?State> {
   try {
     const statePath = pathToState(normalisedEnvName)
-    const file = (await fsAsync.readFileAsync(statePath)).toString()
+    const file = (await fs.readFileAsync(statePath)).toString()
 
     debug('Got raw state for env ' + normalisedEnvName, statePath, file)
 
@@ -45,7 +38,7 @@ export async function saveState(normalisedEnvName: string, state: State): Promis
 
   debug('Writing state for env ' + normalisedEnvName, statePath, state)
 
-  await fsAsync.writeFileAsync(statePath, JSON.stringify(state, null, 2))
+  await fs.writeFileAsync(statePath, JSON.stringify(state, null, 2))
 }
 
 export async function deleteState(normalisedEnvName: string): Promise<void> {

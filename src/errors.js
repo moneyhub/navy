@@ -1,7 +1,11 @@
+/* @flow */
+
 import chalk from 'chalk'
 
 export class NavyError {
-  constructor(message) {
+  message: string;
+
+  constructor(message: string) {
     this.message = message
   }
 
@@ -15,8 +19,8 @@ export class NavyError {
 }
 
 export class EnvironmentNotInitialisedError extends NavyError {
-  constructor() {
-    super('Environment not initialised')
+  constructor(environmentName: string) {
+    super('Environment "' + environmentName + '" not initialised')
   }
 
   prettyPrint() {

@@ -1,5 +1,8 @@
 import program from 'commander'
 import {NavyError} from '../errors'
+import {getConfig} from '../config'
+
+const DEFAULT_ENVIRONMENT_NAME = 'dev'
 
 function wrapper(res) {
   if (res.catch) {
@@ -42,9 +45,11 @@ function lazyRequire(path) {
   }
 }
 
+const defaultNavy = getConfig().defaultNavy || DEFAULT_ENVIRONMENT_NAME
+
 program
   .command('launch [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Launches the given services in an environment')
   .action(lazyRequire('./launch'))
   .on('--help', () => console.log(`
@@ -54,7 +59,7 @@ program
 
 program
   .command('destroy')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .option('-f, --force', 'don\'t prompt before removing the environment')
   .description('Destroys an environment and all related data and services')
   .action(basicCliWrapper('destroy'))
@@ -62,57 +67,57 @@ program
   This will destroy an entire environment and all of its data and services.
 
   Examples:
-    $ navy destroy # destroy "dev" environment
+    $ navy destroy # destroy "${defaultNavy}" environment
     $ navy destroy -e dev # destroy "dev" environment
     $ navy destroy -e test # destroy "test" environment
   `))
 
 program
   .command('ps')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .option('--json', 'output JSON instead of a table')
   .description('Lists the running services for an environment')
   .action(lazyRequire('./ps'))
 
 program
   .command('start [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Starts the given services')
   .action(basicCliWrapper('start'))
 
 program
   .command('stop [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Stops the given services')
   .action(basicCliWrapper('stop'))
 
 program
   .command('restart [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Restarts the given services')
   .action(basicCliWrapper('restart'))
 
 program
   .command('kill [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Kills the given services')
   .action(basicCliWrapper('kill'))
 
 program
   .command('rm [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Removes the given services')
   .action(basicCliWrapper('rm'))
 
 program
   .command('pull [services...]')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Pulls the given services\' images from their respective registries')
   .action(basicCliWrapper('pull'))
 
 program
   .command('port <service> <port>')
-  .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
+  .option('-e, --environment [env]', `set the environment name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external port for the given internal port of the given service')
   .action(basicCliWrapper('port'))
   .on('--help', () => console.log(`
@@ -120,6 +125,11 @@ program
     $ navy port mywebserver 80
     35821
   `))
+
+program
+  .command('set-default <navy>')
+  .description('Set the default navy')
+  .action(lazyRequire('./set-default'))
 
 program
   .command('help')

@@ -13,8 +13,6 @@ import type {ServiceList} from '../service'
 
 export type {State}
 
-const DEFAULT_ENVIRONMENT_NAME: string = 'dev'
-
 export class Environment {
 
   name: string;
@@ -62,7 +60,7 @@ export class Environment {
     const driver: ?Driver = await this.getDriver()
 
     if (!await this.isInitialised()) {
-      throw new EnvironmentNotInitialisedError()
+      throw new EnvironmentNotInitialisedError(this.name)
     }
 
     if (!driver) {
@@ -117,7 +115,7 @@ export class Environment {
 
   async destroy(): Promise<void> {
     if (!await this.isInitialised()) {
-      throw new EnvironmentNotInitialisedError()
+      throw new EnvironmentNotInitialisedError(this.name)
     }
 
     try {
@@ -161,6 +159,10 @@ export class Environment {
 
 }
 
-export function getEnvironment(envName: string = DEFAULT_ENVIRONMENT_NAME): Environment {
+export function getEnvironment(envName: ?string): Environment {
+  if (!envName) {
+    throw new Error('No environment provided')
+  }
+
   return new Environment(envName)
 }
