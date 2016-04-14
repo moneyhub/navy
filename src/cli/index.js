@@ -13,6 +13,8 @@ try {
 } catch (ex) {
   if (ex instanceof NavyError) {
     ex.prettyPrint()
+  } else {
+    throw ex
   }
 }
 

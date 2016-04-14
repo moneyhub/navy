@@ -5,15 +5,16 @@ import chalk from 'chalk'
 import {getLaunchedNavies, Environment} from '../../'
 import {getConfig} from '../config'
 
-export async function printPS(env: Environment, json: boolean): any {
+export async function printPS(env: Environment, json: boolean): Promise<boolean> {
   const ps = await env.ps()
 
   if (json) {
-    return console.log(JSON.stringify(ps, null, 2))
+    console.log(JSON.stringify(ps, null, 2))
+    return true
   }
 
   if (ps.length === 0) {
-    return console.log(chalk.dim('There are no running services'))
+    return false
   }
 
   const defaultStatus = getConfig().defaultNavy === env.name
@@ -34,6 +35,8 @@ export async function printPS(env: Environment, json: boolean): any {
     service.image,
     service.status,
   ]))
+
+  return true
 }
 
 export default async function (opts: Object): Promise<void> {

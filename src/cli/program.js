@@ -41,7 +41,8 @@ function basicCliWrapper(fnName) {
 
 function lazyRequire(path) {
   return function (...args) {
-    return wrapper(require(path).default(...args))
+    const mod = require(path)
+    return wrapper((mod.default || mod)(...args))
   }
 }
 
