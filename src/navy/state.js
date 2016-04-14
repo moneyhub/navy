@@ -19,12 +19,12 @@ export function pathToNavy(): string {
   return path.join(home, '.navy')
 }
 
-export function pathToEnvironments(): string {
-  return path.join(pathToNavy(), 'environments')
+export function pathToNavys(): string {
+  return path.join(pathToNavy(), 'navies')
 }
 
 export function pathToState(normalisedEnvName: string): string {
-  return path.join(pathToEnvironments(), normalisedEnvName, 'state.json')
+  return path.join(pathToNavys(), normalisedEnvName, 'state.json')
 }
 
 export async function getState(normalisedEnvName: string): Promise<?State> {

@@ -1,18 +1,18 @@
 /* @flow */
 
 import path from 'path'
-import {Environment} from '../../environment'
+import {Navy} from '../../navy'
 
 import type {ConfigProvider} from '../../config-provider'
-import type {State} from '../../environment'
+import type {State} from '../../navy'
 
-export default function createCwdConfigProvider(environment: Environment): ConfigProvider {
+export default function createCwdConfigProvider(navy: Navy): ConfigProvider {
   return {
     async getDockerComposePath(): Promise {
-      const envState: ?State = await environment.getState()
+      const envState: ?State = await navy.getState()
 
       if (!envState) {
-        throw new Error('State doesn\'t exist for environment')
+        throw new Error('State doesn\'t exist for navy')
       }
 
       if (!envState.configProvider) {

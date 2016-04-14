@@ -18,15 +18,15 @@ export class NavyError {
   }
 }
 
-export class EnvironmentNotInitialisedError extends NavyError {
-  constructor(environmentName: string) {
-    super('Environment "' + environmentName + '" not initialised')
+export class NavyNotInitialisedError extends NavyError {
+  constructor(navyName: string) {
+    super('Navy "' + navyName + '" not initialised')
   }
 
   prettyPrint() {
     super.prettyPrint()
 
-    console.log(' Make sure you\'ve launched the environment with ' + chalk.bold('navy launch'))
+    console.log(' Make sure you\'ve launched the navy with ' + chalk.bold('navy launch'))
     console.log()
   }
 }

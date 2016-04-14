@@ -2,7 +2,7 @@
 
 import type {Driver} from '../../driver'
 import {createComposeClient} from './client'
-import {Environment} from '../../environment'
+import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
 
@@ -19,10 +19,10 @@ const launchArgMap = {
   forceRecreate: '--force-recreate',
 }
 
-export default function createDockerComposeDriver(environment: Environment): Driver {
+export default function createDockerComposeDriver(navy: Navy): Driver {
   const {
     exec,
-  } = createComposeClient(environment)
+  } = createComposeClient(navy)
 
   return {
     async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {

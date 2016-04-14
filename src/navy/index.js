@@ -3,9 +3,9 @@
 import bluebird from 'bluebird'
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
-import {normaliseEnvironmentName} from './util'
-import {getState, saveState, deleteState, pathToEnvironments} from './state'
-import {EnvironmentNotInitialisedError, NavyError} from '../errors'
+import {normaliseNavyName} from './util'
+import {getState, saveState, deleteState, pathToNavys} from './state'
+import {NavyNotInitialisedError, NavyError} from '../errors'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -16,7 +16,7 @@ const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 
-export class Environment {
+export class Navy {
 
   name: string;
   normalisedName: string;
@@ -25,7 +25,7 @@ export class Environment {
 
   constructor(name: string) {
     this.name = name
-    this.normalisedName = normaliseEnvironmentName(name)
+    this.normalisedName = normaliseNavyName(name)
   }
 
   async getState(): Promise<?State> {
@@ -37,8 +37,8 @@ export class Environment {
   }
 
   /**
-   * Returns an instance of the driver in use by this environment.
-   * Returns null if the environment hasn't been launched yet.
+   * Returns an instance of the driver in use by this navy.
+   * Returns null if the navy hasn't been launched yet.
    */
   async getDriver(): Promise<?Driver> {
     const envState: ?State = await this.getState()
@@ -63,11 +63,11 @@ export class Environment {
     const driver: ?Driver = await this.getDriver()
 
     if (!await this.isInitialised()) {
-      throw new EnvironmentNotInitialisedError(this.name)
+      throw new NavyNotInitialisedError(this.name)
     }
 
     if (!driver) {
-      throw new NavyError('Could not determine driver for the environment')
+      throw new NavyError('Could not determine driver for the navy')
     }
 
     return driver
@@ -118,7 +118,7 @@ export class Environment {
 
   async destroy(): Promise<void> {
     if (!await this.isInitialised()) {
-      throw new EnvironmentNotInitialisedError(this.name)
+      throw new NavyNotInitialisedError(this.name)
     }
 
     try {
@@ -162,15 +162,19 @@ export class Environment {
 
 }
 
-export function getEnvironment(envName: ?string): Environment {
+export function getNavy(envName: ?string): Navy {
   if (!envName) {
-    throw new Error('No environment provided')
+    throw new Error('No navy provided')
   }
 
-  return new Environment(envName)
+  return new Navy(envName)
 }
 
-export async function getLaunchedNavies(): Promise<Array<Environment>> {
-  const navyNames = await fs.readdirAsync(pathToEnvironments())
-  return navyNames.map(name => getEnvironment(name))
+export async function getLaunchedNavies(): Promise<Array<Navy>> {
+  try {
+    const navyNames = await fs.readdirAsync(pathToNavys())
+    return navyNames.map(name => getNavy(name))
+  } catch (ex) {
+    return []
+  }
 }

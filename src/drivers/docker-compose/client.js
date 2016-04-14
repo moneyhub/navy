@@ -1,6 +1,6 @@
 /* @flow */
 
-import {Environment} from '../../environment'
+import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 
 import type {ConfigProvider} from '../../config-provider'
@@ -9,17 +9,18 @@ export type ComposeClient = {
   exec(command: string, args: any): Promise,
 }
 
-export function createComposeClient(environment: Environment): ComposeClient {
+export function createComposeClient(navy: Navy): ComposeClient {
   return {
     async exec(command: string, args: Array<string> = []): Promise<string> {
-      const configProvider: ?ConfigProvider = await environment.getConfigProvider()
+      const configProvider: ?ConfigProvider = await navy.getConfigProvider()
 
       if (!configProvider) {
-        throw new Error('No config provider available for environment')
+        throw new Error('No config provider available for navy')
       }
 
       const composeArgs = [
         '-f', await configProvider.getDockerComposePath(),
+        '-p', 'navy' + navy.normalisedName,
         command,
         ...args,
       ]

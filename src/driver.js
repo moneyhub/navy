@@ -1,7 +1,7 @@
 /* @flow */
 
 import DockerCompose from './drivers/docker-compose'
-import {Environment} from './environment'
+import {Navy} from './navy'
 
 import type {ServiceList} from './service'
 
@@ -18,7 +18,7 @@ export type Driver = {
   port(service: string, privatePort: number, index: ?number): Promise<number>;
 }
 
-export type CreateDriver = (environment: Environment) => Driver
+export type CreateDriver = (navy: Navy) => Driver
 
 export function resolveDriverFromName(driverName: string): ?CreateDriver {
   switch (driverName) {

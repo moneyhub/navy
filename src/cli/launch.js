@@ -1,9 +1,9 @@
 /* @flow */
 
-import {getEnvironment} from '../../'
+import {getNavy} from '../../'
 
 export default async function (services: Array<string>, opts: Object): Promise<void> {
-  const env = getEnvironment(opts.environment)
+  const env = getNavy(opts.navy)
 
   if (!await env.isInitialised()) {
     await env.initialise('cwd', { path: process.cwd() })
