@@ -1,39 +1,8 @@
 /* @flow */
 
-import zygon from 'zygon'
-import chalk from 'chalk'
+import {printPS} from './status'
 import {getEnvironment} from '../../'
-import {getConfig} from '../config'
 
 export default async function (opts: Object): Promise<void> {
-  const env = getEnvironment(opts.environment)
-
-  const ps = await env.ps()
-
-  if (opts.json) {
-    return console.log(JSON.stringify(ps, null, 2))
-  }
-
-  if (ps.length === 0) {
-    return console.log(chalk.dim('There are no running services'))
-  }
-
-  const defaultStatus = getConfig().defaultNavy === opts.environment
-    ? chalk.blue(' (default navy)')
-    : ''
-
-  console.log()
-  console.log('  ' + chalk.underline(opts.environment) + defaultStatus)
-
-  zygon([
-    { name: 'ID' },
-    { name: 'Name' },
-    { name: 'Image' },
-    { name: 'Status' },
-  ], ps.map(service => [
-    service.id,
-    service.name,
-    service.image,
-    service.status,
-  ]))
+  await printPS(getEnvironment(opts.environment), opts.json)
 }

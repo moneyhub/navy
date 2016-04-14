@@ -1,15 +1,18 @@
 /* @flow */
 
+import bluebird from 'bluebird'
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseEnvironmentName} from './util'
-import {getState, saveState, deleteState} from './state'
+import {getState, saveState, deleteState, pathToEnvironments} from './state'
 import {EnvironmentNotInitialisedError, NavyError} from '../errors'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
 import type {State} from './state'
 import type {ServiceList} from '../service'
+
+const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 
@@ -165,4 +168,9 @@ export function getEnvironment(envName: ?string): Environment {
   }
 
   return new Environment(envName)
+}
+
+export async function getLaunchedNavies(): Promise<Array<Environment>> {
+  const navyNames = await fs.readdirAsync(pathToEnvironments())
+  return navyNames.map(name => getEnvironment(name))
 }

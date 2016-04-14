@@ -1,4 +1,4 @@
 /* @flow */
 
-export {getEnvironment} from './environment'
+export {getEnvironment, getLaunchedNavies} from './environment'
 export * as Service from './service'

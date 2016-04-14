@@ -41,7 +41,7 @@ function basicCliWrapper(fnName) {
 
 function lazyRequire(path) {
   return function (...args) {
-    return wrapper(require(path)(...args))
+    return wrapper(require(path).default(...args))
   }
 }
 
@@ -125,6 +125,12 @@ program
     $ navy port mywebserver 80
     35821
   `))
+
+program
+  .command('status')
+  .option('--json', 'output JSON instead of a table')
+  .description('List all of the running navies and the status of their services')
+  .action(lazyRequire('./status'))
 
 program
   .command('set-default <navy>')

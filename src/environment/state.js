@@ -9,14 +9,22 @@ const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 const rimraf = bluebird.promisify(require('rimraf'))
 
-export function pathToState(normalisedEnvName: string): string {
+export function pathToNavy(): string {
   const home = process.env.HOME
 
   if (!home) {
     throw new Error('Home directory not available')
   }
 
-  return path.join(home, '.navy', 'environments', normalisedEnvName, 'state.json')
+  return path.join(home, '.navy')
+}
+
+export function pathToEnvironments(): string {
+  return path.join(pathToNavy(), 'environments')
+}
+
+export function pathToState(normalisedEnvName: string): string {
+  return path.join(pathToEnvironments(), normalisedEnvName, 'state.json')
 }
 
 export async function getState(normalisedEnvName: string): Promise<?State> {
