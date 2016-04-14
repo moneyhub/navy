@@ -1,9 +1,14 @@
 import program from 'commander'
+import {NavyError} from '../errors'
 
 function wrapper(res) {
   if (res.catch) {
-    res.catch(err => {
-      console.error(err.stack)
+    res.catch(ex => {
+      if (ex instanceof NavyError) {
+        ex.prettyPrint()
+      } else {
+        console.error(ex.stack)
+      }
     })
   }
 
@@ -102,7 +107,7 @@ program
 program
   .command('pull [services...]')
   .option('-e, --environment [env]', 'set the environment name to be used [dev]', 'dev')
-  .description('Pulls the given services\' images')
+  .description('Pulls the given services\' images from their respective registries')
   .action(basicCliWrapper('pull'))
 
 program

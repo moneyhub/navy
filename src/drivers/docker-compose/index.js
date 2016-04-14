@@ -46,6 +46,9 @@ export default function createDockerComposeDriver(environment: Environment): Dri
 
     async ps(): Promise<ServiceList> {
       const ids = (await exec('ps', ['-q'])).trim().split('\n')
+
+      if (ids.length === 1 && ids[0] === '') return []
+
       const inspectRaw = await execAsync('docker', ['inspect', ...ids])
       const inspectResult = JSON.parse(inspectRaw)
 

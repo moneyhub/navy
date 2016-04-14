@@ -1,6 +1,7 @@
 /* @flow */
 
 import zygon from 'zygon'
+import chalk from 'chalk'
 import {getEnvironment} from '../../'
 
 export default async function (opts: Object): Promise<void> {
@@ -10,6 +11,10 @@ export default async function (opts: Object): Promise<void> {
 
   if (opts.json) {
     return console.log(JSON.stringify(ps, null, 2))
+  }
+
+  if (ps.length === 0) {
+    return console.log(chalk.dim('There are no running services'))
   }
 
   zygon([

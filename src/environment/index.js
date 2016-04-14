@@ -4,6 +4,7 @@ import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseEnvironmentName} from './util'
 import {getState, saveState} from './state'
+import {EnvironmentNotInitialisedError, NavyError} from '../errors'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -60,8 +61,12 @@ export class Environment {
   async safeGetDriver(): Promise<Driver> {
     const driver: ?Driver = await this.getDriver()
 
+    if (!await this.isInitialised()) {
+      throw new EnvironmentNotInitialisedError()
+    }
+
     if (!driver) {
-      throw new Error('Could not determine the driver for the environment')
+      throw new NavyError('Could not determine driver for the environment')
     }
 
     return driver
