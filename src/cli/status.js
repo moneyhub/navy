@@ -25,9 +25,9 @@ export async function printPS(env: Navy, json: boolean): Promise<boolean> {
   console.log('  ' + chalk.underline(env.name) + defaultStatus)
 
   zygon([
-    { name: 'ID' },
-    { name: 'Name' },
-    { name: 'Image' },
+    { name: 'ID', size: 13 },
+    { name: 'Name', size: 15 },
+    { name: 'Image', size: 25 },
     { name: 'Status' },
   ], ps.map(service => [
     service.id,
@@ -41,5 +41,11 @@ export async function printPS(env: Navy, json: boolean): Promise<boolean> {
 
 export default async function (opts: Object): Promise<void> {
   const navies = await getLaunchedNavies()
+
+  if (navies.length === 0) {
+    console.log(chalk.dim('There are no launched navies'))
+    return
+  }
+
   navies.forEach(navy => printPS(navy, opts.json))
 }
