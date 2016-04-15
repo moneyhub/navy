@@ -13,8 +13,8 @@ services:
 env:
   DOCKER_VERSION: 1.10.3-0~trusty
   DOCKER_COMPOSE_VERSION: 1.6.2
-  DEBUG: "*"
-  NAVY_DEBUG: "*"
+  DEBUG: "navy:*"
+  NAVY_DEBUG: "navy:*"
 
 before_install:
   # list docker-engine versions
