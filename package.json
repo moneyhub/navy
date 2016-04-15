@@ -13,8 +13,9 @@
     "build": "rm -rf lib && babel src -d lib",
     "watch": "rm -rf lib && babel src -wd lib",
     "integration": "cd test/integration && cucumberjs $npm_package_options_cucumber",
+    "lint": "eslint .",
     "flow": "flow",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./scripts/test.sh"
   },
   "repository": {
     "type": "git",
