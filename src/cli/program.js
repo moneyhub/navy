@@ -2,8 +2,6 @@ import program from 'commander'
 import {NavyError} from '../errors'
 import {getConfig} from '../config'
 
-const DEFAULT_ENVIRONMENT_NAME = 'dev'
-
 function wrapper(res) {
   if (res.catch) {
     res.catch(ex => {
@@ -46,7 +44,7 @@ function lazyRequire(path) {
   }
 }
 
-const defaultNavy = getConfig().defaultNavy || DEFAULT_ENVIRONMENT_NAME
+const defaultNavy = getConfig().defaultNavy
 
 program
   .command('launch [services...]')

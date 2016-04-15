@@ -3,6 +3,8 @@
 import path from 'path'
 import bluebird from 'bluebird'
 
+const DEFAULT_ENVIRONMENT_NAME = 'dev'
+
 const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 
@@ -34,7 +36,7 @@ export function getConfig(): Config {
     return _config
   } catch (ex) {
     return {
-      defaultNavy: null,
+      defaultNavy: DEFAULT_ENVIRONMENT_NAME,
     }
   }
 }
