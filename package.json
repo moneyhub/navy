@@ -1,6 +1,6 @@
 {
   "name": "navy",
-  "version": "0.0.0",
+  "version": "1.0.0-rc1",
   "description": "Docker based dev environments made easy",
   "main": "lib/index.js",
   "bin": {
