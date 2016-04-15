@@ -15,7 +15,8 @@
     "integration": "cd test/integration && cucumberjs $npm_package_options_cucumber",
     "lint": "eslint .",
     "flow": "flow",
-    "test": "./scripts/test.sh"
+    "test": "./scripts/test.sh",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
