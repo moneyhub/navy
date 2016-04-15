@@ -6,7 +6,10 @@ export default async function (services: Array<string>, opts: Object): Promise<v
   const env = getNavy(opts.navy)
 
   if (!await env.isInitialised()) {
-    await env.initialise('cwd', { path: process.cwd() })
+    await env.initialise({
+      configProvider: 'filesystem',
+      path: process.cwd(),
+    })
   }
 
   await env.launch(services)

@@ -76,12 +76,12 @@ export class Navy {
   async getConfigProvider(): Promise<?ConfigProvider> {
     const envState: ?State = await this.getState()
 
-    if (!envState || !envState.configProvider || !envState.configProvider.name) {
+    if (!envState || !envState.configProvider) {
       return null
     }
 
     const createConfigProvider: ?CreateConfigProvider =
-      resolveConfigProviderFromName(envState.configProvider.name)
+      resolveConfigProviderFromName(envState.configProvider)
 
     if (!createConfigProvider) {
       return null
@@ -94,17 +94,10 @@ export class Navy {
     return await this.getState() != null
   }
 
-  async initialise(
-    configProviderName: string = 'cwd',
-    configProviderOptions: ?Object = null,
-    driverName: string = 'docker-compose',
-  ): Promise<void> {
+  async initialise(opts: State): Promise<void> {
     await saveState(this.normalisedName, {
-      driver: driverName,
-      configProvider: {
-        name: configProviderName,
-        opts: configProviderOptions,
-      },
+      ...opts,
+      driver: 'docker-compose',
     })
   }
 

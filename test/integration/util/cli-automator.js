@@ -2,11 +2,6 @@ import path from 'path'
 import pty from 'pty.js'
 import stripAnsi from 'strip-ansi'
 
-process.stdin.setEncoding('utf8')
-if (typeof process.stdin.setRawMode === 'function') {
-  process.stdin.setRawMode(true)
-}
-
 // from http://stackoverflow.com/questions/17470554/how-to-capture-the-arrow-keys-in-node-js
 const keyCodes = {
   'up': '\u001b[A',
@@ -45,16 +40,15 @@ export default class Automator {
       name: 'xterm-color',
       cols: 130,
       rows: 30,
-      cwd: this.opts.cwd || process.env.HOME,
+      cwd: this.opts.cwd || path.join(__dirname, '../dummy-navy'),
       env: this.opts.env || process.env,
     })
 
     this.term.pipe(process.stdout)
-    process.stdin.pipe(this.term)
 
     this.term.on('data', data => this.output += data.toString())
 
-    this.term.on('exit', function () {
+    this.term.on('exit', () => {
       console.log()
       console.log(' - Exited')
       console.log()
@@ -78,9 +72,9 @@ export default class Automator {
   }
 
   waitForLaunch() {
-    return new Promise(resolve =>
+    return new Promise((resolve, reject) => {
       this.term.once('data', resolve)
-    )
+    })
   }
 
   getOutput() {

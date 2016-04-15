@@ -1,3 +1,4 @@
+import path from 'path'
 import {expect} from 'chai'
 import {Service} from '../../../../'
 
@@ -6,6 +7,11 @@ import {TEST_SERVICE_NAME} from '../../environment'
 export default function () {
 
   this.When(/I launch a service$/, async function () {
+    await this.navy.initialise({
+      configProvider: 'filesystem',
+      path: path.join(__dirname, '../../dummy-navy'),
+    })
+
     await this.navy.launch([TEST_SERVICE_NAME])
   })
 
