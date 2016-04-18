@@ -8,6 +8,7 @@ export default function () {
     await cmd.waitForLaunch()
 
     // key commands to select the service from the list
+    await cmd.send('down')
     await cmd.send('space')
     await cmd.send('enter')
 

@@ -1,5 +1,6 @@
 /* @flow */
 
+import yaml from 'js-yaml'
 import type {Driver} from '../../driver'
 import {createComposeClient} from './client'
 import {Navy} from '../../navy'
@@ -101,6 +102,31 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       }
 
       return Number(port)
+    },
+
+    async getLaunchedServiceNames(): Promise<Array<string>> {
+      const projectName = 'navy' + navy.normalisedName
+
+      const psRaw = await execAsync('docker', [
+        'ps',
+        '-a',
+        `--filter="label=com.docker.compose.project=${projectName}"`,
+        '--format',
+        '"{{.Label \\"com.docker.compose.service\\"}}"',
+      ])
+
+      const names = psRaw.trim().split('\n')
+
+      if (names.length === 1 && names[0].length === 0) return []
+
+      return names
+    },
+
+    async getAvailableServiceNames(): Promise<Array<string>> {
+      const output = await exec('config')
+      const config = yaml.safeLoad(output)
+
+      return Object.keys(config.services)
     },
   }
 }

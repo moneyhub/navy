@@ -16,6 +16,8 @@ export type Driver = {
   rm(services: ?Array<string>): Promise<void>;
   pull(services: ?Array<string>): Promise<void>;
   port(service: string, privatePort: number, index: ?number): Promise<number>;
+  getLaunchedServiceNames(): Promise<Array<string>>;
+  getAvailableServiceNames(): Promise<Array<string>>;
 }
 
 export type CreateDriver = (navy: Navy) => Driver

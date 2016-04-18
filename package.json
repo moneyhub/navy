@@ -60,6 +60,8 @@
     "cli-spinners": "^0.1.2",
     "commander": "^2.9.0",
     "debug": "^2.2.0",
+    "inquirer": "^1.0.2",
+    "js-yaml": "^3.6.0",
     "lodash": "^4.10.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.2",

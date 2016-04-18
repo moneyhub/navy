@@ -153,6 +153,14 @@ export class Navy {
     return await (await this.safeGetDriver()).port(service, privatePort, index)
   }
 
+  async getLaunchedServiceNames(): Promise<Array<string>> {
+    return await (await this.safeGetDriver()).getLaunchedServiceNames()
+  }
+
+  async getAvailableServiceNames(): Promise<Array<string>> {
+    return await (await this.safeGetDriver()).getAvailableServiceNames()
+  }
+
 }
 
 export function getNavy(envName: ?string): Navy {
