@@ -33,3 +33,27 @@ export function createComposeClient(navy: Navy): ComposeClient {
     },
   }
 }
+
+export function getDockerHost() {
+  const dockerHost = process.env.DOCKER_HOST
+
+  if (process.env.NAVY_HOST) {
+    // Custom host
+    return process.env.NAVY_HOST
+  }
+
+  if (dockerHost && dockerHost.indexOf('tcp://') !== -1) {
+    // OSX with docker-machine, or a remote docker
+    // dockerHost will be formatted like:
+    // tcp://_._._._:_
+    // We only care about the IP address
+
+    let ip = dockerHost.substring('tcp://'.length)
+    ip = ip.substring(0, ip.lastIndexOf(':')).trim()
+
+    return ip
+  }
+
+  // No custom docker host, assume localhost
+  return 'localhost'
+}

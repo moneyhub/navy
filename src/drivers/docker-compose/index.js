@@ -2,7 +2,7 @@
 
 import yaml from 'js-yaml'
 import type {Driver} from '../../driver'
-import {createComposeClient} from './client'
+import {createComposeClient, getDockerHost} from './client'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
@@ -88,6 +88,12 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
     async pull(services: ?Array<string>): Promise<void> {
       await exec('pull', services)
+    },
+
+    async host(service: string, index: ?number): Promise<?string> {
+      // at the moment, we do not support things like Docker Swarm which might have a
+      // different host for different services.
+      return getDockerHost()
     },
 
     async port(service: string, privatePort: number, index: ?number): Promise {

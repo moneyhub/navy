@@ -149,6 +149,10 @@ export class Navy {
     await (await this.safeGetDriver()).pull(services)
   }
 
+  async host(service: string, index: ?number = 1): Promise<?string> {
+    return await (await this.safeGetDriver()).host(service, index)
+  }
+
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
     return await (await this.safeGetDriver()).port(service, privatePort, index)
   }

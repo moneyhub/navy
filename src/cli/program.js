@@ -29,7 +29,9 @@ function wrapper(res) {
   return res
 }
 
-function basicCliWrapper(fnName) {
+function basicCliWrapper(fnName, opts = {}) {
+  const driverLogging = opts.driverLogging == null ? true : opts.driverLogging
+
   return async function (maybeServices, ...args) {
     const { getNavy } = require('../navy')
 
@@ -37,7 +39,7 @@ function basicCliWrapper(fnName) {
     const otherArgs = args.slice(0, args.length - 1)
     const envName = opts.navy
 
-    startDriverLogging(loadingLabelMap[fnName])
+    if (driverLogging) startDriverLogging(loadingLabelMap[fnName])
 
     const returnVal = await wrapper(getNavy(envName)[fnName](
       Array.isArray(maybeServices) && maybeServices.length === 0
@@ -46,7 +48,7 @@ function basicCliWrapper(fnName) {
       ...otherArgs,
     ))
 
-    stopDriverLogging()
+    if (driverLogging) stopDriverLogging()
 
     if (returnVal != null) {
       console.log(returnVal)
@@ -132,10 +134,21 @@ program
   .action(basicCliWrapper('pull'))
 
 program
+  .command('host <service>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Prints the external host for the given service')
+  .action(basicCliWrapper('host', { driverLogging: false }))
+  .on('--help', () => console.log(`
+  Examples:
+    $ navy host mywebserver
+    localhost
+  `))
+
+program
   .command('port <service> <port>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external port for the given internal port of the given service')
-  .action(basicCliWrapper('port'))
+  .action(basicCliWrapper('port', { driverLogging: false }))
   .on('--help', () => console.log(`
   Examples:
     $ navy port mywebserver 80
