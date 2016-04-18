@@ -90,7 +90,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('pull', services)
     },
 
-    async host(service: string, index: ?number): Promise<?string> {
+    async host(service: string, index: ?number): Promise<string> {
       // at the moment, we do not support things like Docker Swarm which might have a
       // different host for different services.
       return getDockerHost()

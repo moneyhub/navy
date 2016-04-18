@@ -34,7 +34,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
   }
 }
 
-export function getDockerHost() {
+export function getDockerHost(): string {
   const dockerHost = process.env.DOCKER_HOST
 
   if (process.env.NAVY_HOST) {

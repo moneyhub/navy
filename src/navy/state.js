@@ -56,7 +56,7 @@ export async function deleteState(normalisedEnvName: string): Promise<void> {
 }
 
 export type State = {
-  driver: ?string,
+  driver?: ?string,
   configProvider: ?string,
   path: ?string,
 }

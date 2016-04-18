@@ -2,7 +2,7 @@
 
 import zygon from 'zygon'
 import chalk from 'chalk'
-import {getLaunchedNavies, Navy} from '../../'
+import {getLaunchedNavies, Navy} from '../'
 import {getConfig} from '../config'
 
 export async function printPS(env: Navy, json: boolean): Promise<boolean> {

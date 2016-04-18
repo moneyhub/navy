@@ -1,7 +1,7 @@
 /* @flow */
 
 import inquirer from 'inquirer'
-import {getNavy} from '../../'
+import {getNavy} from '../'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 
 export default async function (services: Array<string>, opts: Object): Promise<void> {
