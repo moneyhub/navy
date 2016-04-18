@@ -1,6 +1,7 @@
 /* @flow */
 
 import {getNavy} from '../../'
+import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 
 export default async function (services: Array<string>, opts: Object): Promise<void> {
   const env = getNavy(opts.navy)
@@ -12,5 +13,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     })
   }
 
+  startDriverLogging('Launching services...')
   await env.launch(services)
+  stopDriverLogging()
 }

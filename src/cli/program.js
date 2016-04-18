@@ -1,10 +1,23 @@
 import program from 'commander'
 import {NavyError} from '../errors'
 import {getConfig} from '../config'
+import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+
+const loadingLabelMap = {
+  destroy: 'Destroying services...',
+  start: 'Starting services...',
+  stop: 'Stopping services...',
+  restart: 'Restarting services...',
+  kill: 'Killing services...',
+  rm: 'Removing services...',
+  pull: 'Pulling service images...',
+}
 
 function wrapper(res) {
   if (res.catch) {
     res.catch(ex => {
+      stopDriverLogging({ success: false })
+
       if (ex instanceof NavyError) {
         ex.prettyPrint()
       } else {
@@ -24,12 +37,16 @@ function basicCliWrapper(fnName) {
     const otherArgs = args.slice(0, args.length - 1)
     const envName = opts.navy
 
+    startDriverLogging(loadingLabelMap[fnName])
+
     const returnVal = await wrapper(getNavy(envName)[fnName](
       Array.isArray(maybeServices) && maybeServices.length === 0
         ? undefined
         : maybeServices,
       ...otherArgs,
     ))
+
+    stopDriverLogging()
 
     if (returnVal != null) {
       console.log(returnVal)

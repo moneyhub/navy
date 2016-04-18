@@ -2,6 +2,7 @@
 
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
+import {log} from '../../driver-logging'
 
 import type {ConfigProvider} from '../../config-provider'
 
@@ -25,7 +26,10 @@ export function createComposeClient(navy: Navy): ComposeClient {
         ...args,
       ]
 
-      return await execAsync('docker-compose', composeArgs)
+      return await execAsync('docker-compose', composeArgs, childProcess => {
+        childProcess.stdout.on('data', data => log(data))
+        childProcess.stderr.on('data', data => log(data))
+      })
     },
   }
 }
