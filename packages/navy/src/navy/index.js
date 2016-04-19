@@ -6,6 +6,7 @@ import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
 import {getState, saveState, deleteState, pathToNavys} from './state'
 import {NavyNotInitialisedError, NavyError} from '../errors'
+import {invokePluginHook} from './plugin-interface'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -88,6 +89,34 @@ export class Navy {
     }
 
     return createConfigProvider(this)
+  }
+
+  async getNavyFile(): Promise<?Object> {
+    const configProvider: ?ConfigProvider = await this.getConfigProvider()
+
+    if (!configProvider) {
+      throw new Error('No config provider available')
+    }
+
+    const navyFilePath: string = await configProvider.getNavyFilePath()
+
+    try {
+      // $FlowIgnore: entry point to Navyfile.js has to be dynamic
+      return require(navyFilePath)
+    } catch (ex) {
+      return null
+    }
+  }
+
+  async invokePluginHook(hookName: string, ...args: any): Promise {
+    const navyFile = await this.getNavyFile()
+
+    if (!navyFile) {
+      // no action if no Navyfile.js
+      return
+    }
+
+    await invokePluginHook(this, navyFile, hookName, args)
   }
 
   async isInitialised(): Promise<boolean> {

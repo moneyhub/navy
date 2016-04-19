@@ -166,9 +166,4 @@ program
   .description('Set the default navy')
   .action(lazyRequire('./set-default'))
 
-program
-  .command('help')
-  .alias('*')
-  .action(() => program.help())
-
 export default program

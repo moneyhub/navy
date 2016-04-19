@@ -8,7 +8,7 @@ import type {State} from '../../navy'
 
 export default function createFileSystemConfigProvider(navy: Navy): ConfigProvider {
   return {
-    async getDockerComposePath(): Promise {
+    async getNavyPath(): Promise<string> {
       const envState: ?State = await navy.getState()
 
       if (!envState) {
@@ -19,7 +19,15 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
         throw new Error('File system config provider requires a path')
       }
 
-      return path.join(envState.path, 'docker-compose.yml')
+      return envState.path
+    },
+
+    async getNavyFilePath(): Promise<string> {
+      return path.join(await this.getNavyPath(), 'Navyfile.js')
+    },
+
+    async getDockerComposePath(): Promise<string> {
+      return path.join(await this.getNavyPath(), 'docker-compose.yml')
     },
   }
 }
