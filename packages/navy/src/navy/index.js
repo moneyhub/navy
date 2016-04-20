@@ -134,7 +134,9 @@ export class Navy {
     await deleteState(this.normalisedName)
   }
 
-  async launch(services: Array<string>, opts: ?Object): Promise<void> {
+  async launch(services?: Array<string>, opts: ?Object): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).launch(services, opts)
   }
 
@@ -154,27 +156,39 @@ export class Navy {
     return await (await this.safeGetDriver()).ps()
   }
 
-  async start(services: ?Array<string>): Promise<void> {
+  async start(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).start(services)
   }
 
-  async stop(services: ?Array<string>): Promise<void> {
+  async stop(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).stop(services)
   }
 
-  async restart(services: ?Array<string>): Promise<void> {
+  async restart(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).restart(services)
   }
 
-  async kill(services: ?Array<string>): Promise<void> {
+  async kill(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).kill(services)
   }
 
-  async rm(services: ?Array<string>): Promise<void> {
+  async rm(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).rm(services)
   }
 
-  async pull(services: ?Array<string>): Promise<void> {
+  async pull(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).pull(services)
   }
 
