@@ -1,6 +1,6 @@
 import path from 'path'
 import {expect} from 'chai'
-import {Service} from '../../../../'
+import {Service} from '../../../../packages/navy'
 
 import {TEST_SERVICE_NAME} from '../../environment'
 

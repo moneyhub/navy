@@ -14,7 +14,7 @@ const keyCodes = {
 
 const SYNTHETIC_DELAY_MS = 150
 
-export const NAVY_BIN = path.join(__dirname, '../../../bin/navy.js')
+export const NAVY_BIN = path.join(__dirname, '../../../packages/navy/bin/navy.js')
 
 export default class Automator {
 
