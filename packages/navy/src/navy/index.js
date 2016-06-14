@@ -1,12 +1,14 @@
 /* @flow */
 
 import bluebird from 'bluebird'
+
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
 import {getState, saveState, deleteState, pathToNavys} from './state'
 import {NavyNotInitialisedError, NavyError} from '../errors'
-import {invokePluginHook} from './plugin-interface'
+import {loadPlugins} from './plugin-interface'
+import {middlewareRunner} from './middleware'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -23,10 +25,23 @@ export class Navy {
   normalisedName: string;
 
   _cachedState: ?State;
+  _registeredCommands: Object;
+  _registeredMiddleware: Array<Function>;
 
   constructor(name: string) {
     this.name = name
     this.normalisedName = normaliseNavyName(name)
+
+    this._registeredCommands = {}
+    this._registeredMiddleware = []
+  }
+
+  async loadPlugins(): Promise<void> {
+    const navyFile = await this.getNavyFile()
+
+    if (!navyFile) return
+
+    await loadPlugins(this, navyFile)
   }
 
   async getState(): Promise<?State> {
@@ -108,15 +123,25 @@ export class Navy {
     }
   }
 
-  async invokePluginHook(hookName: string, ...args: any): Promise {
-    const navyFile = await this.getNavyFile()
+  async saveState(state: State): Promise<void> {
+    await saveState(this.normalisedName, state)
+    await middlewareRunner(this, state)
+  }
 
-    if (!navyFile) {
-      // no action if no Navyfile.js
-      return
+  registerCommand(name: string, action: Function) {
+    this._registeredCommands[name] = action
+  }
+
+  registerMiddleware(middlewareFn: Function) {
+    this._registeredMiddleware.push(middlewareFn)
+  }
+
+  async invokeCommand(name: string, args: Array<string>) {
+    if (!this._registeredCommands[name]) {
+      throw new NavyError('Unknown command "' + name + '"')
     }
 
-    await invokePluginHook(this, navyFile, hookName, args)
+    await this._registeredCommands[name](args)
   }
 
   async isInitialised(): Promise<boolean> {
@@ -124,10 +149,12 @@ export class Navy {
   }
 
   async initialise(opts: State): Promise<void> {
-    await saveState(this.normalisedName, {
+    const state: State = {
       ...opts,
       driver: 'docker-compose',
-    })
+    }
+
+    await this.saveState(state)
   }
 
   async delete(): Promise<void> {
@@ -137,7 +164,13 @@ export class Navy {
   async launch(services?: Array<string>, opts: ?Object): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
+    console.log('Relaunching', services)
+
     await (await this.safeGetDriver()).launch(services, opts)
+  }
+
+  async relaunch(): Promise<void> {
+    await this.launch()
   }
 
   async destroy(): Promise<void> {
@@ -192,8 +225,8 @@ export class Navy {
     await (await this.safeGetDriver()).pull(services)
   }
 
-  async host(service: string, index: ?number = 1): Promise<?string> {
-    return await (await this.safeGetDriver()).host(service, index)
+  async host(service: string, index?: number): Promise<?string> {
+    return await (await this.safeGetDriver()).host(service)
   }
 
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {

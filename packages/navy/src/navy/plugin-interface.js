@@ -27,11 +27,5 @@ export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<O
   // $FlowIgnore: entry point to plugin has to be dynamic
   const plugins = pluginPaths.map(pluginPath => require(pluginPath))
 
-  return plugins
-}
-
-export async function invokePluginHook(navy: Navy, navyFile: Object, hookName: string, args: Array<any>): Promise<any> {
-  const plugins = await loadPlugins(navy, navyFile)
-
-  return await Promise.all(plugins.map(plugin => plugin[hookName](...args)))
+  return plugins.map(Plugin => Plugin(navy))
 }

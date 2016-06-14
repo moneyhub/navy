@@ -1,26 +1,33 @@
 /* @flow */
 
+import path from 'path'
+import bluebird from 'bluebird'
+
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {log} from '../../driver-logging'
+import {pathToNavy} from '../../navy/state'
 
 import type {ConfigProvider} from '../../config-provider'
 
+const fs = bluebird.promisifyAll(require('fs'))
+
 export type ComposeClient = {
-  exec(command: string, args: any): Promise,
+  exec(command: string, args: any, composeFile?: string): Promise,
+  getCompiledDockerComposePath(): string,
+  getOriginalDockerComposePath(): Promise<string>,
+  getDockerComposeFilePath(): Promise<string>,
 }
 
 export function createComposeClient(navy: Navy): ComposeClient {
-  return {
-    async exec(command: string, args: Array<string> = []): Promise<string> {
-      const configProvider: ?ConfigProvider = await navy.getConfigProvider()
-
-      if (!configProvider) {
-        throw new Error('No config provider available for navy')
+  const client = {
+    async exec(command: string, args: Array<string> = [], composeFile?: string): Promise<string> {
+      if (!composeFile) {
+        composeFile = await client.getDockerComposeFilePath()
       }
 
       const composeArgs = [
-        '-f', await configProvider.getDockerComposePath(),
+        '-f', composeFile,
         '-p', 'navy' + navy.normalisedName,
         command,
         ...args,
@@ -31,7 +38,32 @@ export function createComposeClient(navy: Navy): ComposeClient {
         childProcess.stderr.on('data', data => log(data))
       })
     },
+
+    getCompiledDockerComposePath(): string {
+      return path.join(pathToNavy(navy.normalisedName), 'docker-compose.tmp.yml')
+    },
+
+    async getOriginalDockerComposePath(): Promise<string> {
+      const configProvider: ?ConfigProvider = await navy.getConfigProvider()
+
+      if (!configProvider) {
+        throw new Error('No config provider available for navy')
+      }
+
+      return configProvider.getDockerComposePath()
+    },
+
+    async getDockerComposeFilePath(): Promise<string> {
+      try {
+        await fs.statAsync(client.getCompiledDockerComposePath())
+        return client.getCompiledDockerComposePath()
+      } catch (ex) {
+        return await client.getOriginalDockerComposePath()
+      }
+    },
   }
+
+  return client
 }
 
 export function getDockerHost(): string {

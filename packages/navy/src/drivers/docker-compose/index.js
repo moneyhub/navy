@@ -1,13 +1,19 @@
 /* @flow */
 
 import yaml from 'js-yaml'
-import type {Driver} from '../../driver'
+import bluebird from 'bluebird'
+
 import {createComposeClient, getDockerHost} from './client'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
 
+import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
+
+const fs = bluebird.promisifyAll(require('fs'))
+
+const debug = require('debug')('navy:docker-compose')
 
 function getArgsFromOptions(opts: Object, argMap: Object): Array<string> {
   return Object.keys(opts)
@@ -23,9 +29,11 @@ const launchArgMap = {
 export default function createDockerComposeDriver(navy: Navy): Driver {
   const {
     exec,
+    getCompiledDockerComposePath,
+    getOriginalDockerComposePath,
   } = createComposeClient(navy)
 
-  return {
+  const driver = {
     async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {
       const additionalArgs = []
 
@@ -90,7 +98,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('pull', services)
     },
 
-    async host(service: string, index: ?number): Promise<string> {
+    async host(service: string, index: number = 1): Promise<string> {
       // at the moment, we do not support things like Docker Swarm which might have a
       // different host for different services.
       return getDockerHost()
@@ -108,6 +116,20 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       }
 
       return Number(port)
+    },
+
+    async writeConfig(config: Object): Promise<void> {
+      const yamlOut = yaml.dump(config)
+      await fs.writeFileAsync(getCompiledDockerComposePath(), yamlOut)
+
+      debug('Wrote docker-compose.tmp.yml', yamlOut)
+    },
+
+    async getConfig(): Promise<Object> {
+      const output = await exec('config', [], await getOriginalDockerComposePath())
+      const config = yaml.safeLoad(output)
+
+      return config
     },
 
     async getLaunchedServiceNames(): Promise<Array<string>> {
@@ -129,10 +151,11 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async getAvailableServiceNames(): Promise<Array<string>> {
-      const output = await exec('config')
-      const config = yaml.safeLoad(output)
+      const config = await driver.getConfig()
 
       return Object.keys(config.services)
     },
   }
+
+  return driver
 }
