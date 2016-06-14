@@ -136,7 +136,7 @@ export class Navy {
     this._registeredMiddleware.push(middlewareFn)
   }
 
-  async invokeCommand(name: string, args: Array<string>) {
+  async invokeCommand(name: string, args: Array<string>): Promise<void> {
     if (!this._registeredCommands[name]) {
       throw new NavyError('Unknown command "' + name + '"')
     }
