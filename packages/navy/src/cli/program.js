@@ -156,6 +156,12 @@ program
   `))
 
 program
+  .command('run <name> [args...]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Runs a named command specific to the given Navy')
+  .action(lazyRequire('./run'))
+
+program
   .command('status')
   .option('--json', 'output JSON instead of a table')
   .description('List all of the running navies and the status of their services')
@@ -165,10 +171,5 @@ program
   .command('set-default <navy>')
   .description('Set the default navy')
   .action(lazyRequire('./set-default'))
-
-program
-  .command('help')
-  .alias('*')
-  .action(() => program.help())
 
 export default program

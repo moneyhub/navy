@@ -9,7 +9,7 @@ const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 const rimraf = bluebird.promisify(require('rimraf'))
 
-export function pathToNavy(): string {
+export function pathToNavyRoot(): string {
   const home = process.env.HOME
 
   if (!home) {
@@ -20,11 +20,15 @@ export function pathToNavy(): string {
 }
 
 export function pathToNavys(): string {
-  return path.join(pathToNavy(), 'navies')
+  return path.join(pathToNavyRoot(), 'navies')
+}
+
+export function pathToNavy(normalisedEnvName: string): string {
+  return path.join(pathToNavys(), normalisedEnvName)
 }
 
 export function pathToState(normalisedEnvName: string): string {
-  return path.join(pathToNavys(), normalisedEnvName, 'state.json')
+  return path.join(pathToNavy(normalisedEnvName), 'state.json')
 }
 
 export async function getState(normalisedEnvName: string): Promise<?State> {

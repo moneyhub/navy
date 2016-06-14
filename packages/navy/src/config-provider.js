@@ -4,6 +4,8 @@ import {Navy} from './navy'
 import FileSystem from './config-providers/filesystem'
 
 export type ConfigProvider = {
+  getNavyPath(): Promise<string>;
+  getNavyFilePath(): Promise<string>;
   getDockerComposePath(): Promise<string>;
 }
 

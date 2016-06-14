@@ -8,6 +8,11 @@ const debug = require('debug')('navy:cli')
 
 program.version(pkg.version)
 
+program
+  .command('help')
+  .alias('*')
+  .action(() => program.help())
+
 try {
   program.parse(process.argv)
 } catch (ex) {

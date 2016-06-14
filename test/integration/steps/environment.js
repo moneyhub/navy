@@ -1,5 +1,5 @@
 import path from 'path'
-import {getNavy} from '../../../'
+import {getNavy} from '../../../packages/navy'
 import {ENV_NAME, TEST_SERVICE_NAME} from '../environment'
 
 export default function () {

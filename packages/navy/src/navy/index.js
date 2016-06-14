@@ -1,11 +1,14 @@
 /* @flow */
 
 import bluebird from 'bluebird'
+
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
 import {getState, saveState, deleteState, pathToNavys} from './state'
 import {NavyNotInitialisedError, NavyError} from '../errors'
+import {loadPlugins} from './plugin-interface'
+import {middlewareRunner} from './middleware'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -22,10 +25,23 @@ export class Navy {
   normalisedName: string;
 
   _cachedState: ?State;
+  _registeredCommands: Object;
+  _registeredMiddleware: Array<Function>;
 
   constructor(name: string) {
     this.name = name
     this.normalisedName = normaliseNavyName(name)
+
+    this._registeredCommands = {}
+    this._registeredMiddleware = []
+  }
+
+  async loadPlugins(): Promise<void> {
+    const navyFile = await this.getNavyFile()
+
+    if (!navyFile) return
+
+    await loadPlugins(this, navyFile)
   }
 
   async getState(): Promise<?State> {
@@ -90,23 +106,71 @@ export class Navy {
     return createConfigProvider(this)
   }
 
+  async getNavyFile(): Promise<?Object> {
+    const configProvider: ?ConfigProvider = await this.getConfigProvider()
+
+    if (!configProvider) {
+      throw new Error('No config provider available')
+    }
+
+    const navyFilePath: string = await configProvider.getNavyFilePath()
+
+    try {
+      // $FlowIgnore: entry point to Navyfile.js has to be dynamic
+      return require(navyFilePath)
+    } catch (ex) {
+      return null
+    }
+  }
+
+  async saveState(state: State): Promise<void> {
+    await saveState(this.normalisedName, state)
+    await middlewareRunner(this, state)
+  }
+
+  registerCommand(name: string, action: Function) {
+    this._registeredCommands[name] = action
+  }
+
+  registerMiddleware(middlewareFn: Function) {
+    this._registeredMiddleware.push(middlewareFn)
+  }
+
+  async invokeCommand(name: string, args: Array<string>): Promise<void> {
+    if (!this._registeredCommands[name]) {
+      throw new NavyError('Unknown command "' + name + '"')
+    }
+
+    await this._registeredCommands[name](args)
+  }
+
   async isInitialised(): Promise<boolean> {
     return await this.getState() != null
   }
 
   async initialise(opts: State): Promise<void> {
-    await saveState(this.normalisedName, {
+    const state: State = {
       ...opts,
       driver: 'docker-compose',
-    })
+    }
+
+    await this.saveState(state)
   }
 
   async delete(): Promise<void> {
     await deleteState(this.normalisedName)
   }
 
-  async launch(services: Array<string>, opts: ?Object): Promise<void> {
+  async launch(services?: Array<string>, opts: ?Object): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
+    console.log('Relaunching', services)
+
     await (await this.safeGetDriver()).launch(services, opts)
+  }
+
+  async relaunch(): Promise<void> {
+    await this.launch()
   }
 
   async destroy(): Promise<void> {
@@ -125,32 +189,44 @@ export class Navy {
     return await (await this.safeGetDriver()).ps()
   }
 
-  async start(services: ?Array<string>): Promise<void> {
+  async start(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).start(services)
   }
 
-  async stop(services: ?Array<string>): Promise<void> {
+  async stop(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).stop(services)
   }
 
-  async restart(services: ?Array<string>): Promise<void> {
+  async restart(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).restart(services)
   }
 
-  async kill(services: ?Array<string>): Promise<void> {
+  async kill(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).kill(services)
   }
 
-  async rm(services: ?Array<string>): Promise<void> {
+  async rm(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).rm(services)
   }
 
-  async pull(services: ?Array<string>): Promise<void> {
+  async pull(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
     await (await this.safeGetDriver()).pull(services)
   }
 
-  async host(service: string, index: ?number = 1): Promise<?string> {
-    return await (await this.safeGetDriver()).host(service, index)
+  async host(service: string, index?: number): Promise<?string> {
+    return await (await this.safeGetDriver()).host(service)
   }
 
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
