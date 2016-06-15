@@ -52,7 +52,7 @@ export default async function (service: string, opts: Object): Promise<void> {
   })
 
   await navy.kill([service])
-  await navy.relaunch({ noDeps: true })
+  await navy.launch([service], { noDeps: true })
 
   console.log(`🚧  ${service} has now restarted in development 🚧`)
   console.log(chalk.dim('-----------'))
