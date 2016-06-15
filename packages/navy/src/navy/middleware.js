@@ -1,6 +1,7 @@
 /* @flow */
 
 import {Navy} from './'
+import defaultMiddleware from './default-middleware'
 
 import type {State} from './state'
 import type {Driver} from '../driver'
@@ -12,8 +13,10 @@ export async function middlewareRunner(navy: Navy, state: State): Promise {
     return
   }
 
-  const config = navy._registeredMiddleware
-  .reduce((prevConfig, middlewareFn) => middlewareFn(prevConfig, state), await driver.getConfig())
+  const config = [
+    ...defaultMiddleware,
+    ...navy._registeredMiddleware,
+  ].reduce((prevConfig, middlewareFn) => middlewareFn(prevConfig, state), await driver.getConfig())
 
   await driver.writeConfig(config)
 }

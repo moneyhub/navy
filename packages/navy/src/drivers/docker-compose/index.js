@@ -18,7 +18,7 @@ const debug = require('debug')('navy:docker-compose')
 function getArgsFromOptions(opts: Object, argMap: Object): Array<string> {
   return Object.keys(opts)
     .map(key => argMap[key])
-    .filter(arg => !arg)
+    .filter(arg => arg)
 }
 
 const launchArgMap = {
@@ -37,8 +37,11 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {
       const additionalArgs = []
 
+      debug('Got launch', services, opts)
+
       if (opts) {
         additionalArgs.push(...getArgsFromOptions(opts, launchArgMap))
+        debug('Resolve opts to args', additionalArgs)
       }
 
       if (!services) {

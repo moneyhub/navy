@@ -156,6 +156,18 @@ program
   `))
 
 program
+  .command('develop [service]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Puts the given service into development using the current working directory')
+  .action(lazyRequire('./develop'))
+
+program
+  .command('live [service]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Takes the given service out of development')
+  .action(lazyRequire('./live'))
+
+program
   .command('run <name> [args...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Runs a named command specific to the given Navy')

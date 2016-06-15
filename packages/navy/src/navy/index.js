@@ -164,13 +164,11 @@ export class Navy {
   async launch(services?: Array<string>, opts: ?Object): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
-    console.log('Relaunching', services)
-
     await (await this.safeGetDriver()).launch(services, opts)
   }
 
-  async relaunch(): Promise<void> {
-    await this.launch()
+  async relaunch(opts: ?Object): Promise<void> {
+    await this.launch(undefined, opts)
   }
 
   async destroy(): Promise<void> {
