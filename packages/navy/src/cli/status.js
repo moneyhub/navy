@@ -25,9 +25,9 @@ export async function printPS(env: Navy, json: boolean): Promise<boolean> {
   console.log('  ' + chalk.underline(env.name) + defaultStatus)
 
   zygon([
-    { name: 'ID', size: 13 },
+    { name: 'ID', size: 8 },
     { name: 'Name', size: 15 },
-    { name: 'Image', size: 25 },
+    { name: 'Image', size: 35 },
     { name: 'Status' },
   ], ps.map(service => [
     service.id,
