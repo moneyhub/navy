@@ -25,9 +25,5 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
     async getNavyFilePath(): Promise<string> {
       return path.join(await this.getNavyPath(), 'Navyfile.js')
     },
-
-    async getDockerComposePath(): Promise<string> {
-      return path.join(await this.getNavyPath(), 'docker-compose.yml')
-    },
   }
 }

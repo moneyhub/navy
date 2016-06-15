@@ -13,52 +13,55 @@ import type {ConfigProvider} from '../../config-provider'
 const fs = bluebird.promisifyAll(require('fs'))
 
 export type ComposeClient = {
-  exec(command: string, args: any, composeFile?: string): Promise,
+  exec(command: string, args: any, opts?: Object): Promise,
   getCompiledDockerComposePath(): string,
-  getOriginalDockerComposePath(): Promise<string>,
-  getDockerComposeFilePath(): Promise<string>,
+  getDockerComposeFilePath(): Promise<?string>,
 }
 
 export function createComposeClient(navy: Navy): ComposeClient {
   const client = {
-    async exec(command: string, args: Array<string> = [], composeFile?: string): Promise<string> {
-      if (!composeFile) {
-        composeFile = await client.getDockerComposeFilePath()
+    async exec(command: string, args: Array<string> = [], opts?: Object): Promise<string> {
+      const composeArgs = [
+        '-p', 'navy' + navy.normalisedName,
+      ]
+
+      const composeOpts = {}
+      const composeFilePath = await client.getDockerComposeFilePath()
+
+      if (composeFilePath && (!opts || !opts.useOriginalDockerComposeFiles)) {
+        composeArgs.push('-f', composeFilePath)
+      } else {
+        composeOpts.cwd = await client.getOriginalDockerComposeDirectory()
       }
 
-      const composeArgs = [
-        '-f', composeFile,
-        '-p', 'navy' + navy.normalisedName,
-        command,
-        ...args,
-      ]
+      composeArgs.push(command, ...args)
 
       return await execAsync('docker-compose', composeArgs, childProcess => {
         childProcess.stdout.on('data', data => log(data))
         childProcess.stderr.on('data', data => log(data))
-      })
+      }, composeOpts)
     },
 
     getCompiledDockerComposePath(): string {
       return path.join(pathToNavy(navy.normalisedName), 'docker-compose.tmp.yml')
     },
 
-    async getOriginalDockerComposePath(): Promise<string> {
+    async getOriginalDockerComposeDirectory(): Promise<string> {
       const configProvider: ?ConfigProvider = await navy.getConfigProvider()
 
       if (!configProvider) {
         throw new Error('No config provider available for navy')
       }
 
-      return configProvider.getDockerComposePath()
+      return configProvider.getNavyPath()
     },
 
-    async getDockerComposeFilePath(): Promise<string> {
+    async getDockerComposeFilePath(): Promise<?string> {
       try {
         await fs.statAsync(client.getCompiledDockerComposePath())
         return client.getCompiledDockerComposePath()
       } catch (ex) {
-        return await client.getOriginalDockerComposePath()
+        return null
       }
     },
   }
