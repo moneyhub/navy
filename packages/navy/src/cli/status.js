@@ -5,8 +5,19 @@ import chalk from 'chalk'
 import {getLaunchedNavies, Navy} from '../'
 import {getConfig} from '../config'
 
+function getStatus(service, state) {
+  let statusString = service.status
+
+  if (state && state.services && state.services[service.name] && state.services[service.name]._develop) {
+    statusString += ' ' + chalk.yellow('(development)')
+  }
+
+  return statusString
+}
+
 export async function printPS(env: Navy, json: boolean): Promise<boolean> {
   const ps = await env.ps()
+  const state = await env.getState()
 
   if (json) {
     console.log(JSON.stringify(ps, null, 2))
@@ -28,12 +39,12 @@ export async function printPS(env: Navy, json: boolean): Promise<boolean> {
     { name: 'ID', size: 8 },
     { name: 'Name', size: 15 },
     { name: 'Image', size: 35 },
-    { name: 'Status' },
+    { name: 'Status', size: 25 },
   ], ps.map(service => [
     service.id,
     service.name,
     service.image,
-    service.status,
+    getStatus(service, state),
   ]))
 
   return true
