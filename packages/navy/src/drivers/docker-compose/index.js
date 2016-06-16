@@ -56,7 +56,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async ps(): Promise<ServiceList> {
-      const ids = (await exec('ps', ['-q'])).trim().split('\n')
+      const ids = (await exec('ps', ['-q'], { noLog: true })).trim().split('\n')
 
       if (ids.length === 1 && ids[0] === '') return []
 
