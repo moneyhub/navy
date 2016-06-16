@@ -130,6 +130,8 @@ export class Navy {
   }
 
   async saveState(state: State): Promise<void> {
+    this._cachedState = state
+
     await saveState(this.normalisedName, state)
     await middlewareRunner(this, state)
   }
