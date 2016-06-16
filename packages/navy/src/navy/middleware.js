@@ -13,6 +13,8 @@ export async function middlewareRunner(navy: Navy, state: State): Promise {
     return
   }
 
+  await navy.ensurePluginsLoaded()
+
   const config = [
     ...defaultMiddleware,
     ...navy._registeredMiddleware,

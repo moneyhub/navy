@@ -24,6 +24,7 @@ export class Navy {
   name: string;
   normalisedName: string;
 
+  _pluginsLoaded: boolean;
   _cachedState: ?State;
   _registeredCommands: Object;
   _registeredMiddleware: Array<Function>;
@@ -32,16 +33,21 @@ export class Navy {
     this.name = name
     this.normalisedName = normaliseNavyName(name)
 
+    this._pluginsLoaded = false
     this._registeredCommands = {}
     this._registeredMiddleware = []
   }
 
-  async loadPlugins(): Promise<void> {
+  async ensurePluginsLoaded(): Promise<void> {
+    if (this._pluginsLoaded) return
+
     const navyFile = await this.getNavyFile()
 
     if (!navyFile) return
 
     await loadPlugins(this, navyFile)
+
+    this._pluginsLoaded = true
   }
 
   async getState(): Promise<?State> {
@@ -154,7 +160,7 @@ export class Navy {
       driver: 'docker-compose',
     }
 
-    await this.saveState(state)
+    await saveState(this.normalisedName, state)
   }
 
   async delete(): Promise<void> {
@@ -163,6 +169,12 @@ export class Navy {
 
   async launch(services?: Array<string>, opts: ?Object): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
+
+    const state = await this.getState()
+
+    if (state) {
+      await middlewareRunner(this, state)
+    }
 
     await (await this.safeGetDriver()).launch(services, opts)
   }

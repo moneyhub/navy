@@ -18,17 +18,27 @@ export type ComposeClient = {
   getDockerComposeFilePath(): Promise<?string>,
 }
 
+export type ExecOpts = {
+  useOriginalDockerComposeFiles?: boolean,
+  noLog?: boolean,
+}
+
 export function createComposeClient(navy: Navy): ComposeClient {
   const client = {
-    async exec(command: string, args: Array<string> = [], opts?: Object): Promise<string> {
+    async exec(command: string, args: Array<string> = [], opts?: ExecOpts = {}): Promise<string> {
       const composeArgs = [
         '-p', 'navy' + navy.normalisedName,
       ]
 
+      const {
+        useOriginalDockerComposeFiles,
+        noLog,
+      } = opts
+
       const composeOpts = {}
       const composeFilePath = await client.getDockerComposeFilePath()
 
-      if (composeFilePath && (!opts || !opts.useOriginalDockerComposeFiles)) {
+      if (composeFilePath && !useOriginalDockerComposeFiles) {
         composeArgs.push('-f', composeFilePath)
       } else {
         composeOpts.cwd = await client.getOriginalDockerComposeDirectory()
@@ -37,8 +47,10 @@ export function createComposeClient(navy: Navy): ComposeClient {
       composeArgs.push(command, ...args)
 
       return await execAsync('docker-compose', composeArgs, childProcess => {
-        childProcess.stdout.on('data', data => log(data))
-        childProcess.stderr.on('data', data => log(data))
+        if (!noLog) {
+          childProcess.stdout.on('data', data => log(data))
+          childProcess.stderr.on('data', data => log(data))
+        }
       }, composeOpts)
     },
 

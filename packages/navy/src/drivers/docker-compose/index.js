@@ -128,7 +128,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async getConfig(): Promise<Object> {
-      const output = await exec('config', [], { useOriginalDockerComposeFiles: true })
+      const output = await exec('config', [], { useOriginalDockerComposeFiles: true, noLog: true })
       const config = yaml.safeLoad(output)
 
       return config
