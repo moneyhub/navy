@@ -237,6 +237,42 @@ export class Navy {
     await (await this.safeGetDriver()).update(services)
   }
 
+  async useTag(service: string, tag: string): Promise<void> {
+    const state = (await this.getState()) || {}
+
+    await this.saveState({
+      ...state,
+      services: {
+        ...state.services,
+        [service]: {
+          ...(state.services || {})[service],
+          _tag: tag,
+        },
+      },
+    })
+
+    await this.kill([service])
+    await this.launch([service], { noDeps: true })
+  }
+
+  async resetTag(service: string): Promise<void> {
+    const state = (await this.getState()) || {}
+
+    await this.saveState({
+      ...state,
+      services: {
+        ...state.services,
+        [service]: {
+          ...(state.services || {})[service],
+          _tag: undefined,
+        },
+      },
+    })
+
+    await this.kill([service])
+    await this.launch([service], { noDeps: true })
+  }
+
   async host(service: string, index?: number): Promise<?string> {
     return await (await this.safeGetDriver()).host(service)
   }

@@ -12,6 +12,8 @@ const loadingLabelMap = {
   rm: 'Removing services...',
   update: 'Updating service images...',
   delete: 'Deleting navy configuration...',
+  useTag: 'Pulling custom tag...',
+  resetTag: 'Resetting to default tag...',
 }
 
 function wrapper(res) {
@@ -154,6 +156,18 @@ program
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Streams logs for the given services')
   .action(lazyRequire('./logs'))
+
+program
+  .command('use-tag <service> <tag>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Uses a specific tag for the given service')
+  .action(basicCliWrapper('useTag'))
+
+program
+  .command('reset-tag <service>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Resets any tag override on the given service')
+  .action(basicCliWrapper('resetTag'))
 
 program
   .command('host <service>')
