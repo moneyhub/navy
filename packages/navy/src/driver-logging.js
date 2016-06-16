@@ -2,7 +2,6 @@ import {dots} from 'cli-spinners'
 import chalk from 'chalk'
 
 let _isDriverLogging = false
-let _lineCount = 0
 let _spinnerInterval = null
 let _spinnerIndex = 0
 let _message = null
@@ -16,20 +15,16 @@ function _redraw(opts = {}) {
     symbol = chalk.red('•')
   }
 
-  process.stdout.clearLine()
+  process.stdout.write('                                                                        \n')
+  process.stdout.write(` ${symbol} ${opts.success === false ? chalk.red(_message, 'FAILED') : _message}\n`)
   process.stdout.cursorTo(0)
-  process.stdout.moveCursor(0, -_lineCount - 1)
-  console.log(symbol, opts.success === false ? chalk.red(_message, 'FAILED') : _message)
-  process.stdout.cursorTo(0)
-  process.stdout.moveCursor(0, _lineCount)
+  process.stdout.moveCursor(0, -2)
 }
 
 export function startDriverLogging(message: string) {
   _isDriverLogging = true
   _message = message
-  _lineCount = 0
 
-  console.log()
   _redraw()
 
   _spinnerInterval = setInterval(() => {
@@ -50,6 +45,7 @@ export function stopDriverLogging(opts = {}) {
   clearInterval(_spinnerInterval)
 
   _redraw({ success: opts.success != null ? opts.success : true })
+  console.log('\n\n')
 }
 
 export function isDriverLogging(): boolean {
@@ -59,6 +55,5 @@ export function isDriverLogging(): boolean {
 export function log(message: string) {
   if (!isDriverLogging()) return
 
-  _lineCount += message.split('\n').length - 1
   process.stdout.write(chalk.dim(message))
 }
