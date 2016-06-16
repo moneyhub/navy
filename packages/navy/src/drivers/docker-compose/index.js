@@ -135,7 +135,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async getLaunchedServiceNames(): Promise<Array<string>> {
-      const projectName = 'navy' + navy.normalisedName
+      const projectName = navy.normalisedName
 
       const psRaw = await execAsync('docker', [
         'ps',

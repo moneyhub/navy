@@ -27,7 +27,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
   const client = {
     async exec(command: string, args: Array<string> = [], opts?: ExecOpts = {}): Promise<string> {
       const composeArgs = [
-        '-p', 'navy' + navy.normalisedName,
+        '-p', navy.normalisedName,
       ]
 
       const {
