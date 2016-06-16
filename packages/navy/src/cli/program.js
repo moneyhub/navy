@@ -50,6 +50,10 @@ function basicCliWrapper(fnName, opts = {}) {
 
     if (driverLogging) stopDriverLogging()
 
+    if (Array.isArray(returnVal)) {
+      return console.log(returnVal.join('\n'))
+    }
+
     if (returnVal != null) {
       console.log(returnVal)
     }
@@ -154,6 +158,12 @@ program
     $ navy port mywebserver 80
     35821
   `))
+
+program
+  .command('available-services')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Prints the names of the services that are launched or can be launched')
+  .action(basicCliWrapper('getAvailableServiceNames', { driverLogging: false }))
 
 program
   .command('develop [service]')
