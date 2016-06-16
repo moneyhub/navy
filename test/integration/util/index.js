@@ -1,17 +1,20 @@
-import {expect} from 'chai'
+export async function retry(callback, onFail, { tries = 10, interval = 1000 } = {}) {
+  let currentTry = 0
+  let lastException = null
 
-export async function tryAndWait(callback) {
-  let success = false
-  let tries = 0
+  while (currentTry++ < tries) {
+    try {
+      await callback()
+      return true
+    } catch (ex) {
+      lastException = ex
+      console.log('Retrying assertion...')
 
-  while (tries++ < 40) {
-    if (await callback()) {
-      success = true
-      break
+      if (onFail) await onFail()
     }
 
-    await new Promise(resolve => setTimeout(resolve, 1500))
+    await new Promise(resolve => setTimeout(resolve, interval))
   }
 
-  expect(success).to.be.true
+  throw lastException
 }
