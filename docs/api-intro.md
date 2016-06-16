@@ -49,4 +49,4 @@ be launched. If you don't pass an array, all services will be launched.
 ## Next steps
 
 These docs are very much a work in progress. If you want to see what else you can do with your `navy` instance, check out the
-integration tests or the `src/navy/index.js` file.
+integration tests or the `packages/navy/src/navy/index.js` file.

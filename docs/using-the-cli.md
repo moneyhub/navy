@@ -1,31 +1,24 @@
 Using the CLI
 =============
 
-## Launching a Navy
+## Importing a Navy
 
-In order to launch a navy, you need to supply configuration which defines your environment.
-This is done in the form of a `docker-compose.yml` file.
+In order to get started, you need to import your docker compose configuration.
+`cd` to the directory where you have your docker compose config, and then run:
 
-An example `docker-compose.yml` file might look like this:
-
-```yaml
-version: '2'
-
-services:
-  mongo:
-    image: mongo
-    ports:
-      - 27017
-
-  helloworld:
-    image: dockercloud/hello-world
-    ports:
-      - 80
+```sh
+$ navy import
 ```
 
-Make sure you've `cd`'d to the directory where your `docker-compose.yml` file is.
+Now you should be ready to operate on your Navy!
 
-Then launch your navy!
+It's worth noting that once you've imported your config, you don't have to be in the directory where your
+docker compose config is, it remembers the directory where you imported from!
+
+
+## Launching services
+
+Now you can run:
 
 ```sh
 $ navy launch
@@ -37,9 +30,6 @@ you can preselect which services to bring up on the command line.
 ```sh
 $ navy launch helloworld # Launches helloworld service only
 ```
-
-Once you've launched your navy, you don't have to be in the directory where your
-`docker-compose.yml` file is, it remembers the directory where you launched from!
 
 ## Listing the running services
 
