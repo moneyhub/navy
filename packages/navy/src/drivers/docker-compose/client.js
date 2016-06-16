@@ -21,6 +21,7 @@ export type ComposeClient = {
 export type ExecOpts = {
   useOriginalDockerComposeFiles?: boolean,
   noLog?: boolean,
+  pipeLog?: boolean,
 }
 
 export function createComposeClient(navy: Navy): ComposeClient {
@@ -33,6 +34,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
       const {
         useOriginalDockerComposeFiles,
         noLog,
+        pipeLog,
       } = opts
 
       const composeOpts = {}
@@ -47,9 +49,12 @@ export function createComposeClient(navy: Navy): ComposeClient {
       composeArgs.push(command, ...args)
 
       return await execAsync('docker-compose', composeArgs, childProcess => {
-        if (!noLog) {
+        if (!noLog && !pipeLog) {
           childProcess.stdout.on('data', data => log(data))
           childProcess.stderr.on('data', data => log(data))
+        } else if (pipeLog) {
+          childProcess.stdout.on('data', data => process.stdout.write(data))
+          childProcess.stderr.on('data', data => process.stderr.write(data))
         }
       }, composeOpts)
     },

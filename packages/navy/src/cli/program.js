@@ -150,6 +150,12 @@ program
   .action(basicCliWrapper('pull'))
 
 program
+  .command('logs [services...]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Streams logs for the given services')
+  .action(lazyRequire('./logs'))
+
+program
   .command('host <service>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external host for the given service')

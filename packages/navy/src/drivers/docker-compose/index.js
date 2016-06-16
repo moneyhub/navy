@@ -100,6 +100,14 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('pull', services)
     },
 
+    async spawnLogStream(services: ?Array<string>): Promise<void> {
+      if (!services) {
+        services = []
+      }
+
+      await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true })
+    },
+
     async host(service: string, index: number = 1): Promise<string> {
       // at the moment, we do not support things like Docker Swarm which might have a
       // different host for different services.
