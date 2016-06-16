@@ -7,13 +7,6 @@ import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 export default async function (services: Array<string>, opts: Object): Promise<void> {
   const env = getNavy(opts.navy)
 
-  if (!await env.isInitialised()) {
-    await env.initialise({
-      configProvider: 'filesystem',
-      path: process.cwd(),
-    })
-  }
-
   const serviceNames = await env.getAvailableServiceNames()
   const launchedServiceNames = await env.getLaunchedServiceNames()
 

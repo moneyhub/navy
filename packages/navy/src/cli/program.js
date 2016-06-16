@@ -11,6 +11,7 @@ const loadingLabelMap = {
   kill: 'Killing services...',
   rm: 'Removing services...',
   pull: 'Pulling service images...',
+  delete: 'Deleting navy configuration...',
 }
 
 function wrapper(res) {
@@ -70,9 +71,15 @@ function lazyRequire(path) {
 const defaultNavy = getConfig().defaultNavy
 
 program
+  .command('import')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Imports docker compose configuration from the current working directory and initialises a new navy')
+  .action(lazyRequire('./import'))
+
+program
   .command('launch [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .description('Launches the given services in an navy')
+  .description('Launches the given services in a navy')
   .action(lazyRequire('./launch'))
   .on('--help', () => console.log(`
   This will prompt you for the services that you want to bring up.
@@ -82,8 +89,7 @@ program
 program
   .command('destroy')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .option('-f, --force', 'don\'t prompt before removing the navy')
-  .description('Destroys an navy and all related data and services')
+  .description('Destroys a navy and all related data and services')
   .action(basicCliWrapper('destroy'))
   .on('--help', () => console.log(`
   This will destroy an entire navy and all of its data and services.
@@ -95,10 +101,16 @@ program
   `))
 
 program
+  .command('delete')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Removes a navy configuration without removing any docker containers or services')
+  .action(basicCliWrapper('delete'))
+
+program
   .command('ps')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .option('--json', 'output JSON instead of a table')
-  .description('Lists the running services for an navy')
+  .description('Lists the running services for a navy')
   .action(lazyRequire('./ps'))
 
 program

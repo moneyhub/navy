@@ -20,13 +20,13 @@ export class NavyError {
 
 export class NavyNotInitialisedError extends NavyError {
   constructor(navyName: string) {
-    super('Navy "' + navyName + '" not initialised')
+    super('Navy "' + navyName + '" not imported')
   }
 
   prettyPrint() {
     super.prettyPrint()
 
-    console.log(' Make sure you\'ve launched the navy with ' + chalk.bold('navy launch'))
+    console.log(' Make sure you\'ve imported the navy with ' + chalk.bold('navy import'))
     console.log()
   }
 }

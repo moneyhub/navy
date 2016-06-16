@@ -4,6 +4,8 @@ import Automator from '../../util/cli-automator'
 export default function () {
 
   this.When(/I launch a service from the CLI prompt$/, async function () {
+    await Automator.spawn(['-e', ENV_NAME, 'import']).waitForDone()
+
     const cmd = Automator.spawn(['-e', ENV_NAME, 'launch'])
     await cmd.waitForLaunch()
 
@@ -16,6 +18,8 @@ export default function () {
   })
 
   this.When(/I launch a service from the CLI directly$/, async function () {
+    await Automator.spawn(['-e', ENV_NAME, 'import']).waitForDone()
+
     const cmd = Automator.spawn(['-e', ENV_NAME, 'launch', TEST_SERVICE_NAME])
     await cmd.waitForDone()
   })
