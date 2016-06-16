@@ -14,7 +14,7 @@ export type Driver = {
   restart(services: ?Array<string>): Promise<void>;
   kill(services: ?Array<string>): Promise<void>;
   rm(services: ?Array<string>): Promise<void>;
-  pull(services: ?Array<string>): Promise<void>;
+  update(services: ?Array<string>): Promise<void>;
   spawnLogStream(services: ?Array<string>): Promise<void>;
   host(service: string, index?: number): Promise<string>;
   port(service: string, privatePort: number, index: ?number): Promise<number>;

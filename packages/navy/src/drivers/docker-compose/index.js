@@ -96,8 +96,13 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('rm', ['-f', '-v', ...services])
     },
 
-    async pull(services: ?Array<string>): Promise<void> {
+    async update(services: ?Array<string>): Promise<void> {
+      if (!services) {
+        services = []
+      }
+
       await exec('pull', services)
+      await exec('up', ['-d', '--no-deps', ...services])
     },
 
     async spawnLogStream(services: ?Array<string>): Promise<void> {

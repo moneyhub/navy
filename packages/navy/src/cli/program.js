@@ -10,7 +10,7 @@ const loadingLabelMap = {
   restart: 'Restarting services...',
   kill: 'Killing services...',
   rm: 'Removing services...',
-  pull: 'Pulling service images...',
+  update: 'Updating service images...',
   delete: 'Deleting navy configuration...',
 }
 
@@ -144,10 +144,10 @@ program
   .action(basicCliWrapper('rm'))
 
 program
-  .command('pull [services...]')
+  .command('update [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .description('Pulls the given services\' images from their respective registries')
-  .action(basicCliWrapper('pull'))
+  .description('Pulls the given services\' images from their respective registries and relaunches the services')
+  .action(basicCliWrapper('update'))
 
 program
   .command('logs [services...]')

@@ -231,10 +231,10 @@ export class Navy {
     await (await this.safeGetDriver()).rm(services)
   }
 
-  async pull(services?: Array<string>): Promise<void> {
+  async update(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
-    await (await this.safeGetDriver()).pull(services)
+    await (await this.safeGetDriver()).update(services)
   }
 
   async host(service: string, index?: number): Promise<?string> {
