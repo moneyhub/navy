@@ -1,5 +1,6 @@
 /* @flow */
 
+import Bluebird from 'bluebird'
 import {Navy} from './'
 import defaultMiddleware from './default-middleware'
 
@@ -15,10 +16,10 @@ export async function middlewareRunner(navy: Navy, state: State): Promise {
 
   await navy.ensurePluginsLoaded()
 
-  const config = [
+  const config = await Bluebird.reduce([
     ...defaultMiddleware,
     ...navy._registeredMiddleware,
-  ].reduce((prevConfig, middlewareFn) => middlewareFn(prevConfig, state), await driver.getConfig())
+  ], async (prevConfig, middlewareFn) => await middlewareFn(prevConfig, state), await driver.getConfig())
 
   await driver.writeConfig(config)
 }
