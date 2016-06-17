@@ -12,7 +12,8 @@
     "flow": "flow",
     "test": "./scripts/test.sh",
     "prepublish": "npm run build",
-    "publish": "lerna publish"
+    "publish": "lerna publish",
+    "publish-rc": "NPM_DIST_TAG=next npm run publish"
   },
   "repository": {
     "type": "git",
