@@ -63,5 +63,6 @@ export type State = {
   driver?: string,
   configProvider?: string,
   path?: string,
+  npmPackage?: string,
   services?: Object,
 }

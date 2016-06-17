@@ -5,6 +5,13 @@ import path from 'path'
 import chalk from 'chalk'
 import {getNavy} from '../'
 import {NavyError} from '../errors'
+import {getImportOptionsForCLI} from '../config-provider'
+
+const OPTION_LABEL_MAP = {
+  configProvider: 'Provider',
+  path: 'Directory',
+  npmPackage: 'NPM Package',
+}
 
 export default async function (opts: Object): Promise<void> {
   const env = getNavy(opts.navy)
@@ -14,15 +21,20 @@ export default async function (opts: Object): Promise<void> {
     throw new NavyError(`Navy "${opts.navy}" has already been imported and initialised.`)
   }
 
-  await env.initialise({
-    configProvider: 'filesystem',
-    path: process.cwd(),
-  })
+  const initialiseOpts = await getImportOptionsForCLI(opts)
+
+  await env.initialise(initialiseOpts)
 
   console.log()
   console.log(chalk.green(` Navy "${chalk.white.bold(opts.navy)}" has now been imported and initialised. 🎉`))
   console.log()
-  console.log(` ${chalk.bold('Directory')}: ${chalk.dim(process.cwd())}`)
+
+  for (const key in initialiseOpts) {
+    if (OPTION_LABEL_MAP[key]) {
+      console.log(` ${chalk.bold(OPTION_LABEL_MAP[key])}: ${chalk.dim(initialiseOpts[key])}`)
+    }
+  }
+
   console.log()
   console.log(` You can now use ${chalk.bold('navy')} commands from any directory to control this Navy.`)
   console.log()

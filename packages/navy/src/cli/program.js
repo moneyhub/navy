@@ -2,6 +2,7 @@ import program from 'commander'
 import {NavyError} from '../errors'
 import {getConfig} from '../config'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+import {getImportCommandLineOptions} from '../config-provider'
 
 const loadingLabelMap = {
   destroy: 'Destroying services...',
@@ -72,11 +73,13 @@ function lazyRequire(path) {
 
 const defaultNavy = getConfig().defaultNavy
 
-program
+const importCommand = program
   .command('import')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Imports docker compose configuration from the current working directory and initialises a new navy')
   .action(lazyRequire('./import'))
+
+getImportCommandLineOptions().forEach(opt => importCommand.option(...opt))
 
 program
   .command('launch [services...]')

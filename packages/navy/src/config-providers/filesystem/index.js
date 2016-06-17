@@ -27,3 +27,12 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
     },
   }
 }
+
+createFileSystemConfigProvider.importCliOptions = []
+
+createFileSystemConfigProvider.getImportOptionsForCLI = (opts) => {
+  return {
+    configProvider: 'filesystem',
+    path: process.cwd(),
+  }
+}
