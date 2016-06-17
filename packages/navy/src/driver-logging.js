@@ -16,10 +16,11 @@ function _redraw(opts = {}) {
   }
 
   if (!process.stdout.isTTY) {
-    console.log()
     if (opts.success) {
+      console.log()
       console.log(symbol, 'SUCCESS')
     } else if (opts.success === false) {
+      console.log()
       console.log(symbol, 'FAILURE')
     }
     return
