@@ -15,6 +15,16 @@ function _redraw(opts = {}) {
     symbol = chalk.red('•')
   }
 
+  if (!process.stdout.isTTY) {
+    console.log()
+    if (opts.success) {
+      console.log(symbol, 'SUCCESS')
+    } else if (opts.success === false) {
+      console.log(symbol, 'FAILURE')
+    }
+    return
+  }
+
   process.stdout.write('                                                                        \n')
   process.stdout.write(` ${symbol} ${opts.success === false ? chalk.red(_message, 'FAILED') : _message}\n`)
   process.stdout.cursorTo(0)
@@ -45,7 +55,8 @@ export function stopDriverLogging(opts = {}) {
   clearInterval(_spinnerInterval)
 
   _redraw({ success: opts.success != null ? opts.success : true })
-  console.log('\n\n')
+
+  if (process.stdout.isTTY) console.log('\n\n')
 }
 
 export function isDriverLogging(): boolean {
