@@ -1,6 +1,7 @@
 /* @flow */
 
 import bluebird from 'bluebird'
+import {EventEmitter2} from 'eventemitter2'
 
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
@@ -19,7 +20,7 @@ const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 
-export class Navy {
+export class Navy extends EventEmitter2 {
 
   name: string;
   normalisedName: string;
@@ -30,6 +31,10 @@ export class Navy {
   _registeredMiddleware: Array<Function>;
 
   constructor(name: string) {
+    super({
+      maxListeners: Number.MAX_SAFE_INTEGER,
+    })
+
     this.name = name
     this.normalisedName = normaliseNavyName(name)
 
