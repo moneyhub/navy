@@ -163,6 +163,7 @@ export class Navy extends EventEmitter2 {
 
   async initialise(opts: State): Promise<void> {
     const state: State = {
+      services: {},
       ...opts,
       driver: 'docker-compose',
     }
