@@ -71,7 +71,7 @@ function lazyRequire(path) {
   }
 }
 
-const defaultNavy = getConfig().defaultNavy
+const defaultNavy = process.env.NAVY_NAME || getConfig().defaultNavy
 
 const importCommand = program
   .command('import')

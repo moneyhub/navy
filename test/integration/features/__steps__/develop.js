@@ -1,14 +1,14 @@
 import fetch from 'node-fetch'
 import {expect} from 'chai'
 
-import {ENV_NAME, TEST_SERVICE_NAME} from '../../environment'
+import {TEST_SERVICE_NAME} from '../../environment'
 import Automator from '../../util/cli-automator'
 import {retry} from '../../util'
 
 export default function () {
 
   this.When(/I put the service into development$/, async function () {
-    const cmd = Automator.spawn(['-e', ENV_NAME, 'develop'], {
+    const cmd = Automator.spawn(['develop'], {
       cwd: this.localCopyPath,
     })
 
