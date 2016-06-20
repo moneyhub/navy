@@ -8,8 +8,16 @@ import {getConfig} from '../config'
 function getStatus(service, state) {
   let statusString = service.status
 
-  if (state && state.services && state.services[service.name] && state.services[service.name]._develop) {
-    statusString += ' ' + chalk.yellow('(development)')
+  if (state && state.services && state.services[service.name]) {
+    const serviceState = state.services[service.name]
+
+    if (serviceState._develop) {
+      statusString += ' ' + chalk.yellow('(development)')
+    }
+
+    if (serviceState._tag) {
+      statusString += ' ' + chalk.cyan(`@ ${serviceState._tag}`)
+    }
   }
 
   return statusString
