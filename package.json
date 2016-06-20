@@ -13,7 +13,9 @@
     "test": "./scripts/test.sh",
     "prepublish": "npm run build",
     "publish": "lerna publish",
-    "publish-rc": "NPM_DIST_TAG=next npm run publish"
+    "publish-rc": "NPM_DIST_TAG=next npm run publish",
+    "bootstrap": "lerna bootstrap",
+    "updated": "lerna updated"
   },
   "repository": {
     "type": "git",

@@ -33,6 +33,5 @@ before_install:
   - docker --version
   - docker-compose --version
 
-  # install and bootstrap with lerna (monorepo tool)
-  - npm i -g lerna@1.1.2
-  - lerna bootstrap
+  # bootstrap packages
+  - npm run bootstrap
