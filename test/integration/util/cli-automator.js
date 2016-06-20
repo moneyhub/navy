@@ -44,7 +44,7 @@ export default class Automator {
       cwd: this.opts.cwd || path.join(__dirname, '../dummy-navy'),
       env: {
         NAVY_NAME: ENV_NAME,
-        ...(this.opts.env || process.env)
+        ...(this.opts.env || process.env),
       },
     })
 
