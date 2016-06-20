@@ -56,6 +56,8 @@ export default class Automator {
       console.log()
       console.log(' - Exited')
       console.log()
+
+      this.exited = true
     })
   }
 
@@ -70,6 +72,10 @@ export default class Automator {
   }
 
   waitForDone() {
+    if (this.exited) {
+      return stripAnsi(this.output)
+    }
+
     return new Promise(resolve =>
       this.term.once('exit', () => resolve(stripAnsi(this.output)))
     )
