@@ -243,6 +243,12 @@ export class Navy extends EventEmitter2 {
     await (await this.safeGetDriver()).update(services)
   }
 
+  async spawnLogStream(services?: Array<string>): Promise<void> {
+    if (!services) services = await this.getLaunchedServiceNames()
+
+    await (await this.safeGetDriver()).spawnLogStream(services)
+  }
+
   async useTag(service: string, tag: string): Promise<void> {
     const state = (await this.getState()) || {}
 
