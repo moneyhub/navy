@@ -33,6 +33,8 @@ export class Navy extends EventEmitter2 {
   constructor(name: string) {
     super({
       maxListeners: Number.MAX_SAFE_INTEGER,
+      wildcard: true,
+      delimiter: '.',
     })
 
     this.name = name

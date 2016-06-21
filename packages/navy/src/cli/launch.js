@@ -33,7 +33,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     return
   }
 
-  await env.emitAsync('cli:launch:before-launch')
+  await env.emitAsync('cli.before.launch')
 
   startDriverLogging('Launching services...')
   await env.launch(services)

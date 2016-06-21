@@ -25,6 +25,9 @@ export default async function (opts: Object): Promise<void> {
 
   await env.initialise(initialiseOpts)
 
+  await env.ensurePluginsLoaded()
+  await env.emitAsync('cli.import')
+
   console.log()
   console.log(chalk.green(` Navy "${chalk.white.bold(opts.navy)}" has now been imported and initialised. 🎉`))
   console.log()

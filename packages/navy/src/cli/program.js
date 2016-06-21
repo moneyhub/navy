@@ -45,12 +45,18 @@ function basicCliWrapper(fnName, opts = {}) {
 
     if (driverLogging) startDriverLogging(loadingLabelMap[fnName])
 
-    const returnVal = await wrapper(getNavy(envName)[fnName](
+    const navy = getNavy(envName)
+    await navy.ensurePluginsLoaded()
+    await navy.emitAsync(`cli.before.${fnName}`, fnName)
+
+    const returnVal = await wrapper(navy[fnName](
       Array.isArray(maybeServices) && maybeServices.length === 0
         ? undefined
         : maybeServices,
       ...otherArgs,
     ))
+
+    await navy.emitAsync(`cli.after.${fnName}`, fnName)
 
     if (driverLogging) stopDriverLogging()
 
