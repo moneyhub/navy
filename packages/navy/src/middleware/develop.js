@@ -10,6 +10,10 @@ export default (config, state) => {
         ...serviceConfig.volumes || [],
         ...Object.keys(serviceState._develop.mounts).map(local => `${local}:${serviceState._develop.mounts[local]}`),
       ]
+
+      if (serviceState._develop.command) {
+        serviceConfig.command = serviceState._develop.command
+      }
     }
   })
 

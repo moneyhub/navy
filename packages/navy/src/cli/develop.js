@@ -46,6 +46,7 @@ export default async function (service: string, opts: Object): Promise<void> {
         ...(state.services || {})[service],
         _develop: {
           mounts,
+          command: navyRc.develop.command,
         },
       },
     },
