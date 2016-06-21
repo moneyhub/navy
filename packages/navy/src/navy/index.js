@@ -190,6 +190,12 @@ export class Navy extends EventEmitter2 {
   }
 
   async relaunch(opts: ?Object): Promise<void> {
+    const services = await this.getLaunchedServiceNames()
+
+    if (services.length === 0) {
+      return
+    }
+
     await this.launch(undefined, opts)
   }
 

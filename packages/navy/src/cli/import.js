@@ -6,6 +6,7 @@ import chalk from 'chalk'
 import {getNavy} from '../'
 import {NavyError} from '../errors'
 import {getImportOptionsForCLI} from '../config-provider'
+import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 
 const OPTION_LABEL_MAP = {
   configProvider: 'Provider',
@@ -27,6 +28,10 @@ export default async function (opts: Object): Promise<void> {
 
   await env.ensurePluginsLoaded()
   await env.emitAsync('cli.import')
+
+  startDriverLogging('Ensuring services are up to date...')
+  await env.relaunch()
+  stopDriverLogging()
 
   console.log()
   console.log(chalk.green(` Navy "${chalk.white.bold(opts.navy)}" has now been imported and initialised. 🎉`))
