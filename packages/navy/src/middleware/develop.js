@@ -6,6 +6,8 @@ export default (config, state) => {
     const serviceState = state.services[serviceName]
 
     if (serviceState._develop) {
+      serviceConfig.stdin_open = true
+
       serviceConfig.volumes = [
         ...serviceConfig.volumes || [],
         ...Object.keys(serviceState._develop.mounts).map(local => `${local}:${serviceState._develop.mounts[local]}`),
