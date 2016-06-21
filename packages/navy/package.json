@@ -1,6 +1,6 @@
 {
   "name": "navy",
-  "version": "2.1.0-rc5",
+  "version": "2.1.0",
   "description": "Docker Compose wrapper to allow for easy development workflows",
   "main": "lib/index.js",
   "bin": {
