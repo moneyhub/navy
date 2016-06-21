@@ -56,6 +56,18 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
     async getNavyFilePath(): Promise<string> {
       return path.join(await this.getNavyPath(), 'Navyfile.js')
     },
+
+    async refreshConfig(): Promise<bool> {
+      const envState: ?State = await navy.getState()
+
+      if (!envState) {
+        throw new Error('State doesn\'t exist for navy')
+      }
+
+      await tryAndInstall(envState.npmPackage)
+
+      return true
+    },
   }
 }
 
@@ -65,11 +77,7 @@ createNpmConfigProvider.importCliOptions = [
 
 createNpmConfigProvider.getImportOptionsForCLI = async (opts) => {
   if (opts.npmPackage) {
-    try {
-      await fs.accessAsync(await pathToModule(opts.npmPackage))
-    } catch (ex) {
-      await tryAndInstall(opts.npmPackage)
-    }
+    await tryAndInstall(opts.npmPackage)
 
     return {
       configProvider: 'npm',

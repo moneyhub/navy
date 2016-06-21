@@ -219,6 +219,12 @@ program
   .action(lazyRequire('./run'))
 
 program
+  .command('refresh-config')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Refreshes the configuration for the given Navy')
+  .action(lazyRequire('./refresh-config'))
+
+program
   .command('status')
   .option('--json', 'output JSON instead of a table')
   .description('List all of the running navies and the status of their services')

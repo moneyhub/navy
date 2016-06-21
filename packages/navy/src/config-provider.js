@@ -14,6 +14,7 @@ const PROVIDERS = [
 export type ConfigProvider = {
   getNavyPath(): Promise<string>;
   getNavyFilePath(): Promise<string>;
+  refreshConfig(): Promise<bool>;
 }
 
 export type CreateConfigProvider = (navy: Navy) => ConfigProvider
