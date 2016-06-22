@@ -3,15 +3,15 @@ Example day to day uses of Navy
 
 *This documentation is a work in progress and might be incomplete*
 
-## Viewing the status of all my services and environments
+## Viewing the status of all my services and Navies
 
-You can view all of your services across environments by running:
+You can view all of your services across Navies by running:
 
 ```sh
 $ navy status
 ```
 
-Alternatively, `navy ps` will show the services just from the current working environment.
+Alternatively, `navy ps` will show the services just from the current working Navy.
 
 
 ## Temporarily using a different version/tag of a service locally
@@ -41,7 +41,7 @@ $ navy logs my-awesome-webapp
 
 ## Run multiple instances of your environment in parallel
 
-[See working with multiple environments](multiple-environments.md).
+[See working with multiple Navies](multiple-navies.md).
 
 ## Working on a service locally
 

@@ -5,7 +5,7 @@ navy
 
 Navy is a command line tool and NodeJS library to help make working on your application easier when it has many services or backing services.
 
-It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
+It builds on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
 
 Navy is great for development as it allows you to put a service into "development mode" from the command line, which automatically mounts your local source code into the container. This is great for quickly working on multiple services without having to change any configuration.
 

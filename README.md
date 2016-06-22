@@ -5,7 +5,7 @@ Navy [![Build Status](https://img.shields.io/travis/momentumft/navy/master.svg?s
 
 Navy is a command line tool and NodeJS library to help make working on your application easier when it has many services or backing services.
 
-It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
+It builds on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
 
 An example `docker-compose.yml` might look like this:
 
@@ -75,7 +75,7 @@ If you don't have an existing `docker-compose.yml`, [check out the guide on writ
 
 - [Example uses of Navy in a day to day workflow](docs/example-uses.md)
 - [Working on services in your environment using Navy's development mode](docs/development-mode.md)
-- [Working with multiple environments in parallel](docs/multiple-environments.md)
+- [Working with multiple Navies in parallel](docs/multiple-navies.md)
 - [Introduction to using the NodeJS API](docs/api-intro.md)
 - [Writing your own plugins](docs/writing-plugins.md)
 

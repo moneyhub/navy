@@ -1,9 +1,9 @@
-Working with multiple environments
+Working with multiple Navies
 ==================================
 
 *This documentation is a work in progress and might be incomplete*
 
-Environments are referred to as "Navies" in Navy. You can launch multiple Navies in parallel and operate them.
+You can launch multiple Navies in parallel and operate them.
 
 Unlike with Docker Compose, when you launch a Navy (with `navy import` and `navy launch`), you can then operate on that Navy from any directory on your machine, no need to remain in the same directory as your configuration.
 
