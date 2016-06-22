@@ -1,14 +1,35 @@
-navy [![Build Status](https://img.shields.io/travis/momentumft/navy/master.svg?style=flat)](https://travis-ci.org/momentumft/navy) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/momentumft/navy.svg)](https://github.com/momentumft/navy)
+Navy [![Build Status](https://img.shields.io/travis/momentumft/navy/master.svg?style=flat)](https://travis-ci.org/momentumft/navy) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/momentumft/navy.svg)](https://github.com/momentumft/navy)
 ==================
 
-> Docker Compose wrapper to allow for easy development workflows
+> A tool for easy multi-service development powered by Docker Compose
 
-Navy is a command line tool and Node library to help make working on your application easier when it has many services,
-perfect if you have a microservice-like architecture.
+Navy is a command line tool and NodeJS library to help make working on your application easier when it has many services or backing services.
 
-It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem.
+It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
 
-We're very much early days with Navy, and lots of the functionality we are using in our team internally hasn't been open sourced here yet!
+An example `docker-compose.yml` might look like this:
+
+```yaml
+version: '2'
+
+services:
+  web:
+    image: mycompany/myapp
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+```
+
+Navy is great for development as it allows you to put a service into "development mode" from the command line, which automatically mounts your local source code into the container. This is great for quickly working on multiple services without having to change any configuration.
+
+Navy is also great for testing and CI as you can bring up your environment before your test run and even get information like host and ports of various services using the NodeJS API.
+
+You can customise the functionality of Navy by writing Javascript plugins which can add workflow commands or control your service configuration at runtime using middleware. [See more about writing plugins](docs/writing-plugins).
+
 
 ## Features
 
@@ -28,7 +49,7 @@ We're very much early days with Navy, and lots of the functionality we are using
 
 - **Javascript API for interfacing with Docker and Docker Compose**
 
-  Easily launch and manage environments from your code. Useful for if you want to spin up an environment at the start of a test run.
+  Easily launch and manage environments from your code. Useful for if you want to spin up an environment at the start of a test run or extract the host and port of a running service.
 
 - **Plugin system**
 
@@ -36,27 +57,27 @@ We're very much early days with Navy, and lots of the functionality we are using
   An example of how we use this internally is rewriting the images to point to a local registry cache instead of pulling from Docker Hub.
 
 
-## Installation
-
-Navy can be installed globally as a CLI tool, or locally in your application so you can use the API to manage environments from code.
-
-### CLI installation
+## Getting started
 
 ```sh
 $ npm install -g navy
-$ navy help
+$ cd my-docker-compose-config # where your docker-compose.yml might live
+$ navy import # import the docker compose config into Navy
+$ navy launch # launch your services!
 ```
 
-### Package installation
+[Now check out some example uses of Navy](docs/example-uses.md).
 
-```sh
-$ npm install --save-dev navy
-```
+If you don't have an existing `docker-compose.yml`, [check out the guide on writing your docker compose config](docs/creating-docker-compose-config.md).
 
-## Getting started
 
-- [Guide to using the CLI](docs/using-the-cli.md)
-- [Introduction to the NodeJS API](docs/api-intro.md)
+## Other useful guides
+
+- [Example uses of Navy in a day to day workflow](docs/example-uses.md)
+- [Working on services in your environment using Navy's development mode](docs/development-mode.md)
+- [Working with multiple environments in parallel](docs/multiple-environments.md)
+- [Introduction to using the NodeJS API](docs/api-intro.md)
+- [Writing your own plugins](docs/writing-plugins.md)
 
 
 ## License

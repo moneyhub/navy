@@ -1,14 +1,18 @@
 navy
 ====
 
-> Docker Compose wrapper to allow for easy development workflows
+> A tool for easy multi-service development powered by Docker Compose
 
-Navy is a command line tool and Node library to help make working on your application easier when it has many services,
-perfect if you have a microservice-like architecture.
+Navy is a command line tool and NodeJS library to help make working on your application easier when it has many services or backing services.
 
-It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem.
+It adds additional functionality on top of Docker Compose which means it's super easy to get started if you're already familiar with the Docker ecosystem. Simply point Navy at your existing `docker-compose.yml` and then you're good to go. With a single command, you can launch all of your services from your configuration and go on to manage those services and debug them.
 
-We're very much early days with Navy, and lots of the functionality we are using in our team internally hasn't been open sourced here yet!
+Navy is great for development as it allows you to put a service into "development mode" from the command line, which automatically mounts your local source code into the container. This is great for quickly working on multiple services without having to change any configuration.
+
+Navy is also great for testing and CI as you can bring up your environment before your test run and even get information like host and ports of various services using the NodeJS API.
+
+You can customise the functionality of Navy by writing Javascript plugins which can add workflow commands or control your service configuration at runtime using middleware.
+
 
 ## Features
 
@@ -28,7 +32,7 @@ We're very much early days with Navy, and lots of the functionality we are using
 
 - **Javascript API for interfacing with Docker and Docker Compose**
 
-  Easily launch and manage environments from your code. Useful for if you want to spin up an environment at the start of a test run.
+  Easily launch and manage environments from your code. Useful for if you want to spin up an environment at the start of a test run or extract the host and port of a running service.
 
 - **Plugin system**
 
@@ -36,28 +40,13 @@ We're very much early days with Navy, and lots of the functionality we are using
   An example of how we use this internally is rewriting the images to point to a local registry cache instead of pulling from Docker Hub.
 
 
-## Installation
-
-Navy can be installed globally as a CLI tool, or locally in your application so you can use the API to manage environments from code.
-
-### CLI installation
+## Getting started
 
 ```sh
 $ npm install -g navy
-$ navy help
 ```
 
-### Package installation
-
-```sh
-$ npm install --save-dev navy
-```
-
-## Getting started
-
-- [Guide to using the CLI](../../docs/using-the-cli.md)
-- [Introduction to the NodeJS API](../../docs/api-intro.md)
-
+[Read more of the documentation on our GitHub](https://github.com/momentumft/navy)
 
 ## License
 

@@ -1,6 +1,8 @@
 Introduction to using the NodeJS API
 ====================================
 
+*This documentation is a work in progress and might be incomplete*
+
 One of the great things about Navy is that it allows you to launch and manipulate your environments, or "navies",
 from the NodeJS api. Some example use cases of this might be:
 
