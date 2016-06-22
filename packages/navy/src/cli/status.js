@@ -4,6 +4,7 @@ import zygon from 'zygon'
 import chalk from 'chalk'
 import {getLaunchedNavies, Navy} from '../'
 import {getConfig} from '../config'
+import {fetchLaunchedComposeProjects} from '../util/compose-projects'
 
 function getStatus(service, state) {
   let statusString = service.status
@@ -60,6 +61,22 @@ export async function printPS(env: Navy, json: boolean): Promise<boolean> {
 
 export default async function (opts: Object): Promise<void> {
   const navies = await getLaunchedNavies()
+  const navyNames = navies.map(navy => navy.name)
+
+  const launchedComposeProjects = await fetchLaunchedComposeProjects()
+  const notImportedProjects = launchedComposeProjects.filter(
+    projectName => navyNames.indexOf(projectName) === -1
+  )
+
+  if (notImportedProjects.length > 0) {
+    for (const projectName of notImportedProjects) {
+      console.log()
+      console.log('  ' + chalk.underline(projectName) + ' ' + chalk.dim('(not imported)'))
+      console.log()
+      console.log(chalk.dim('  Import with ') + chalk.bold.white('$ navy import -e ' + projectName) + chalk.dim(' from the directory where your Docker Compose config is.'))
+      console.log()
+    }
+  }
 
   if (navies.length === 0) {
     console.log(chalk.dim('There are no launched navies'))
