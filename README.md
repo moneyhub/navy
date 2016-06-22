@@ -28,7 +28,7 @@ Navy is great for development as it allows you to put a service into "developmen
 
 Navy is also great for testing and CI as you can bring up your environment before your test run and even get information like host and ports of various services using the NodeJS API.
 
-You can customise the functionality of Navy by writing Javascript plugins which can add workflow commands or control your service configuration at runtime using middleware. [See more about writing plugins](docs/writing-plugins).
+You can customise the functionality of Navy by writing Javascript plugins which can add workflow commands or control your service configuration at runtime using middleware. [See more about writing plugins](docs/writing-plugins.md).
 
 
 ## Features
