@@ -7,7 +7,9 @@ import {getConfig} from '../config'
 import {fetchLaunchedComposeProjects} from '../util/compose-projects'
 
 function getStatus(service, state) {
-  let statusString = service.status
+  let statusString = service.status === 'exited'
+    ? chalk.red(service.status)
+    : service.status
 
   if (state && state.services && state.services[service.name]) {
     const serviceState = state.services[service.name]
