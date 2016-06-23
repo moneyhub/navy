@@ -1,0 +1,30 @@
+{
+  "name": "navy-plugin-nodejs",
+  "version": "2.1.0",
+  "description": "A set of helpers to help improve the experience of developing NodeJS applications with Navy",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/momentumft/navy.git"
+  },
+  "keywords": [
+    "docker",
+    "environment",
+    "node",
+    "nodejs",
+    "navy"
+  ],
+  "author": "Momentum Financial Technology Ltd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/momentumft/navy/issues"
+  },
+  "homepage": "https://github.com/momentumft/navy#readme",
+  "dependencies": {
+    "findit": "^2.0.0",
+    "lodash.mapvalues": "^4.4.0"
+  }
+}

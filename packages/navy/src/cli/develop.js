@@ -52,6 +52,8 @@ export default async function (service: string, opts: Object): Promise<void> {
     },
   })
 
+  await navy.emitAsync('cli.develop.beforeLaunch')
+
   await navy.kill([service])
   await navy.launch([service], { noDeps: true })
 
