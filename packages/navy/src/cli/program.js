@@ -4,9 +4,6 @@ import {getConfig} from '../config'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 import {getImportCommandLineOptions} from '../config-provider'
 
-const debug = require('debug')('navy:cli:program')
-debug('Loaded program')
-
 const loadingLabelMap = {
   destroy: 'Destroying services...',
   start: 'Starting services...',

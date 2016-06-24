@@ -1,4 +1,4 @@
-export default function tagOverrideMiddleware(config, state) {
+export default (config, state) => {
   const newConfig = config
 
   Object.keys(state.services || {}).forEach(function (serviceName) {

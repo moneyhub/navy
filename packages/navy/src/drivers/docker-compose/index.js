@@ -1,7 +1,7 @@
 /* @flow */
 
 import yaml from 'js-yaml'
-import fs from '../../util/fs'
+import bluebird from 'bluebird'
 
 import {createComposeClient, getDockerHost} from './client'
 import {Navy} from '../../navy'
@@ -10,6 +10,8 @@ import {Status as ServiceStatus} from '../../service'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
+
+const fs = bluebird.promisifyAll(require('fs'))
 
 const debug = require('debug')('navy:docker-compose')
 
@@ -54,7 +56,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async ps(): Promise<ServiceList> {
-      const ids = (await execAsync('docker', ['ps', '--filter', 'label=com.docker.compose.project=' + navy.normalisedName, '-q'])).trim().split('\n')
+      const ids = (await exec('ps', ['-q'], { noLog: true })).trim().split('\n')
 
       if (ids.length === 1 && ids[0] === '') return []
 

@@ -7,8 +7,6 @@ import defaultMiddleware from './default-middleware'
 import type {State} from './state'
 import type {Driver} from '../driver'
 
-const debug = require('debug')('navy:middleware')
-
 export async function middlewareRunner(navy: Navy, state: State): Promise {
   const driver: ?Driver = await navy.getDriver()
 
@@ -18,16 +16,10 @@ export async function middlewareRunner(navy: Navy, state: State): Promise {
 
   await navy.ensurePluginsLoaded()
 
-  const middleware = [
+  const config = await Bluebird.reduce([
     ...defaultMiddleware,
     ...navy._registeredMiddleware,
-  ]
-
-  debug('Got middleware, running', middleware.map(fn => fn.name))
-
-  const config = await Bluebird.reduce(middleware, async (prevConfig, middlewareFn) => await middlewareFn(prevConfig, state), await driver.getConfig())
-
-  debug('Finished running middleware')
+  ], async (prevConfig, middlewareFn) => await middlewareFn(prevConfig, state), await driver.getConfig())
 
   await driver.writeConfig(config)
 }

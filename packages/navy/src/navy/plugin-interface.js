@@ -6,7 +6,6 @@ import {Navy} from './'
 import type {ConfigProvider} from '../config-provider'
 
 const resolve = bluebird.promisify(require('resolve'))
-const debug = require('debug')('navy:plugin-interface')
 
 export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<Object>> {
   const configProvider: ?ConfigProvider = await navy.getConfigProvider()
@@ -25,15 +24,8 @@ export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<O
     resolve(pluginName, { basedir })
   ))
 
-  debug('Got plugins', pluginPaths)
-
-  const plugins = pluginPaths.map(pluginPath => {
-    debug('Loading', pluginPath)
-
-    return global.require(pluginPath)
-  })
-
-  debug('Got loaded plugins', plugins)
+  // $FlowIgnore: entry point to plugin has to be dynamic
+  const plugins = pluginPaths.map(pluginPath => require(pluginPath))
 
   return plugins.map(Plugin => Plugin(navy))
 }
