@@ -1,4 +1,4 @@
-export default (config, state) => {
+export default function developMiddleware(config, state) {
   const newConfig = config
 
   Object.keys(state.services || {}).forEach(function (serviceName) {

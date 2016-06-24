@@ -2,10 +2,10 @@
 
 import path from 'path'
 import bluebird from 'bluebird'
+import fs from '../util/fs'
 
 const debug = require('debug')('navy:state')
 
-const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 const rimraf = bluebird.promisify(require('rimraf'))
 

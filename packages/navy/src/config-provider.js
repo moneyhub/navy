@@ -1,9 +1,9 @@
 /* @flow */
 
-import {Navy} from './navy'
 import FileSystem from './config-providers/filesystem'
 import NPM from './config-providers/npm'
 
+import type {Navy} from './navy'
 import type {State} from './navy/state'
 
 const PROVIDERS = [

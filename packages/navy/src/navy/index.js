@@ -1,7 +1,7 @@
 /* @flow */
 
-import bluebird from 'bluebird'
 import {EventEmitter2} from 'eventemitter2'
+import fs from '../util/fs'
 
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
@@ -16,9 +16,9 @@ import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
 import type {State} from './state'
 import type {ServiceList} from '../service'
 
-const fs = bluebird.promisifyAll(require('fs'))
-
 export type {State}
+
+const debug = require('debug')('navy:main')
 
 export class Navy extends EventEmitter2 {
 
@@ -48,10 +48,13 @@ export class Navy extends EventEmitter2 {
   async ensurePluginsLoaded(): Promise<void> {
     if (this._pluginsLoaded) return
 
+    debug('Ensuring plugins are loaded')
+
     const navyFile = await this.getNavyFile()
 
     if (!navyFile) return
 
+    debug('Loading plugins')
     await loadPlugins(this, navyFile)
 
     this._pluginsLoaded = true
@@ -128,10 +131,12 @@ export class Navy extends EventEmitter2 {
 
     const navyFilePath: string = await configProvider.getNavyFilePath()
 
+    debug('Got NavyFile', navyFilePath)
+
     try {
-      // $FlowIgnore: entry point to Navyfile.js has to be dynamic
-      return require(navyFilePath)
+      return global.require(navyFilePath)
     } catch (ex) {
+      debug('Failed to load Navyfile', navyFilePath, ex)
       return null
     }
   }
@@ -140,7 +145,6 @@ export class Navy extends EventEmitter2 {
     this._cachedState = state
 
     await saveState(this.normalisedName, state)
-    await middlewareRunner(this, state)
   }
 
   registerCommand(name: string, action: Function) {
