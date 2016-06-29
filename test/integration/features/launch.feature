@@ -23,3 +23,8 @@ Feature: Launching and working with an navy
     And there is a launched service
     When I launch the navy with no services specified
     Then I should see that the service is running
+
+  Scenario: Launching a Navy which doesn't exist should throw an error
+    Given I am working with a nonexistant navy
+    When I launch the navy with no services specified
+    Then I should get an exception as the navy hasn't been initialised

@@ -1,4 +1,3 @@
-import path from 'path'
 import {expect} from 'chai'
 import {Service} from '../../../../packages/navy'
 
@@ -7,25 +6,15 @@ import {TEST_SERVICE_NAME} from '../../environment'
 export default function () {
 
   this.When(/I launch a service$/, async function () {
-    if (!await this.navy.isInitialised()) {
-      await this.navy.initialise({
-        configProvider: 'filesystem',
-        path: path.join(__dirname, '../../dummy-navy'),
-      })
-    }
-
     await this.navy.launch([TEST_SERVICE_NAME])
   })
 
   this.When(/I launch the navy with no services specified$/, async function () {
-    if (!await this.navy.isInitialised()) {
-      await this.navy.initialise({
-        configProvider: 'filesystem',
-        path: path.join(__dirname, '../../dummy-navy'),
-      })
+    try {
+      await this.navy.launch()
+    } catch (ex) {
+      this.error = ex
     }
-
-    await this.navy.launch()
   })
 
   this.When(/I stop the service$/, async function () {
@@ -37,6 +26,8 @@ export default function () {
   })
 
   this.Then(/I should see that the service is running$/, async function () {
+    expect(this.error).to.not.exist
+
     await expect(this.navy).to.have.services([
       { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
     ])
@@ -53,6 +44,10 @@ export default function () {
       { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
       { name: 'anotherservice', status: Service.Status.RUNNING },
     ])
+  })
+
+  this.Then(/I should get an exception as the navy hasn't been initialised/, async function () {
+    expect(this.error.message).to.equal('Navy "nonexistanttest" not imported')
   })
 
 }
