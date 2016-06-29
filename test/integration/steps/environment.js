@@ -21,4 +21,9 @@ export default function () {
     await this.navy.launch([TEST_SERVICE_NAME])
   })
 
+  this.Given(/there is a launched service which isn't running$/, async function () {
+    await this.navy.launch([TEST_SERVICE_NAME])
+    await this.navy.stop([TEST_SERVICE_NAME])
+  })
+
 }
