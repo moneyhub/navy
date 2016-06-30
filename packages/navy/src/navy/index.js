@@ -120,6 +120,10 @@ export class Navy extends EventEmitter2 {
   }
 
   async getNavyFile(): Promise<?Object> {
+    if (!await this.isInitialised()) {
+      throw new NavyNotInitialisedError(this.name)
+    }
+
     const configProvider: ?ConfigProvider = await this.getConfigProvider()
 
     if (!configProvider) {

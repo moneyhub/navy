@@ -43,18 +43,30 @@ function basicCliWrapper(fnName, opts = {}) {
     const otherArgs = args.slice(0, args.length - 1)
     const envName = opts.navy
 
+    process.on('unhandledRejection', ex => {
+      stopDriverLogging({ success: false })
+
+      if (ex instanceof NavyError) {
+        ex.prettyPrint()
+      } else {
+        console.error(ex.stack)
+      }
+
+      process.exit()
+    })
+
     if (driverLogging) startDriverLogging(loadingLabelMap[fnName])
 
     const navy = getNavy(envName)
     await navy.ensurePluginsLoaded()
     await navy.emitAsync(`cli.before.${fnName}`, fnName)
 
-    const returnVal = await wrapper(navy[fnName](
+    const returnVal = await navy[fnName](
       Array.isArray(maybeServices) && maybeServices.length === 0
         ? undefined
         : maybeServices,
       ...otherArgs,
-    ))
+    )
 
     await navy.emitAsync(`cli.after.${fnName}`, fnName)
 

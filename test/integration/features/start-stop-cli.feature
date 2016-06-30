@@ -13,3 +13,8 @@ Feature: Starting and stopping a service via the CLI
     And there is a launched service which isn't running
     When I start the navy via the CLI
     Then I should see that just that service is running
+
+  Scenario: Starting a Navy which doesn't exist should show an error
+    Given I am working with a nonexistant navy
+    When I start the navy via the CLI
+    Then I should see that the navy hasn't been initialised
