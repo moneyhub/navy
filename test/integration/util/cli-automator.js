@@ -41,7 +41,7 @@ export default class Automator {
       name: 'xterm-color',
       cols: 130,
       rows: 30,
-      cwd: this.opts.cwd || path.join(__dirname, '../dummy-navy'),
+      cwd: this.opts.cwd || path.join(__dirname, '../dummy-navies/basic'),
       env: {
         NAVY_NAME: ENV_NAME,
         ...(this.opts.env || process.env),

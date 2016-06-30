@@ -34,19 +34,23 @@ export default function () {
   })
 
   this.Then(/I should see that the service is stopped$/, async function () {
+    expect(this.error).to.not.exist
+
     await expect(this.navy).to.have.services([
       { name: TEST_SERVICE_NAME, status: Service.Status.EXITED },
     ])
   })
 
-  this.Then(/I should see that all of the services are running/, async function () {
+  this.Then(/I should see that all of the services are running$/, async function () {
+    expect(this.error).to.not.exist
+
     await expect(this.navy).to.have.services([
       { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
       { name: 'anotherservice', status: Service.Status.RUNNING },
     ])
   })
 
-  this.Then(/I should get an exception as the navy hasn't been initialised/, async function () {
+  this.Then(/I should get an exception as the navy hasn't been initialised$/, async function () {
     expect(this.error.message).to.equal('Navy "nonexistanttest" not imported')
   })
 

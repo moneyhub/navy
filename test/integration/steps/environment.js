@@ -9,7 +9,16 @@ export default function () {
 
     await this.navy.initialise({
       configProvider: 'filesystem',
-      path: path.join(__dirname, '../dummy-navy'),
+      path: path.join(__dirname, '../dummy-navies/basic'),
+    })
+  })
+
+  this.Given(/I am working with the test navy which uses the test middleware plugin to add labels$/, async function () {
+    this.navy = getNavy(ENV_NAME)
+
+    await this.navy.initialise({
+      configProvider: 'filesystem',
+      path: path.join(__dirname, '../dummy-navies/with-labels-middleware'),
     })
   })
 

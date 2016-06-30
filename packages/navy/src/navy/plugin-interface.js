@@ -20,12 +20,24 @@ export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<O
     return []
   }
 
-  const pluginPaths = await Promise.all(navyFile.plugins.map(async pluginName =>
-    resolve(pluginName, { basedir })
-  ))
+  let pluginPaths
+
+  try {
+    pluginPaths = await Promise.all(navyFile.plugins.map(async pluginName =>
+      resolve(pluginName, { basedir })
+    ))
+  } catch (ex) {
+    throw new Error('Couldn\'t resolve some of the plugins: ' + navyFile.plugins)
+  }
 
   // $FlowIgnore: entry point to plugin has to be dynamic
   const plugins = pluginPaths.map(pluginPath => require(pluginPath))
 
-  return plugins.map(Plugin => Plugin(navy))
+  return plugins.map((Plugin, index) => {
+    if (typeof Plugin !== 'function') {
+      throw new Error(navyFile.plugins[index] + ' doesn\'t export a function as the entrypoint')
+    }
+
+    return Plugin(navy)
+  })
 }
