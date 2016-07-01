@@ -37,6 +37,7 @@
     "mkdirp": "^0.5.1",
     "resolve": "^1.1.7",
     "rimraf": "^2.5.2",
+    "simple-docker-registry-client": "^1.1.0",
     "zygon": "^0.1.0"
   }
 }

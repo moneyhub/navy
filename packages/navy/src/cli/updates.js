@@ -1,8 +1,13 @@
+/* @flow */
+
 import chalk from 'chalk'
+import readline from 'readline'
 import zygon from 'zygon'
 import {dots} from 'cli-spinners'
 import {getNavy} from '../'
 import hasUpdate from '../util/has-update'
+
+const debug = require('debug')('navy:updates')
 
 let spinnerIndex = 0
 let spinnerFrame = dots.frames[0]
@@ -12,6 +17,12 @@ function renderStatus(status) {
     return chalk.yellow(spinnerFrame) + ' ' + chalk.dim('Checking...')
   } else if (status === true) {
     return chalk.yellow('• Update available')
+  } else if (status === 'UNKNOWN_REMOTE') {
+    return chalk.red('• Not found')
+  } else if (status === 'UNKNOWN_ERROR') {
+    return chalk.red('• Internal error')
+  } else if (status === 'NO_IMAGE') {
+    return chalk.red('• No image for service')
   } else {
     return chalk.green('✔ Up to date')
   }
@@ -20,6 +31,7 @@ function renderStatus(status) {
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
 
+  const navyFile = await navy.getNavyFile()
   const ps = await navy.ps()
 
   const updateStatus = {}
@@ -51,12 +63,12 @@ export default async function (opts: Object): Promise<void> {
   }
 
   function redraw() {
-    process.stdout.clearLine()
-    process.stdout.cursorTo(0)
+    readline.clearLine(process.stdout, 0)
+    readline.cursorTo(process.stdout, 0)
 
     for (let i = 0; i < drawnLines; i++) {
-      process.stdout.moveCursor(0, -1)
-      process.stdout.clearLine()
+      readline.moveCursor(process.stdout, 0, -1)
+      readline.clearLine(process.stdout, 0)
     }
 
     draw()
@@ -77,7 +89,16 @@ export default async function (opts: Object): Promise<void> {
   draw()
 
   await Promise.all(ps.map(async service => {
-    updateStatus[service.id] = await hasUpdate(service.image)
+    try {
+      if (!service || !service.raw || !service.raw.Image) {
+        return updateStatus[service.id] = 'NO_IMAGE'
+      }
+
+      updateStatus[service.id] = await hasUpdate(service.image, service.raw.Image, navyFile)
+    } catch (ex) {
+      debug('Error checking update for', service.name, ex.stack || ex.message)
+      updateStatus[service.id] = 'UNKNOWN_ERROR'
+    }
   }))
 
   redraw()

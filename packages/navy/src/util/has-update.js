@@ -1,20 +1,30 @@
 /* @flow */
 
-import {spawn} from 'child_process'
+import {imageFromImageWithTag, localImageFromImage, tagFromImageWithTag} from 'simple-docker-registry-client'
+import {execAsync} from './exec-async'
+import {getRegistryClient} from './registry-client'
 
-export default function hasUpdate(image: string): Promise<boolean> {
-  return new Promise(resolve => {
-    const pullPs = spawn('docker', ['pull', image])
+export default async function hasUpdate(imageWithTag: string, currentImageId: string, navyFile: ?Object): Promise<boolean|string> {
+  const imageRaw = await execAsync('docker inspect ' + currentImageId)
+  const currentImageContainerId = JSON.parse(imageRaw)[0].ContainerConfig.Image
 
-    pullPs.stdout.on('data', dataBuf => {
-      const data = dataBuf.toString()
+  const image = imageFromImageWithTag(imageWithTag)
 
-      if (data.indexOf('Download') !== -1 || data.indexOf('Waiting') !== -1 || data.indexOf('Pulling fs layer') !== -1) {
-        pullPs.kill()
-        resolve(true)
-      }
-    })
+  const client = await getRegistryClient(image, navyFile)
 
-    pullPs.on('close', () => resolve(false))
-  })
+  let manifest
+
+  try {
+    manifest = await client.request(localImageFromImage(image) + '/manifests/' + tagFromImageWithTag(imageWithTag))
+  } catch (ex) {
+    if (ex.body && ex.body.errors[0].code === 'MANIFEST_UNKNOWN') {
+      return 'UNKNOWN_REMOTE'
+    }
+
+    return 'UNKNOWN_ERROR'
+  }
+
+  const lastLayer = JSON.parse(manifest.history[0].v1Compatibility)
+
+  return lastLayer.container_config.Image !== currentImageContainerId
 }
