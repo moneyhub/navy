@@ -110,7 +110,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         services = []
       }
 
-      await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true })
+      await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
     },
 
     async host(service: string, index: number = 1): Promise<string> {

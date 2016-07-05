@@ -22,6 +22,7 @@ export type ExecOpts = {
   useOriginalDockerComposeFiles?: boolean,
   noLog?: boolean,
   pipeLog?: boolean,
+  maxBuffer?: number,
 }
 
 export function createComposeClient(navy: Navy): ComposeClient {
@@ -35,9 +36,12 @@ export function createComposeClient(navy: Navy): ComposeClient {
         useOriginalDockerComposeFiles,
         noLog,
         pipeLog,
+        maxBuffer,
       } = opts
 
-      const composeOpts = {}
+      const composeOpts: Object = {
+        maxBuffer: maxBuffer || 1024 * 1024,
+      }
       const composeFilePath = await client.getDockerComposeFilePath()
 
       if (composeFilePath && !useOriginalDockerComposeFiles) {
