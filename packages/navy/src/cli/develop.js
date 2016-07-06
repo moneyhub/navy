@@ -59,10 +59,6 @@ export default async function (service: string, opts: Object): Promise<void> {
 
   console.log(`🚧  ${service} has now restarted in development 🚧`)
 
-  if (opts.logs === false) {
-    return
-  }
-
   console.log(chalk.dim('-----------'))
   console.log()
 
