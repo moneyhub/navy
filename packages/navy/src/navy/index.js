@@ -10,6 +10,9 @@ import {getState, saveState, deleteState, pathToNavys} from './state'
 import {NavyNotInitialisedError, NavyError} from '../errors'
 import {loadPlugins} from './plugin-interface'
 import {middlewareRunner} from './middleware'
+import {reconfigureHTTPProxy} from '../http-proxy'
+import {getExternalIP} from '../util/external-ip'
+import {getUrlForService} from '../util/xipio'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -191,6 +194,8 @@ export class Navy extends EventEmitter2 {
     }
 
     await (await this.safeGetDriver()).launch(services, opts)
+
+    await reconfigureHTTPProxy()
   }
 
   async relaunch(opts: ?Object): Promise<void> {
@@ -208,6 +213,8 @@ export class Navy extends EventEmitter2 {
       throw new NavyNotInitialisedError(this.name)
     }
 
+    await reconfigureHTTPProxy({ excludeNavy: this.normalisedName })
+
     try {
       await (await this.safeGetDriver()).destroy()
     } catch (ex) {}
@@ -221,6 +228,8 @@ export class Navy extends EventEmitter2 {
 
   async start(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
+
+    await reconfigureHTTPProxy()
 
     await (await this.safeGetDriver()).start(services)
   }
@@ -297,12 +306,21 @@ export class Navy extends EventEmitter2 {
     await this.launch([service], { noDeps: true })
   }
 
-  async host(service: string, index?: number): Promise<?string> {
-    return await (await this.safeGetDriver()).host(service)
+  async externalIP(): Promise<?string> {
+    return getExternalIP()
+  }
+
+  async host(service?: string, index?: number): Promise<?string> {
+    // getting host by service and index is now DEPRECATED
+    return getExternalIP()
   }
 
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
     return await (await this.safeGetDriver()).port(service, privatePort, index)
+  }
+
+  async url(service: string): Promise<?string> {
+    return getUrlForService(service, this.normalisedName)
   }
 
   async getLaunchedServiceNames(): Promise<Array<string>> {

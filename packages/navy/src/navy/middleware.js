@@ -17,7 +17,7 @@ export async function middlewareRunner(navy: Navy, state: State): Promise {
   await navy.ensurePluginsLoaded()
 
   const config = await Bluebird.reduce([
-    ...defaultMiddleware,
+    ...defaultMiddleware(navy),
     ...navy._registeredMiddleware,
   ], async (prevConfig, middlewareFn) => await middlewareFn(prevConfig, state), await driver.getConfig())
 

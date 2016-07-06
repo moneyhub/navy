@@ -3,7 +3,7 @@
 import yaml from 'js-yaml'
 import bluebird from 'bluebird'
 
-import {createComposeClient, getDockerHost} from './client'
+import {createComposeClient} from './client'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
@@ -111,12 +111,6 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       }
 
       await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
-    },
-
-    async host(service: string, index: number = 1): Promise<string> {
-      // at the moment, we do not support things like Docker Swarm which might have a
-      // different host for different services.
-      return getDockerHost()
     },
 
     async port(service: string, privatePort: number, index: ?number): Promise {
