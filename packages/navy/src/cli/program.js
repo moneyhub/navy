@@ -227,6 +227,7 @@ program
 program
   .command('develop [service]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .option('-n, --no-logs')
   .description('Puts the given service into development using the current working directory')
   .action(lazyRequire('./develop'))
 
