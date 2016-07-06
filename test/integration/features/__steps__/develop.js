@@ -39,7 +39,7 @@ export default function () {
 
   this.Then(/I should see that my local copy has been applied$/, async function () {
     await retry(async () => {
-      const url = `http://${await this.navy.host(TEST_SERVICE_NAME)}:${await this.navy.port(TEST_SERVICE_NAME, 80)}/`
+      const url = await this.navy.url(TEST_SERVICE_NAME)
 
       expect((await fetch(url)
         .then(res => res.text())
@@ -52,7 +52,7 @@ export default function () {
   })
 
   this.Then(/I should see that my local copy is no longer applied/, async function () {
-    const url = `http://${await this.navy.host(TEST_SERVICE_NAME)}:${await this.navy.port(TEST_SERVICE_NAME, 80)}/`
+    const url = await this.navy.url(TEST_SERVICE_NAME)
 
     expect((await fetch(url)
       .then(res => res.text())

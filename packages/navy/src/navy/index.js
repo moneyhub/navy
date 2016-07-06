@@ -213,7 +213,10 @@ export class Navy extends EventEmitter2 {
       throw new NavyNotInitialisedError(this.name)
     }
 
-    await reconfigureHTTPProxy({ excludeNavy: this.normalisedName })
+    await reconfigureHTTPProxy({
+      navies: (await getLaunchedNavyNames())
+        .filter(navy => navy !== this.normalisedName),
+    })
 
     try {
       await (await this.safeGetDriver()).destroy()
@@ -345,6 +348,14 @@ export async function getLaunchedNavies(): Promise<Array<Navy>> {
   try {
     const navyNames = await fs.readdirAsync(pathToNavys())
     return navyNames.map(name => getNavy(name))
+  } catch (ex) {
+    return []
+  }
+}
+
+export async function getLaunchedNavyNames(): Promise<Array<string>> {
+  try {
+    return await fs.readdirAsync(pathToNavys())
   } catch (ex) {
     return []
   }
