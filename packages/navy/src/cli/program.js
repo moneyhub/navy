@@ -197,6 +197,17 @@ program
   .action(basicCliWrapper('resetTag'))
 
 program
+  .command('url <service>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Prints the external URL for the given service if it is a web service')
+  .action(basicCliWrapper('url', { driverLogging: false }))
+  .on('--help', () => console.log(`
+  Examples:
+    $ navy url mywebserver
+    http://mywebserver.dev.0.xip.io
+  `))
+
+program
   .command('host <service>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external host for the given service')
