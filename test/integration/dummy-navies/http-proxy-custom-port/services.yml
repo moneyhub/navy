@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  helloworld-otherport:
+    image: dockercloud/hello-world
+    ports:
+      - "8080:80"

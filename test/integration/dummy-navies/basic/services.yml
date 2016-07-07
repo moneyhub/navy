@@ -8,5 +8,3 @@ services:
     image: dockercloud/hello-world
     ports:
       - 80
-    labels:
-      com.navy.httpProxyPort: '80'
