@@ -58,11 +58,6 @@ export default async function (service: string, opts: Object): Promise<void> {
   await navy.launch([service], { noDeps: true })
 
   console.log(`🚧  ${service} has now restarted in development 🚧`)
-
-  if (opts.logs === false) {
-    return
-  }
-
   console.log(chalk.dim('-----------'))
   console.log()
 
