@@ -2,9 +2,9 @@
 
 import chalk from 'chalk'
 import readline from 'readline'
-import zygon from 'zygon'
 import {dots} from 'cli-spinners'
 import {getNavy} from '../'
+import table from '../util/table'
 import hasUpdate from '../util/has-update'
 
 const debug = require('debug')('navy:updates')
@@ -40,23 +40,15 @@ export default async function (opts: Object): Promise<void> {
 
   function draw() {
     drawnLines = 0
-    let buffer = ''
 
-    zygon([
-      { name: 'Name', size: 15 },
-      { name: 'Image', size: 35 },
-      { name: 'Updates', size: 25 },
-    ], ps.map(service => [
-      service.name,
-      service.image,
-      renderStatus(updateStatus[service.id]),
-    ]), {
-      output: {
-        write(out) {
-          buffer += out
-        },
-      },
-    })
+    const buffer = table([
+      ['NAME', 'IMAGE', 'UPDATES'],
+      ...ps.map(service => [
+        service.name,
+        service.image,
+        renderStatus(updateStatus[service.id]),
+      ]),
+    ])
 
     drawnLines = buffer.split('\n').length
     console.log(buffer)

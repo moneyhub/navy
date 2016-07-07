@@ -263,7 +263,7 @@ program
 program
   .command('status')
   .option('--json', 'output JSON instead of a table')
-  .description('List all of the running navies and the status of their services')
+  .description('List all of the imported navies')
   .action(lazyRequire('./status'))
 
 program

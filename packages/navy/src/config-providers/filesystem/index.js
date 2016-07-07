@@ -30,6 +30,16 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
       // no-op
       return false
     },
+
+    async getLocationDisplayName(): Promise<string> {
+      const envState: ?State = await navy.getState()
+
+      if (!envState) {
+        throw new Error('State doesn\'t exist for navy')
+      }
+
+      return envState.path
+    },
   }
 }
 
