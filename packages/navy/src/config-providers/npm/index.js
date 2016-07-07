@@ -68,6 +68,16 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
 
       return true
     },
+
+    async getLocationDisplayName(): Promise<string> {
+      const envState: ?State = await navy.getState()
+
+      if (!envState) {
+        throw new Error('State doesn\'t exist for navy')
+      }
+
+      return envState.npmPackage
+    },
   }
 }
 

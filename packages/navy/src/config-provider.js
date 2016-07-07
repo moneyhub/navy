@@ -15,6 +15,7 @@ export type ConfigProvider = {
   getNavyPath(): Promise<string>;
   getNavyFilePath(): Promise<string>;
   refreshConfig(): Promise<bool>;
+  getLocationDisplayName(): Promise<string>;
 }
 
 export type CreateConfigProvider = (navy: Navy) => ConfigProvider
