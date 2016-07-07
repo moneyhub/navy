@@ -1,5 +1,7 @@
 /* @flow */
 
+import {merge} from 'lodash'
+
 export default (config: Object, state: Object) => {
   const newConfig = config
 
@@ -7,6 +9,7 @@ export default (config: Object, state: Object) => {
     const serviceConfig = newConfig.services[serviceName]
     const serviceState = state.services[serviceName]
 
+    // DEPRECATED .navyrc development
     if (serviceState._develop) {
       serviceConfig.stdin_open = true
 
@@ -20,8 +23,11 @@ export default (config: Object, state: Object) => {
       }
     }
 
+    // new .navy-develop.yml
     if (serviceState.developConfig) {
-      Object.assign(serviceConfig, serviceState.developConfig)
+      serviceConfig.stdin_open = true
+
+      merge(serviceConfig, serviceState.developConfig)
     }
   })
 

@@ -7,13 +7,10 @@ import {execSync} from 'child_process'
 import {getNavy} from '../'
 import {NavyError} from '../errors'
 import getNavyRc from '../util/navyrc'
+import {getNavyDevelopConfig, processDevelopConfig} from './util/develop'
 
-export default async function (service: string, opts: Object): Promise<void> {
-  const navy = getNavy(opts.navy)
-  const cwd = process.cwd()
-  const navyRc = await getNavyRc(cwd)
-
-  if (!navyRc || !navyRc.services) {
+async function processLegacyNavyRc(navy, navyRc, service, cwd) {
+  if (navyRc && !navyRc.services) {
     throw new NavyError(`No valid .navyrc file was found in "${cwd}"`)
   }
 
@@ -51,6 +48,21 @@ export default async function (service: string, opts: Object): Promise<void> {
       },
     },
   })
+}
+
+export default async function (service: string, opts: Object): Promise<void> {
+  const navy = getNavy(opts.navy)
+  const cwd = process.cwd()
+  const legacyNavyRc = await getNavyRc(cwd)
+  const developConfig = await getNavyDevelopConfig(cwd)
+
+  if (developConfig) {
+    service = (await processDevelopConfig(service ? [service] : [], navy))[0]
+  } else if (legacyNavyRc) {
+    await processLegacyNavyRc(navy, legacyNavyRc, service, cwd)
+  } else {
+    throw new NavyError('No development configuration found in current working directory')
+  }
 
   await navy.emitAsync('cli.develop.beforeLaunch')
 

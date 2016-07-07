@@ -14,6 +14,7 @@
     "url": "git+https://github.com/momentumft/navy.git"
   },
   "keywords": [
+    "navy",
     "docker",
     "environment"
   ],

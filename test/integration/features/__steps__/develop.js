@@ -23,7 +23,7 @@ export default function () {
     await this.cmd.waitForDone()
   })
 
-  this.When(/I call develop from a folder with no source code or .navyrc$/, async function () {
+  this.When(/I call develop from a folder with no source code or .navy-develop.yml/, async function () {
     this.cmd = Automator.spawn(['develop'])
 
     await this.cmd.waitForDone()
@@ -64,7 +64,7 @@ export default function () {
   })
 
   this.Then(/I should see that there are no services to put in development/, async function () {
-    expect(await this.cmd.waitForDone()).to.contain('No valid .navyrc file was found in')
+    expect(await this.cmd.waitForDone()).to.contain('No valid .navy-develop file was found in')
   })
 
   this.Then(/I should see that I specified an invalid development target/, async function () {

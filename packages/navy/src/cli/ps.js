@@ -15,7 +15,7 @@ function getStatus(service, state) {
   if (state && state.services && state.services[service.name]) {
     const serviceState = state.services[service.name]
 
-    if (serviceState._develop) {
+    if (serviceState._develop || serviceState.developConfig) {
       statusString += ' ' + chalk.yellow('(development)')
     }
 

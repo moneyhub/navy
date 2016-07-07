@@ -36,6 +36,7 @@ export default async function (service: string, opts: Object): Promise<void> {
       [service]: {
         ...(state.services || {})[service],
         _develop: undefined,
+        developConfig: undefined,
       },
     },
   })

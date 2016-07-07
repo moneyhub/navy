@@ -6,7 +6,7 @@ import fs from '../../util/fs'
 import {Navy} from '../../navy'
 import {NavyError} from '../../errors'
 
-async function getNavyDevelopConfig(dir) {
+export async function getNavyDevelopConfig(dir: string) {
   try {
     return yaml.safeLoad(await fs.readFileAsync(path.join(dir, '.navy-develop.yml')))
   } catch (ex) {
@@ -18,7 +18,7 @@ export async function processDevelopConfig(services: Array<string>, navy: Navy) 
   const cwd = process.cwd()
   const config = await getNavyDevelopConfig(cwd)
 
-  if (!config || !config.services) {
+  if (!config || !config.services || config.version !== '2') {
     throw new NavyError('No valid .navy-develop.yml file was found in the current working directory')
   }
 
@@ -31,7 +31,7 @@ export async function processDevelopConfig(services: Array<string>, navy: Navy) 
   if (services.length === 0) services = serviceNames
 
   const state = await navy.getState()
-  const serviceConfig = {...state.services}
+  const serviceConfig = state && state.services ? {...state.services} : {}
 
   for (const service of services) {
     if (serviceNames.indexOf(service) !== -1) {
@@ -52,7 +52,7 @@ export async function processDevelopConfig(services: Array<string>, navy: Navy) 
       }
 
       serviceConfig[service] = {
-        ...state.services[service],
+        ...serviceConfig[service],
         developConfig,
       }
     }

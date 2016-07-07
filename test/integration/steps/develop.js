@@ -11,15 +11,13 @@ export default function () {
     rimraf.sync(this.localCopyPath)
 
     fs.mkdirSync(this.localCopyPath)
-    fs.writeFileSync(path.join(this.localCopyPath, '.navyrc'), `
-      {
-        "services": ["helloworld"],
-        "develop": {
-          "mounts": {
-            "./index.php": "/www/index.php"
-          }
-        }
-      }
+    fs.writeFileSync(path.join(this.localCopyPath, '.navy-develop.yml'), `
+version: '2'
+
+services:
+  helloworld:
+    volumes:
+      - "./index.php:/www/index.php"
     `, 'utf8')
     fs.writeFileSync(path.join(this.localCopyPath, 'index.php'), `
       Hello from the local source code!
