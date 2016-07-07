@@ -3,6 +3,7 @@
 import inquirer from 'inquirer'
 import {getNavy} from '../'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+import {processDevelopConfig} from './util/develop'
 
 export default async function (services: Array<string>, opts: Object): Promise<void> {
   const env = getNavy(opts.navy)
@@ -10,14 +11,18 @@ export default async function (services: Array<string>, opts: Object): Promise<v
 
   await env.ensurePluginsLoaded()
 
+  if (opts.develop) {
+    services = await processDevelopConfig(services, env)
+  }
+
   const serviceNames = await env.getAvailableServiceNames()
   const launchedServiceNames = await env.getLaunchedServiceNames()
 
-  const selectedServiceNames = launchedServiceNames.length > 0
-    ? launchedServiceNames
-    : navyFile.launchDefaults || []
-
   if (!services || services.length === 0) {
+    const selectedServiceNames = launchedServiceNames.length > 0
+      ? launchedServiceNames
+      : navyFile.launchDefaults || []
+
     const choices = serviceNames
       .sort(name => selectedServiceNames.indexOf(name) === -1 ? 100 : -1)
       .map(name => ({

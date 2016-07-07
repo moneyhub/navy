@@ -19,6 +19,10 @@ export default (config: Object, state: Object) => {
         serviceConfig.command = serviceState._develop.command
       }
     }
+
+    if (serviceState.developConfig) {
+      Object.assign(serviceConfig, serviceState.developConfig)
+    }
   })
 
   return newConfig

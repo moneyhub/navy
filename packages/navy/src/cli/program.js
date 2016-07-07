@@ -102,11 +102,20 @@ getImportCommandLineOptions().forEach(opt => importCommand.option(...opt))
 program
   .command('launch [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .option('-d, --develop', 'launches the given services in development')
   .description('Launches the given services in a navy')
   .action(lazyRequire('./launch'))
   .on('--help', () => console.log(`
   This will prompt you for the services that you want to bring up.
   You can optionally provide the names of services to bring up which will disable the interactive prompt.
+
+  You can also bring up the services in development mode by providing the --develop flag. Ensure that your
+  current working directory contains a .navy-develop.yml config file when providing this flag (just like the develop command).
+
+  Examples:
+    $ navy launch # will show a prompt asking which services to bring up
+    $ navy launch myservice # will bring up myservice and its dependencies
+    $ navy launch --develop # will bring up services in development mode specified in .navy-develop.yml
   `))
 
 program
