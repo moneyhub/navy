@@ -31,6 +31,15 @@ export default function () {
     })
   })
 
+  this.Given(/I am working with the test navy which has a service with a different port$/, async function () {
+    this.navy = getNavy(ENV_NAME)
+
+    await this.navy.initialise({
+      configProvider: 'filesystem',
+      path: path.join(__dirname, '../dummy-navies/http-proxy-custom-port'),
+    })
+  })
+
   this.Given(/I am working with a nonexistant navy$/, async function () {
     this.navy = getNavy('nonexistanttest')
   })
