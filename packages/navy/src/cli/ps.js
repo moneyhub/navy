@@ -4,7 +4,6 @@ import chalk from 'chalk'
 
 import {getNavy, Navy} from '../'
 import table from '../util/table'
-import {getUrlForService} from '../util/xipio'
 
 const SMALL_WINDOW_COLUMNS = 185
 
@@ -44,14 +43,16 @@ function getPorts(service) {
 }
 
 function getUrl(service, navy: Navy) {
-  if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Labels) {
+  if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Env) {
     return '-'
   }
 
-  const labels = service.raw.Config.Labels
+  const env = service.raw.Config.Env
 
-  if (labels['com.navy.httpProxyPort']) {
-    return getUrlForService(service.name, navy.normalisedName)
+  for (const envVar of env) {
+    if (envVar.indexOf('VIRTUAL_HOST=') === 0) {
+      return envVar.substring('VIRTUAL_HOST='.length)
+    }
   }
 
   return '-'
