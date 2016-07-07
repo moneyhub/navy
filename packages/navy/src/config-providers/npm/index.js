@@ -6,6 +6,7 @@ import bluebird from 'bluebird'
 import {Navy} from '../../navy'
 import fs from '../../util/fs'
 import {pathToNavyRoot} from '../../navy/state'
+import {pathToModule} from './util'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
@@ -29,10 +30,6 @@ async function tryAndInstall(pkgName) {
   execSync(`npm i ${pkgName}`, { stdio: 'inherit', cwd: npmContext })
 }
 
-async function pathToModule(pkgName) {
-  return path.join(nodeModulesPath, pkgName)
-}
-
 export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
   return {
     async getNavyPath(): Promise<string> {
@@ -46,7 +43,7 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
         throw new Error('NPM config provider requires an NPM package')
       }
 
-      const navyPath = await pathToModule(envState.npmPackage)
+      const navyPath = await pathToModule(nodeModulesPath, envState.npmPackage)
 
       fs.accessSync(navyPath) // see if path exists
 
