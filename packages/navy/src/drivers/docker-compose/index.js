@@ -113,7 +113,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
     },
 
-    async port(service: string, privatePort: number, index: ?number): Promise {
+    async port(service: string, privatePort: number, index: ?number): Promise<?number> {
       if (index == null) index = 1
 
       const output = await exec('port', ['--index=' + index, service, privatePort])
@@ -124,7 +124,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         return null
       }
 
-      return Number(port)
+      return 5
     },
 
     async writeConfig(config: Object): Promise<void> {

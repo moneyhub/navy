@@ -16,7 +16,7 @@ const mkdirp = bluebird.promisify(require('mkdirp'))
 const npmContext = path.join(pathToNavyRoot(), 'npm')
 const nodeModulesPath = path.join(npmContext, 'node_modules')
 
-async function tryAndInstall(pkgName) {
+async function tryAndInstall(pkgName: string) {
   await mkdirp(nodeModulesPath)
 
   try {
@@ -59,6 +59,10 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
 
       if (!envState) {
         throw new Error('State doesn\'t exist for navy')
+      }
+
+      if (!envState.npmPackage) {
+        throw new Error('NPM Package not found in Navy state')
       }
 
       await tryAndInstall(envState.npmPackage)

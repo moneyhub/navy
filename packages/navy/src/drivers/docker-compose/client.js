@@ -13,7 +13,7 @@ import type {ConfigProvider} from '../../config-provider'
 const fs = bluebird.promisifyAll(require('fs'))
 
 export type ComposeClient = {
-  exec(command: string, args: any, opts?: Object): Promise,
+  exec(command: string, args: any, opts?: Object): Promise<string>,
   getCompiledDockerComposePath(): string,
   getDockerComposeFilePath(): Promise<?string>,
 }

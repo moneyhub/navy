@@ -16,7 +16,7 @@ export type Driver = {
   rm(services: ?Array<string>): Promise<void>;
   update(services: ?Array<string>): Promise<void>;
   spawnLogStream(services: ?Array<string>): Promise<void>;
-  port(service: string, privatePort: number, index: ?number): Promise<number>;
+  port(service: string, privatePort: number, index: ?number): Promise<?number>;
   writeConfig(config: Object): Promise<void>;
   getConfig(): Promise<Object>;
   getLaunchedServiceNames(): Promise<Array<string>>;
