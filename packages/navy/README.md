@@ -30,6 +30,11 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 
   Great for when you want to quickly revert to an old version of a service.
 
+- **Built in HTTP proxy**
+
+  Access your services using `myservice.dev.xip.io` rather than using pesky IP addresses and random ports.
+  This is also great for testing your services on other devices like tablets and phones.
+
 - **Javascript API for interfacing with Docker and Docker Compose**
 
   Easily launch and manage environments from your code. Useful for if you want to spin up an environment at the start of a test run or extract the host and port of a running service.
