@@ -7,11 +7,23 @@ import {execSync} from 'child_process'
 import {getNavy} from '../'
 import {NavyError} from '../errors'
 import getNavyRc from '../util/navyrc'
+import {runCLI} from './util/helper'
 
-export default async function (service: string, opts: Object): Promise<void> {
-  const navy = getNavy(opts.navy)
+const definition = `
+usage: navy develop [-h] [-n NAVY] [<SERVICE>]
+
+Options:
+  -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]
+  -h, --help           Shows usage
+`
+
+
+export default async function (): Promise<void> {
+  const args = runCLI(definition)
+  const navy = getNavy(args['--navy'])
   const cwd = process.cwd()
   const navyRc = await getNavyRc(cwd)
+  let service = args['<SERVICE>']
 
   if (!navyRc || !navyRc.services) {
     throw new NavyError(`No valid .navyrc file was found in "${cwd}"`)

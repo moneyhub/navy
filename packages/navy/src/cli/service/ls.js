@@ -2,8 +2,18 @@
 
 import chalk from 'chalk'
 
-import {getNavy, Navy} from '../'
-import table from '../util/table'
+import {getNavy, Navy} from '../../'
+import table from '../../util/table'
+import {runCLI} from '../util/helper'
+
+const definition = `
+usage: navy service|s [-n NAVY] ls [-h] [--json]
+
+Options:
+  --json               Output as JSON instead of table
+  -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]
+  -h, --help           Shows usage
+`
 
 const SMALL_WINDOW_COLUMNS = 185
 
@@ -58,15 +68,17 @@ function getUrl(service, navy: Navy) {
   return '-'
 }
 
-export default async function (opts: Object): Promise<void> {
-  const navy = getNavy(opts.navy)
+export default async function (): Promise<void> {
+  const args = runCLI(definition)
+
+  const navy = getNavy(args['--navy'])
   const ps = await navy.ps()
   const state = await navy.getState()
 
   // $FlowIgnore getWindowSize not on type
   const isSmallConsole = process.stdout.isTTY && process.stdout.getWindowSize()[0] < SMALL_WINDOW_COLUMNS
 
-  if (opts.json) {
+  if (args['--json']) {
     return console.log(JSON.stringify(ps, null, 2))
   }
 

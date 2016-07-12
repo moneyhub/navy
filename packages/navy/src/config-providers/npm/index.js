@@ -7,6 +7,7 @@ import {Navy} from '../../navy'
 import fs from '../../util/fs'
 import {pathToNavyRoot} from '../../navy/state'
 import {pathToModule} from './util'
+import {NavyError} from '../../errors'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
@@ -82,17 +83,44 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
   }
 }
 
-createNpmConfigProvider.importCliOptions = [
-  ['--npm-package [package]', 'set the NPM package to use for docker compose config'],
-]
+createNpmConfigProvider.importPromptSelectorName = 'NPM Package'
 
-createNpmConfigProvider.getImportOptionsForCLI = async (opts) => {
-  if (opts.npmPackage) {
-    await tryAndInstall(opts.npmPackage)
+createNpmConfigProvider.getImportPromptOptions = () => [{
+  name: 'npmPackage',
+  type: 'input',
+  message: 'Please enter the NPM package',
+}]
 
-    return {
-      configProvider: 'npm',
-      npmPackage: opts.npmPackage,
-    }
+createNpmConfigProvider.getImportOptionsFromPrompt = async opts => {
+  if (!opts.npmPackage || opts.npmPackage.trim() === '') {
+    throw new NavyError('No NPM package provided')
+  }
+
+  await tryAndInstall(opts.npmPackage)
+
+  return {
+    configProvider: 'npm',
+    npmPackage: opts.npmPackage,
+  }
+}
+
+createNpmConfigProvider.getImportCLIDefinition = () => `
+[PACKAGE]
+
+Imports the formation from the given NPM package
+`
+
+createNpmConfigProvider.getImportOptionsFromCLI = async (opts) => {
+  if (!opts['PACKAGE']) {
+    throw new NavyError('No NPM package provided')
+  }
+
+  const npmPackage = opts['PACKAGE']
+
+  await tryAndInstall(npmPackage)
+
+  return {
+    configProvider: 'npm',
+    npmPackage: npmPackage,
   }
 }

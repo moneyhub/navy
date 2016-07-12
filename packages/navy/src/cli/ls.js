@@ -2,11 +2,22 @@ import chalk from 'chalk'
 import {getLaunchedNavies} from '../'
 import {getUrlForService} from '../util/xipio'
 import table from '../util/table'
+import {runCLI} from './util/helper'
 
-export default async function (opts: Object): Promise<void> {
+const definition = `
+usage: navy ls [-h] [--json]
+
+Options:
+  --json               Output as JSON instead of table
+  -h, --help           Shows usage
+`
+
+
+export default async function (): Promise<void> {
+  const args = runCLI(definition)
   const navies = await getLaunchedNavies()
 
-  if (opts.json) {
+  if (args['--json']) {
     return console.log(JSON.stringify(await Promise.all(navies.map(async navy => {
       const ps = await navy.ps()
       const state = await navy.getState()

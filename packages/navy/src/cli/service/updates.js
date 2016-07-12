@@ -3,11 +3,20 @@
 import chalk from 'chalk'
 import readline from 'readline'
 import {dots} from 'cli-spinners'
-import {getNavy} from '../'
-import table from '../util/table'
-import hasUpdate from '../util/has-update'
+import {getNavy} from '../../'
+import table from '../../util/table'
+import hasUpdate from '../../util/has-update'
+import {runCLI} from '../util/helper'
 
 const debug = require('debug')('navy:updates')
+
+const definition = `
+usage: navy service|s [-n NAVY] updates [-h]
+
+Options:
+  -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]
+  -h, --help           Shows usage
+`
 
 let spinnerIndex = 0
 let spinnerFrame = dots.frames[0]
@@ -28,8 +37,9 @@ function renderStatus(status) {
   }
 }
 
-export default async function (opts: Object): Promise<void> {
-  const navy = getNavy(opts.navy)
+export default async function (): Promise<void> {
+  const args = runCLI(definition)
+  const navy = getNavy(args['--navy'])
 
   const navyFile = await navy.getNavyFile()
   const ps = await navy.ps()
