@@ -43,9 +43,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         debug('Resolve opts to args', additionalArgs)
       }
 
-      if (!services) {
-        services = []
-      }
+      if (!services || services.length === 0) return
 
       await exec('up', ['-d', ...additionalArgs, ...services])
     },
@@ -73,43 +71,38 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async start(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('start', services)
     },
 
     async stop(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('stop', services)
     },
 
     async restart(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('restart', services)
     },
 
     async kill(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('kill', services)
     },
 
     async rm(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
-
+      if (!services || services.length === 0) return
       await exec('rm', ['-f', '-v', ...services])
     },
 
     async update(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
-
+      if (!services || services.length === 0) return
       await exec('pull', services)
       await exec('up', ['-d', '--no-deps', ...services])
     },
 
     async spawnLogStream(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
-
+      if (!services || services.length === 0) return
       await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
     },
 
@@ -124,7 +117,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         return null
       }
 
-      return 5
+      return Number(port)
     },
 
     async writeConfig(config: Object): Promise<void> {
