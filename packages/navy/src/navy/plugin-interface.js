@@ -1,11 +1,9 @@
 /* @flow */
 
-import bluebird from 'bluebird'
 import {Navy} from './'
+import resolve from '../util/resolve'
 
 import type {ConfigProvider} from '../config-provider'
-
-const resolve = bluebird.promisify(require('resolve'))
 
 export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<Object>> {
   const configProvider: ?ConfigProvider = await navy.getConfigProvider()

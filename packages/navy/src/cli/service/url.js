@@ -4,7 +4,7 @@ import {runCLI} from '../util/helper'
 import {getNavy} from '../../'
 
 const definition = `
-usage: navy service|s [-n NAVY] url [-h] <SERVICE>
+usage: navy service [-n NAVY] url [-h] <SERVICE>
 
 Options:
   -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]

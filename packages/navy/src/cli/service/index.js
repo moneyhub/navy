@@ -45,6 +45,6 @@ const commandMap = {
   'url': require('./url'),
 }
 
-export default function (args: Object) {
-  runAndInvokeCLI(definition, commandMap, { argv: ['service'].concat(args['<args>']), parentArgs: args })
+export default async function (args: Object) {
+  await runAndInvokeCLI(definition, commandMap, { argv: ['service'].concat(args['<args>']), parentArgs: args })
 }

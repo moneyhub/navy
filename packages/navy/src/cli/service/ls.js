@@ -7,7 +7,7 @@ import table from '../../util/table'
 import {runCLI} from '../util/helper'
 
 const definition = `
-usage: navy service|s [-n NAVY] ls [-h] [--json]
+usage: navy service [-n NAVY] ls [-h] [--json]
 
 Options:
   --json               Output as JSON instead of table

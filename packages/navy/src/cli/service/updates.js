@@ -11,7 +11,7 @@ import {runCLI} from '../util/helper'
 const debug = require('debug')('navy:updates')
 
 const definition = `
-usage: navy service|s [-n NAVY] updates [-h]
+usage: navy service [-n NAVY] updates [-h]
 
 Options:
   -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]

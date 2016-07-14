@@ -1,12 +1,10 @@
 /* @flow */
 
 import path from 'path'
-import bluebird from 'bluebird'
+import mkdirp from './util/mkdirp'
+import fs from './util/fs'
 
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
-
-const fs = bluebird.promisifyAll(require('fs'))
-const mkdirp = bluebird.promisify(require('mkdirp'))
 
 export type Config = {
   defaultNavy: ?string,

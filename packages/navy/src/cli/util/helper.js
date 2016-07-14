@@ -28,19 +28,19 @@ export function runCLI(doc: string, opts: Object = {}) {
   return args
 }
 
-export function invokeCLI(args: Object, doc: string, commands: Object) {
+export async function invokeCLI(args: Object, doc: string, commands: Object) {
   const command = args['<command>']
 
   if (!command || !commands[command]) {
     return console.log(doc.trim())
   }
 
-  return commands[command](args)
+  return await commands[command](args)
 }
 
-export function runAndInvokeCLI(doc: string, commands: Object, opts: Object = {}) {
+export async function runAndInvokeCLI(doc: string, commands: Object, opts: Object = {}) {
   const args = runCLI(doc, opts)
-  return invokeCLI({ ...(opts.parentArgs || {}), ...args }, doc, commands)
+  return await invokeCLI({ ...(opts.parentArgs || {}), ...args }, doc, commands)
 }
 
 export async function basicCLIWrapper(fnName: string, args: Object, opts: Object = {}) {

@@ -8,7 +8,7 @@ usage: navy [--version|-v] [--help]
 
 These are common Navy commands used in various situations:
   import               Imports docker compose configuration from the current working directory and initialises a new navy
-  service|s            Manage services in a Navy
+  service              Manage services in a Navy
   ls                   Lists all of the imported Navies
   destroy              Destroys the given Navy by removing all of its services and configuration
   delete               Removes Navy's awareness of the given Navy, removing all configuration but keeping the Docker Containers
