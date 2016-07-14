@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-delete process.env.DEBUG
-process.env.DEBUG = process.env.NAVY_DEBUG
-
-var debug = require('debug')('navy') // eslint-disable-line
-debug('Start CLI')
-
-require('../lib/cli')
+console.log('"navy" has moved to the "navy-cli" npm package. To switch, run:')
+console.log()
+console.log('  $ npm r -g navy')
+console.log('  $ npm i -g navy-cli')
+console.log()

@@ -2,10 +2,10 @@
 
 import chalk from 'chalk'
 import {runCLI} from '../util/helper'
-import {getNavy} from '../../'
+import {getNavy} from 'navy'
 
 const definition = `
-usage: navy service [-n NAVY] use-tag [-h] <SERVICE> <TAG>
+usage: navy service [-n NAVY] reset-tag [-h] <SERVICE>
 
 Options:
   -n, --navy NAVY      Specifies the navy to use [env: NAVY_NAME] [default: dev]
@@ -16,12 +16,11 @@ export default async function () {
   const args = runCLI(definition)
   const navy = getNavy(args['--navy'])
 
-  console.log(chalk.dim('Overriding tags...'))
+  console.log(chalk.dim('Resetting tags...'))
 
   const service = args['<SERVICE>']
-  const tag = args['<TAG>']
 
-  await navy.useTag(service, tag)
+  await navy.resetTag(service)
 
-  console.log(chalk.green('✔ ' + chalk.bold(service) + ' is now running ' + chalk.cyan('@ ' + tag)))
+  console.log(chalk.green('✔ ' + chalk.bold(service) + ' is no longer using a tag override'))
 }

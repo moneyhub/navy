@@ -3,10 +3,10 @@
 import path from 'path'
 import chalk from 'chalk'
 import {execSync} from 'child_process'
+import {getNavy} from 'navy'
+import {NavyError} from 'navy/lib/errors'
 
-import {getNavy} from '../'
-import {NavyError} from '../errors'
-import getNavyRc from '../util/navyrc'
+import getNavyRc from './util/navyrc'
 import {runCLI} from './util/helper'
 
 const definition = `
@@ -84,7 +84,6 @@ export default async function (): Promise<void> {
   // this loop ends when the user Ctrl+C's out of the CLI process
 
   while (true) {
-    // $FlowIgnore some weird bug with execSync
     execSync(`docker attach --sig-proxy=false ${containerId}`, { stdio: 'inherit' })
 
     console.log()

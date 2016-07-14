@@ -1,7 +1,7 @@
 /* @flow */
 
 import {runCLI} from '../util/helper'
-import {getNavy} from '../../'
+import {getNavy} from 'navy'
 
 const definition = `
 usage: navy service [-n NAVY] port [-h] <SERVICE> <PORT>

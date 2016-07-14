@@ -1,8 +1,8 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {getNavy} from '../'
-import {NavyError} from '../errors'
+import {getNavy} from 'navy'
+import {NavyError} from 'navy/lib/errors'
 import {runCLI} from './util/helper'
 
 const definition = `

@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 
-import {getNavy, Navy} from '../../'
-import table from '../../util/table'
+import {getNavy, Navy} from 'navy'
+import table from '../util/table'
 import {runCLI} from '../util/helper'
 
 const definition = `

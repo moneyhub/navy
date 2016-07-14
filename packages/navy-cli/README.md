@@ -1,5 +1,5 @@
-navy
-====
+navy-cli
+========
 
 > A tool for easy multi-service development powered by Docker Compose
 
@@ -48,7 +48,7 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 ## Getting started
 
 ```sh
-$ npm install --save-dev navy
+$ npm install -g navy-cli
 ```
 
 [Read more of the documentation on our GitHub](https://github.com/momentumft/navy)

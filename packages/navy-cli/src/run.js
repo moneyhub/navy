@@ -1,6 +1,6 @@
 /* @flow */
 
-import {getNavy} from '../'
+import {getNavy} from 'navy'
 import {runCLI} from './util/helper'
 
 const definition = `

@@ -1,21 +1,8 @@
 /* @flow */
 
 import {run as _runCLI} from 'neodoc'
-import {NavyError} from '../../errors'
-import {startDriverLogging, stopDriverLogging} from '../../driver-logging'
-
-// const loadingLabelMap = {
-//   destroy: 'Destroying services...',
-//   start: 'Starting services...',
-//   stop: 'Stopping services...',
-//   restart: 'Restarting services...',
-//   kill: 'Killing services...',
-//   rm: 'Removing services...',
-//   update: 'Updating service images...',
-//   delete: 'Deleting navy configuration...',
-//   useTag: 'Pulling custom tag...',
-//   resetTag: 'Resetting to default tag...',
-// }
+import {NavyError} from 'navy/lib/errors'
+import {startDriverLogging, stopDriverLogging} from 'navy/lib/driver-logging'
 
 export function runCLI(doc: string, opts: Object = {}) {
   const args = _runCLI(doc, { ...opts, optionsFirst: true, smartOptions: true })
@@ -46,8 +33,6 @@ export async function runAndInvokeCLI(doc: string, commands: Object, opts: Objec
 export async function basicCLIWrapper(fnName: string, args: Object, opts: Object = {}) {
   const { logging } = opts
 
-  const { getNavy } = require('../../navy')
-
   const envName = args['--navy']
   let services = args['<SERVICE>']
 
@@ -67,7 +52,7 @@ export async function basicCLIWrapper(fnName: string, args: Object, opts: Object
 
   if (logging) startDriverLogging(logging)
 
-  const navy = getNavy(envName)
+  const navy = require('navy').getNavy(envName)
   await navy.ensurePluginsLoaded()
   await navy.emitAsync(`cli.before.${fnName}`, fnName)
 

@@ -18,7 +18,7 @@ export default function () {
     expect(ps[0].image).to.contain(':latest')
 
     expect(
-      await Automator.spawn(['ps']).waitForDone()
+      await Automator.spawn(['service', 'ls']).waitForDone()
     ).to.contain('@ latest')
   })
 
@@ -28,7 +28,7 @@ export default function () {
     expect(ps[0].image).to.not.contain(':latest')
 
     expect(
-      await Automator.spawn(['ps']).waitForDone()
+      await Automator.spawn(['service', 'ls']).waitForDone()
     ).to.not.contain('@ latest')
   })
 

@@ -4,12 +4,13 @@ import fs from 'fs'
 import path from 'path'
 import inquirer from 'inquirer'
 import chalk from 'chalk'
-import {getNavy} from '../'
-import {NavyError} from '../errors'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+import {getNavy} from 'navy'
+import {NavyError} from 'navy/lib/errors'
+import {startDriverLogging, stopDriverLogging} from 'navy/lib/driver-logging'
+import {resolveConfigProviderFromName, getAvailableConfigProviders} from 'navy/lib/config-provider'
+
 import {runCLI} from './util/helper'
 import {showLaunchPrompt} from './util/launch'
-import {resolveConfigProviderFromName, getAvailableConfigProviders} from '../config-provider'
 
 const definition = `
 usage: navy import [-h] [-n NAVY] [--no-launch-prompt] [-p PROVIDER] [<args>...]
@@ -17,7 +18,7 @@ usage: navy import [-h] [-n NAVY] [--no-launch-prompt] [-p PROVIDER] [<args>...]
 Options:
       --no-launch-prompt    Don't show the prompt asking for which services to launch
   -p, --provider            Specifies the formation provider to use
-  -n, --navy NAVY           Specifies the navy to use [navy: NAVY_NAME] [default: dev]
+  -n, --navy NAVY           Specifies the navy to use [env: NAVY_NAME] [default: dev]
   -h, --help                Shows usage
 
 Run 'navy import -p PROVIDER --help' for command line usage for a specific provider.
@@ -33,7 +34,7 @@ const OPTION_LABEL_MAP = {
 export default async function (): Promise<void> {
   const args = runCLI(definition, { ignoreHelpFlag: true })
   const navy = getNavy(args['--navy'])
-  const boatAsciiArt = fs.readFileSync(path.join(__dirname, '../../resources/sailing-boat.txt')).toString()
+  const boatAsciiArt = fs.readFileSync(path.join(__dirname, '../resources/sailing-boat.txt')).toString()
 
   if (!args['--provider'] && args['--help']) {
     return console.log(definition.trim())

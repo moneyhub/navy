@@ -1,6 +1,6 @@
 import inquirer from 'inquirer'
-import {Navy} from '../../'
-import {startDriverLogging, stopDriverLogging} from '../../driver-logging'
+import {Navy} from 'navy'
+import {startDriverLogging, stopDriverLogging} from 'navy/lib/driver-logging'
 
 export async function showLaunchPrompt(navy: Navy): Promise<void> {
   const navyFile = (await navy.getNavyFile()) || {}

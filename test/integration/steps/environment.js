@@ -13,6 +13,10 @@ export default function () {
     })
   })
 
+  this.Given(/I am working with the test navy which hasn't been imported yet$/, async function () {
+    this.navy = getNavy(ENV_NAME)
+  })
+
   this.Given(/I am working with the test navy which uses the test middleware plugin to add labels$/, async function () {
     this.navy = getNavy(ENV_NAME)
 

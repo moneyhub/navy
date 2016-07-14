@@ -1,6 +1,6 @@
 import {runCLI, invokeCLI} from './util/helper'
-import pkg from '../../package.json'
-import {NavyError} from '../errors'
+import pkg from '../package.json'
+import {NavyError} from 'navy/lib/errors'
 
 const definition = `
 usage: navy [--version|-v] [--help]

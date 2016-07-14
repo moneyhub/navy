@@ -1,7 +1,7 @@
 import chalk from 'chalk'
-import {getLaunchedNavies} from '../'
-import {getUrlForService} from '../util/xipio'
-import table from '../util/table'
+import {getLaunchedNavies} from 'navy'
+import {getUrlForService} from 'navy/lib/util/xipio'
+import table from './util/table'
 import {runCLI} from './util/helper'
 
 const definition = `

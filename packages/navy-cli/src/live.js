@@ -2,9 +2,9 @@
 
 import chalk from 'chalk'
 
-import {getNavy} from '../'
-import {NavyError} from '../errors'
-import getNavyRc from '../util/navyrc'
+import {getNavy} from 'navy'
+import {NavyError} from 'navy/lib/errors'
+import getNavyRc from './util/navyrc'
 import {runCLI} from './util/helper'
 
 const definition = `

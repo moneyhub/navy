@@ -6,15 +6,15 @@ import {Service} from '../../../../packages/navy'
 export default function () {
 
   this.When(/I stop the service via the CLI$/, async function () {
-    this.result = await Automator.spawn(['stop', TEST_SERVICE_NAME]).waitForDone()
+    this.result = await Automator.spawn(['service', 'stop', TEST_SERVICE_NAME]).waitForDone()
   })
 
   this.When(/I start the service via the CLI$/, async function () {
-    this.result = await Automator.spawn(['start', TEST_SERVICE_NAME]).waitForDone()
+    this.result = await Automator.spawn(['service', 'start', TEST_SERVICE_NAME]).waitForDone()
   })
 
   this.When(/I start the navy via the CLI$/, async function () {
-    this.result = await Automator.spawn(['start']).waitForDone()
+    this.result = await Automator.spawn(['service', 'start']).waitForDone()
   })
 
   this.Then(/I should see that just that service is running$/, async function () {
