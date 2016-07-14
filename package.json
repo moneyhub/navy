@@ -19,7 +19,7 @@
     "publish-rc": "NPM_DIST_TAG=next npm run publish",
     "bootstrap": "lerna bootstrap && rm -rf packages/navy-cli/node_modules/navy && ln -s ../../navy packages/navy-cli/node_modules",
     "updated": "lerna updated",
-    "webpack-build": "NODE_ENV=production webpack",
+    "webpack-build": "NODE_ENV=production webpack && chmod +x packages/navy-cli/bin/navy.js",
     "webpack-watch": "webpack -w"
   },
   "repository": {
