@@ -1,17 +1,17 @@
 /* @flow */
 
 import yaml from 'js-yaml'
-import bluebird from 'bluebird'
+import {Readable} from 'stream'
 
 import {createComposeClient} from './client'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
+import fs from '../../util/fs'
+import LogStream from './log-stream'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 const debug = require('debug')('navy:docker-compose')
 
@@ -101,9 +101,18 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('up', ['-d', '--no-deps', ...services])
     },
 
-    async spawnLogStream(services: ?Array<string>): Promise<void> {
+    async getLogStream(services: ?Array<string>): Promise<Readable> {
       if (!services || services.length === 0) return
-      await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
+
+      const logStream = new LogStream()
+
+      return await new Promise(resolve =>
+        exec('logs', ['-f', '--tail=250', ...(services || [])], { maxBuffer: 32 * 1024 * 1024 }, ps => {
+          ps.stdout.pipe(logStream)
+          ps.stderr.pipe(logStream)
+          resolve(logStream)
+        })
+      )
     },
 
     async port(service: string, privatePort: number, index: ?number): Promise<?number> {

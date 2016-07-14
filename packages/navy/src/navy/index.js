@@ -1,8 +1,9 @@
 /* @flow */
 
-import bluebird from 'bluebird'
 import {EventEmitter2} from 'eventemitter2'
+import {Readable} from 'stream'
 
+import fs from '../util/fs'
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
@@ -18,8 +19,6 @@ import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
 import type {State} from './state'
 import type {ServiceList} from '../service'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 
@@ -267,10 +266,10 @@ export class Navy extends EventEmitter2 {
     await (await this.safeGetDriver()).update(services)
   }
 
-  async spawnLogStream(services?: Array<string>): Promise<void> {
+  async getLogStream(services?: Array<string>): Promise<Readable> {
     if (!services) services = await this.getLaunchedServiceNames()
 
-    await (await this.safeGetDriver()).spawnLogStream(services)
+    return await (await this.safeGetDriver()).getLogStream(services)
   }
 
   async useTag(service: string, tag: string): Promise<void> {

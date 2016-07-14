@@ -1,16 +1,14 @@
 /* @flow */
 
 import path from 'path'
-import bluebird from 'bluebird'
 
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {log} from '../../driver-logging'
 import {pathToNavy} from '../../navy/state'
+import fs from '../../util/fs'
 
 import type {ConfigProvider} from '../../config-provider'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 export type ComposeClient = {
   exec(command: string, args: any, opts?: Object): Promise<string>,
@@ -27,7 +25,7 @@ export type ExecOpts = {
 
 export function createComposeClient(navy: Navy): ComposeClient {
   const client = {
-    async exec(command: string, args: Array<string> = [], opts?: ExecOpts = {}): Promise<string> {
+    async exec(command: string, args: Array<string> = [], opts?: ExecOpts = {}, callback?: Function): Promise<string> {
       const composeArgs = [
         '-p', navy.normalisedName,
       ]
@@ -53,7 +51,9 @@ export function createComposeClient(navy: Navy): ComposeClient {
       composeArgs.push(command, ...args)
 
       return await execAsync('docker-compose', composeArgs, childProcess => {
-        if (!noLog && !pipeLog) {
+        if (callback) {
+          callback(childProcess)
+        } else if (!noLog && !pipeLog) {
           childProcess.stdout.on('data', data => log(data))
           childProcess.stderr.on('data', data => log(data))
         } else if (pipeLog) {
