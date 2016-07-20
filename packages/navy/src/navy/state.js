@@ -1,13 +1,11 @@
 /* @flow */
 
 import path from 'path'
-import bluebird from 'bluebird'
+import fs from '../util/fs'
+import rimraf from '../util/rimraf'
+import mkdirp from '../util/mkdirp'
 
 const debug = require('debug')('navy:state')
-
-const fs = bluebird.promisifyAll(require('fs'))
-const mkdirp = bluebird.promisify(require('mkdirp'))
-const rimraf = bluebird.promisify(require('rimraf'))
 
 export function pathToNavyRoot(): string {
   const home = process.env.HOME

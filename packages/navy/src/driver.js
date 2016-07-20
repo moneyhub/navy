@@ -1,5 +1,6 @@
 /* @flow */
 
+import {Readable} from 'stream'
 import DockerCompose from './drivers/docker-compose'
 import {Navy} from './navy'
 
@@ -15,7 +16,7 @@ export type Driver = {
   kill(services: ?Array<string>): Promise<void>;
   rm(services: ?Array<string>): Promise<void>;
   update(services: ?Array<string>): Promise<void>;
-  spawnLogStream(services: ?Array<string>): Promise<void>;
+  getLogStream(services: ?Array<string>): Promise<Readable>;
   port(service: string, privatePort: number, index: ?number): Promise<?number>;
   writeConfig(config: Object): Promise<void>;
   getConfig(): Promise<Object>;

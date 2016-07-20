@@ -1,4 +1,3 @@
-import {dots} from 'cli-spinners'
 import chalk from 'chalk'
 
 let _isDriverLogging = false
@@ -7,7 +6,7 @@ let _spinnerIndex = 0
 let _message = null
 
 function _redraw(opts = {}) {
-  let symbol = chalk.cyan(dots.frames[_spinnerIndex])
+  let symbol = chalk.cyan('...')
 
   if (opts.success === true) {
     symbol = chalk.green('✔')
@@ -41,12 +40,12 @@ export function startDriverLogging(message: string) {
   _spinnerInterval = setInterval(() => {
     _spinnerIndex++
 
-    if (_spinnerIndex >= dots.frames.length) {
+    if (_spinnerIndex >= 1) {
       _spinnerIndex = 0
     }
 
     _redraw()
-  }, dots.interval)
+  }, 1000)
 }
 
 export function stopDriverLogging(opts = {}) {

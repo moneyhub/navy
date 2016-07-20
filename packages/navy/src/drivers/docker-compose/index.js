@@ -1,17 +1,17 @@
 /* @flow */
 
 import yaml from 'js-yaml'
-import bluebird from 'bluebird'
+import {Readable} from 'stream'
 
 import {createComposeClient} from './client'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
+import fs from '../../util/fs'
+import LogStream from './log-stream'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 const debug = require('debug')('navy:docker-compose')
 
@@ -43,9 +43,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         debug('Resolve opts to args', additionalArgs)
       }
 
-      if (!services) {
-        services = []
-      }
+      if (!services || services.length === 0) return
 
       await exec('up', ['-d', ...additionalArgs, ...services])
     },
@@ -73,44 +71,48 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async start(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('start', services)
     },
 
     async stop(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('stop', services)
     },
 
     async restart(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('restart', services)
     },
 
     async kill(services: ?Array<string>): Promise<void> {
+      if (!services || services.length === 0) return
       await exec('kill', services)
     },
 
     async rm(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
-
+      if (!services || services.length === 0) return
       await exec('rm', ['-f', '-v', ...services])
     },
 
     async update(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
-
+      if (!services || services.length === 0) return
       await exec('pull', services)
       await exec('up', ['-d', '--no-deps', ...services])
     },
 
-    async spawnLogStream(services: ?Array<string>): Promise<void> {
-      if (!services) {
-        services = []
-      }
+    async getLogStream(services: ?Array<string>): Promise<Readable> {
+      if (!services || services.length === 0) return
 
-      await exec('logs', ['-f', '--tail=250', ...services], { pipeLog: true, maxBuffer: 32 * 1024 * 1024 })
+      const logStream = new LogStream()
+
+      return await new Promise(resolve =>
+        exec('logs', ['-f', '--tail=250', ...(services || [])], { maxBuffer: 32 * 1024 * 1024 }, ps => {
+          ps.stdout.pipe(logStream)
+          ps.stderr.pipe(logStream)
+          resolve(logStream)
+        })
+      )
     },
 
     async port(service: string, privatePort: number, index: ?number): Promise<?number> {
@@ -124,7 +126,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         return null
       }
 
-      return 5
+      return Number(port)
     },
 
     async writeConfig(config: Object): Promise<void> {

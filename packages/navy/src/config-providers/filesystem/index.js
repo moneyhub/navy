@@ -43,9 +43,29 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
   }
 }
 
-createFileSystemConfigProvider.importCliOptions = []
+createFileSystemConfigProvider.importPromptSelectorName = 'Current working directory'
 
-createFileSystemConfigProvider.getImportOptionsForCLI = (opts) => {
+createFileSystemConfigProvider.getImportOptionsFromPrompt = () => {
+  return {
+    configProvider: 'filesystem',
+    path: process.cwd(),
+  }
+}
+
+createFileSystemConfigProvider.getImportCLIDefinition = () => `
+[DIR]
+
+Imports the formation from the current working directory or the given directory
+`
+
+createFileSystemConfigProvider.getImportOptionsFromCLI = (opts) => {
+  if (opts['DIR']) {
+    return {
+      configProvider: 'filesystem',
+      path: path.resolve(opts['DIR']),
+    }
+  }
+
   return {
     configProvider: 'filesystem',
     path: process.cwd(),

@@ -48,7 +48,7 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 ## Getting started
 
 ```sh
-$ npm install -g navy
+$ npm install --save-dev navy
 ```
 
 [Read more of the documentation on our GitHub](https://github.com/momentumft/navy)

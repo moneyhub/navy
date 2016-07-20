@@ -45,7 +45,7 @@ export default function () {
         .then(res => res.text())
       ).trim()).to.equal('Hello from the local source code!')
 
-      const psOutput = await Automator.spawn(['ps']).waitForDone()
+      const psOutput = await Automator.spawn(['service', 'ls']).waitForDone()
 
       expect(psOutput).to.contain('(development)')
     })
@@ -58,7 +58,7 @@ export default function () {
       .then(res => res.text())
     ).trim()).to.not.equal('Hello from the local source code!')
 
-    const psOutput = await Automator.spawn(['ps']).waitForDone()
+    const psOutput = await Automator.spawn(['service', 'ls']).waitForDone()
 
     expect(psOutput).to.not.contain('(development)')
   })

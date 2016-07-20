@@ -1,7 +1,7 @@
 Feature: Launching and working with an navy from the CLI
 
   Scenario: Launch prompt when not specifying services to launch
-    Given I am working with the test navy
+    Given I am working with the test navy which hasn't been imported yet
     When I launch a service from the CLI prompt
     Then I should see that the service is running
 
