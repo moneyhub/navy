@@ -4,9 +4,9 @@ import chalk from 'chalk'
 
 import {getNavy, Navy} from 'navy'
 import table from '../util/table'
-import {runCLI} from '../util/helper'
+import {run} from '../util/args'
 
-const definition = `
+const help = `
 usage: navy service [-n NAVY] ls [-h] [--json]
 
 Options:
@@ -68,17 +68,25 @@ function getUrl(service, navy: Navy) {
   return '-'
 }
 
-export default async function (): Promise<void> {
-  const args = runCLI(definition)
+export default async function (parentArgs): Promise<void> {
+  const args = run(['service', 'ls'], help, {
+    alias: {
+      n: 'navy',
+    },
+    default: {
+      navy: 'dev',
+    },
+    boolean: ['json'],
+  }, parentArgs)
 
-  const navy = getNavy(args['--navy'])
+  const navy = getNavy(args.navy)
   const ps = await navy.ps()
   const state = await navy.getState()
 
   // $FlowIgnore getWindowSize not on type
   const isSmallConsole = process.stdout.isTTY && process.stdout.getWindowSize()[0] < SMALL_WINDOW_COLUMNS
 
-  if (args['--json']) {
+  if (args.json) {
     return console.log(JSON.stringify(ps, null, 2))
   }
 

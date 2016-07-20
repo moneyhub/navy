@@ -1,8 +1,8 @@
 /* @flow */
 
-import {runAndInvokeCLI} from '../util/helper'
+import {runCommand} from '../util/args'
 
-const definition = `
+const help = `
 usage: navy service [-n NAVY] [-h] [<command> [<args>]...]
 
 All service commands operate on services belonging to a Navy.
@@ -29,22 +29,29 @@ Options:
 `
 
 const commandMap = {
-  'ls': require('./ls'),
-  'launch': require('./launch'),
-  'start': require('./start'),
-  'stop': require('./stop'),
-  'restart': require('./restart'),
-  'kill': require('./kill'),
-  'rm': require('./rm'),
-  'update': require('./update'),
-  'updates': require('./updates'),
-  'logs': require('./logs'),
-  'use-tag': require('./use-tag'),
-  'reset-tag': require('./reset-tag'),
-  'port': require('./port'),
-  'url': require('./url'),
+  'ls': () => require('./ls'),
+  'launch': () => require('./launch'),
+  'start': () => require('./start'),
+  'stop': () => require('./stop'),
+  'restart': () => require('./restart'),
+  'kill': () => require('./kill'),
+  'rm': () => require('./rm'),
+  'update': () => require('./update'),
+  'updates': () => require('./updates'),
+  'logs': () => require('./logs'),
+  'use-tag': () => require('./use-tag'),
+  'reset-tag': () => require('./reset-tag'),
+  'port': () => require('./port'),
+  'url': () => require('./url'),
 }
 
-export default async function (args: Object) {
-  await runAndInvokeCLI(definition, commandMap, { argv: ['service'].concat(args['<args>']), parentArgs: args })
+export default async function () {
+  await runCommand(['service'], help, commandMap, {
+    alias: {
+      n: 'navy',
+    },
+    default: {
+      navy: 'dev',
+    },
+  })
 }

@@ -31,8 +31,8 @@
     "cli-spinners": "^0.1.2",
     "debug": "^2.2.0",
     "inquirer": "^1.0.2",
+    "minimist": "^1.2.0",
     "navy": "^2.3.0",
-    "neodoc": "^0.7.0",
     "pad": "^1.0.0",
     "strip-ansi": "^3.0.1"
   }

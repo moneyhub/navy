@@ -1,8 +1,10 @@
-import {runCLI, invokeCLI} from './util/helper'
+/* @flow */
+
+import {run, command} from './util/args'
 import pkg from '../package.json'
 import {NavyError} from 'navy/lib/errors'
 
-const definition = `
+const help = `
 usage: navy [--version|-v] [--help]
             [<command> [<args>]...]
 
@@ -21,19 +23,17 @@ Run 'navy COMMAND --help' for usage of a certain command.
 `
 
 const commandMap = {
-  'import': require('./import'),
-  'service': require('./service'),
-  's': require('./service'),
-  'ls': require('./ls'),
-  'destroy': require('./destroy'),
-  'delete': require('./delete'),
-  'develop': require('./develop'),
-  'live': require('./live'),
-  'run': require('./run'),
-  'reload': require('./reload'),
+  'import': () => require('./import'),
+  'service': () => require('./service'),
+  's': () => require('./service'),
+  'ls': () => require('./ls'),
+  'destroy': () => require('./destroy'),
+  'delete': () => require('./delete'),
+  'develop': () => require('./develop'),
+  'live': () => require('./live'),
+  'run': () => require('./run'),
+  'reload': () => require('./reload'),
 }
-
-const args = runCLI(definition)
 
 process.on('unhandledRejection', ex => {
   if (ex instanceof NavyError) {
@@ -43,8 +43,22 @@ process.on('unhandledRejection', ex => {
   }
 })
 
-if (args['--version'] || args['-v']) {
+const args = run([], help, {
+  boolean: ['help'],
+  alias: {
+    v: 'version',
+    h: 'help',
+  },
+})
+
+if (args.version) {
   console.log(pkg.version)
 } else {
-  invokeCLI(args, definition, commandMap)
+  command(args, help, commandMap)
 }
+
+// if (args['--version'] || args['-v']) {
+//   console.log(pkg.version)
+// } else {
+//   invokeCLI(args, definition, commandMap)
+// }
