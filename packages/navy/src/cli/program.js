@@ -15,6 +15,8 @@ const loadingLabelMap = {
   delete: 'Deleting navy configuration...',
   useTag: 'Pulling custom tag...',
   resetTag: 'Resetting to default tag...',
+  usePort: 'Setting up port mapping...',
+  resetPort: 'Resetting port mapping...',
 }
 
 function wrapper(res) {
@@ -195,6 +197,18 @@ program
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Resets any tag override on the given service')
   .action(basicCliWrapper('resetTag'))
+
+program
+  .command('use-port <service> <internal> <external>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Uses a specific external port for the given service and internal port')
+  .action(basicCliWrapper('usePort'))
+
+program
+  .command('reset-port <service> <internal>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Resets a specific external port mapping set by use-port')
+  .action(basicCliWrapper('resetPort'))
 
 program
   .command('url <service>')

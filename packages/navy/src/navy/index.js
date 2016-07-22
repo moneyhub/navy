@@ -309,6 +309,48 @@ export class Navy extends EventEmitter2 {
     await this.launch([service], { noDeps: true })
   }
 
+  async usePort(service: string, privatePort: number, externalPort: number): Promise<void> {
+    const state = (await this.getState()) || {}
+
+    await this.saveState({
+      ...state,
+      services: {
+        ...state.services,
+        [service]: {
+          ...(state.services || {})[service],
+          _ports: {
+            ...((state.services || {})[service] || {})._ports,
+            [privatePort]: externalPort,
+          },
+        },
+      },
+    })
+
+    await this.kill([service])
+    await this.launch([service], { noDeps: true })
+  }
+
+  async resetPort(service: string, privatePort: number): Promise<void> {
+    const state = (await this.getState()) || {}
+
+    await this.saveState({
+      ...state,
+      services: {
+        ...state.services,
+        [service]: {
+          ...(state.services || {})[service],
+          _ports: {
+            ...((state.services || {})[service] || {})._ports,
+            [privatePort]: undefined,
+          },
+        },
+      },
+    })
+
+    await this.kill([service])
+    await this.launch([service], { noDeps: true })
+  }
+
   async externalIP(): Promise<?string> {
     return getExternalIP()
   }
