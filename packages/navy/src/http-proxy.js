@@ -49,6 +49,7 @@ async function updateComposeConfig(navies: Array<string>) {
         volumes: [
           '/var/run/docker.sock:/tmp/docker.sock:ro',
         ],
+        restart: 'always',
       },
     },
 
