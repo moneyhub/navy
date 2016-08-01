@@ -7,4 +7,4 @@ services:
   helloworld:
     image: dockercloud/hello-world
     ports:
-      - 80
+      - "38472:80"

@@ -8,7 +8,7 @@ export default function () {
   })
 
   this.Then(/I should see the port$/, function () {
-    expect(this.port).to.be.a.number
+    expect(this.port).to.equal(38472)
   })
 
   this.Then(/I shouldn't see the port$/, function () {

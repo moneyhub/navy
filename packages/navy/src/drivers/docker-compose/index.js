@@ -124,7 +124,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
         return null
       }
 
-      return 5
+      return Number(port)
     },
 
     async writeConfig(config: Object): Promise<void> {
