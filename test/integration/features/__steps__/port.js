@@ -8,7 +8,7 @@ export default function () {
   })
 
   this.Then(/I should see the port$/, function () {
-    expect(this.port).to.equal(38472)
+    expect(this.port).to.equal(38472) // port is from dummy-navies/with-fixed-port/services.yml
   })
 
   this.Then(/I shouldn't see the port$/, function () {

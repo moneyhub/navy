@@ -14,7 +14,7 @@ export default function () {
   })
 
   this.Then(/I should see the port using the CLI$/, function () {
-    expect(this.port.trim()).to.equal('38472')
+    expect(this.port.trim()).to.equal('38472') // port is from dummy-navies/with-fixed-port/services.yml
   })
 
   this.Then(/I shouldn't see the port using the CLI$/, function () {

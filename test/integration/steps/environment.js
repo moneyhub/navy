@@ -40,6 +40,15 @@ export default function () {
     })
   })
 
+  this.Given(/I am working with the test navy which has a fixed external port$/, async function () {
+    this.navy = getNavy(ENV_NAME)
+
+    await this.navy.initialise({
+      configProvider: 'filesystem',
+      path: path.join(__dirname, '../dummy-navies/with-fixed-port'),
+    })
+  })
+
   this.Given(/I am working with a nonexistant navy$/, async function () {
     this.navy = getNavy('nonexistanttest')
   })

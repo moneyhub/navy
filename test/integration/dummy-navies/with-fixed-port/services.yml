@@ -1,10 +1,7 @@
 version: '2'
 
 services:
-  anotherservice:
-    image: dockercloud/hello-world
-
   helloworld:
     image: dockercloud/hello-world
     ports:
-      - "80"
+      - "38472:80"
