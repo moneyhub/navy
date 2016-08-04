@@ -187,6 +187,12 @@ program
   .action(lazyRequire('./logs'))
 
 program
+  .command('health')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Shows the health status for all of the launched services')
+  .action(lazyRequire('./health'))
+
+program
   .command('use-tag <service> <tag>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Uses a specific tag for the given service')
