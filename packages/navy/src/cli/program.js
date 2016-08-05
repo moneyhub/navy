@@ -193,6 +193,12 @@ program
   .action(lazyRequire('./health'))
 
 program
+  .command('wait-for-healthy [services...]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Waits for the given services to be healthy')
+  .action(lazyRequire('./wait-for-healthy'))
+
+program
   .command('use-tag <service> <tag>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Uses a specific tag for the given service')

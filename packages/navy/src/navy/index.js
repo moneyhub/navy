@@ -351,6 +351,35 @@ export class Navy extends EventEmitter2 {
     await this.launch([service], { noDeps: true })
   }
 
+  async waitForHealthy(services?: Array<string>, progressCallback?: Function): Promise<boolean> {
+    if (services == null) services = await this.getLaunchedServiceNames()
+
+    let tries = 0
+
+    while (tries++ < 30) {
+      const ps = await this.ps()
+
+      const serviceHealth = ps
+      .filter(service => services && services.indexOf(service.name) !== -1 && service.raw && service.raw.State.Health)
+      .map(service => ({
+        service: service.name,
+        health: service.raw && service.raw.State.Health.Status,
+      }))
+
+      if (progressCallback) progressCallback(serviceHealth)
+
+      const unhealthy = serviceHealth.filter(service => service.health !== 'healthy')
+
+      if (unhealthy.length === 0) {
+        return true
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 2000))
+    }
+
+    throw new NavyError('Timed out waiting for services to be healthy')
+  }
+
   async externalIP(): Promise<?string> {
     return getExternalIP()
   }
