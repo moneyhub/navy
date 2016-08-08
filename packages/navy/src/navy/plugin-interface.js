@@ -10,7 +10,7 @@ const resolve = bluebird.promisify(require('resolve'))
 
 export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<Object>> {
   const configProvider: ?ConfigProvider = await navy.getConfigProvider()
-  invariant(configProvider, 'NO_CONFIG_PROVIDER')
+  invariant(configProvider, 'NO_CONFIG_PROVIDER', navy.name)
 
   const basedir = await configProvider.getNavyPath()
 
