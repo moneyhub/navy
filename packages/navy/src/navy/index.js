@@ -1,6 +1,7 @@
 /* @flow */
 
 import bluebird from 'bluebird'
+import invariant from 'invariant'
 import {EventEmitter2} from 'eventemitter2'
 
 import {resolveDriverFromName} from '../driver'
@@ -98,9 +99,7 @@ export class Navy extends EventEmitter2 {
       throw new NavyNotInitialisedError(this.name)
     }
 
-    if (!driver) {
-      throw new NavyError('Could not determine driver for the navy')
-    }
+    invariant(driver, 'NO_DRIVER', this.name)
 
     return driver
   }
@@ -129,9 +128,7 @@ export class Navy extends EventEmitter2 {
 
     const configProvider: ?ConfigProvider = await this.getConfigProvider()
 
-    if (!configProvider) {
-      throw new Error('No config provider available')
-    }
+    invariant(configProvider, 'NO_CONFIG_PROVIDER', this.name)
 
     const navyFilePath: string = await configProvider.getNavyFilePath()
 
@@ -408,9 +405,7 @@ export class Navy extends EventEmitter2 {
 }
 
 export function getNavy(envName: ?string): Navy {
-  if (!envName) {
-    throw new Error('No navy provided')
-  }
+  invariant(envName, 'NO_NAVY_PROVIDED')
 
   return new Navy(envName)
 }

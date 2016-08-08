@@ -1,5 +1,6 @@
 /* @flow */
 
+import invariant from 'invariant'
 import {Navy} from './navy'
 import FileSystem from './config-providers/filesystem'
 import NPM from './config-providers/npm'
@@ -16,6 +17,7 @@ export type ConfigProvider = {
   getNavyFilePath(): Promise<string>;
   refreshConfig(): Promise<bool>;
   getLocationDisplayName(): Promise<string>;
+  isDangling(): Promise<boolean>;
 }
 
 export type CreateConfigProvider = (navy: Navy) => ConfigProvider
@@ -44,5 +46,5 @@ export async function getImportOptionsForCLI(opts: Object): State {
     }
   }
 
-  throw new Error('Could not resolve import options from CLI arguments')
+  invariant(false, 'CLI_IMPORT_RESOLVE_OPTIONS_ERR')
 }

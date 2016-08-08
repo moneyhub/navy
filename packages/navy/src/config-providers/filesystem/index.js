@@ -1,6 +1,8 @@
 /* @flow */
 
 import path from 'path'
+import invariant from 'invariant'
+import fs from '../../util/fs'
 import {Navy} from '../../navy'
 
 import type {ConfigProvider} from '../../config-provider'
@@ -11,12 +13,13 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
     async getNavyPath(): Promise<string> {
       const envState: ?State = await navy.getState()
 
-      if (!envState) {
-        throw new Error('State doesn\'t exist for navy')
-      }
+      invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
+      invariant(!!envState.path, 'FILESYSTEM_PROVIDER_REQUIRES_PATH', navy.name)
 
-      if (!envState.path) {
-        throw new Error('File system config provider requires a path')
+      try {
+        await fs.statAsync(envState.path)
+      } catch (ex) {
+        invariant(false, 'FILESYSTEM_PROVIDER_INVALID_PATH', navy.name)
       }
 
       return envState.path
@@ -34,11 +37,25 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
     async getLocationDisplayName(): Promise<string> {
       const envState: ?State = await navy.getState()
 
-      if (!envState) {
-        throw new Error('State doesn\'t exist for navy')
-      }
+      invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
 
       return envState.path
+    },
+
+    async isDangling(): Promise<boolean> {
+      const envState: ?State = await navy.getState()
+
+      if (!envState || !envState.path) {
+        return true
+      }
+
+      try {
+        await fs.statAsync(envState.path)
+      } catch (ex) {
+        return true
+      }
+
+      return false
     },
   }
 }

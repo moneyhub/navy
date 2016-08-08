@@ -1,0 +1,15 @@
+{
+  "STATE_NONEXISTANT": "State doesn't exist for navy %s",
+  "NO_CONFIG_PROVIDER": "Couldn't determine config provider for navy %s",
+  "NO_DRIVER": "Couldn't determine driver for navy %s",
+  "NO_NAVY_PROVIDED": "No Navy provided",
+  "FILESYSTEM_PROVIDER_REQUIRES_PATH": "File system config provider requires a path for %s",
+  "FILESYSTEM_PROVIDER_INVALID_PATH": "Invalid path given to navy: %s",
+  "NPM_PROVIDER_REQUIRES_PACKAGE": "NPM config provider requires an NPM package for %s",
+  "DEVELOP_NO_CONTAINER_ID": "Could not determine container ID for log attachment",
+  "DOCTOR_FIX_NO_PARAMS": "Expected params to be passed to doctor fix",
+  "CLI_IMPORT_RESOLVE_OPTIONS_ERR": "Could not resolve import options from CLI arguments",
+  "NO_HOME_DIRECTORY": "No home directory available",
+  "PLUGIN_RESOLVE_ERR": "Could not resolve some of the plugins in Navyfile.js: %s",
+  "PLUGIN_DOESNT_EXPORT_FUNCTION": "Plugin %s doesn't export a function as the entrypoint"
+}

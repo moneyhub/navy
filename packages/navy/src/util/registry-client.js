@@ -1,6 +1,7 @@
 /* @flow */
 
 import path from 'path'
+import invariant from 'invariant'
 import {registryRequest} from 'simple-docker-registry-client'
 import fs from './fs'
 
@@ -8,9 +9,7 @@ const DEFAULT_REGISTRY = 'registry-1.docker.io'
 const DEFAULT_REGISTRY_AUTH = 'https://index.docker.io/v1/'
 
 async function getAuthForRegistry(registry: string) {
-  if (!process.env.HOME) {
-    throw new Error('HOME directory not available')
-  }
+  invariant(process.env.HOME, 'NO_HOME_DIRECTORY')
 
   if (registry === DEFAULT_REGISTRY) {
     registry = DEFAULT_REGISTRY_AUTH

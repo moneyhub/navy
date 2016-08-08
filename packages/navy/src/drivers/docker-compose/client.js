@@ -2,6 +2,7 @@
 
 import path from 'path'
 import bluebird from 'bluebird'
+import invariant from 'invariant'
 
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
@@ -70,9 +71,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
     async getOriginalDockerComposeDirectory(): Promise<string> {
       const configProvider: ?ConfigProvider = await navy.getConfigProvider()
 
-      if (!configProvider) {
-        throw new Error('No config provider available for navy')
-      }
+      invariant(configProvider, 'NO_CONFIG_PROVIDER', navy.name)
 
       return configProvider.getNavyPath()
     },

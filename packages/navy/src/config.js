@@ -2,6 +2,7 @@
 
 import path from 'path'
 import bluebird from 'bluebird'
+import invariant from 'invariant'
 
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
 
@@ -17,9 +18,7 @@ let _config: ?Config = null
 export function getConfigPath(): string {
   const home = process.env.HOME
 
-  if (!home) {
-    throw new Error('Home directory not available')
-  }
+  invariant(home, 'NO_HOME_DIRECTORY')
 
   return path.join(home, '.navy', 'config.json')
 }

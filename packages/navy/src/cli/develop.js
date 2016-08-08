@@ -3,6 +3,7 @@
 import path from 'path'
 import chalk from 'chalk'
 import {execSync} from 'child_process'
+import invariant from 'invariant'
 
 import {getNavy} from '../'
 import {NavyError} from '../errors'
@@ -63,9 +64,7 @@ export default async function (service: string, opts: Object): Promise<void> {
 
   const container = (await navy.ps()).filter(_service => _service.name === service)[0]
 
-  if (!container) {
-    throw new NavyError('Could not determine container ID for log attachment')
-  }
+  invariant(container, 'DEVELOP_NO_CONTAINER_ID')
 
   const containerId = container.id
 

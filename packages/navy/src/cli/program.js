@@ -1,4 +1,5 @@
 import program from 'commander'
+import chalk from 'chalk'
 import {NavyError} from '../errors'
 import {getConfig} from '../config'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
@@ -26,9 +27,21 @@ function wrapper(res) {
 
       if (ex instanceof NavyError) {
         ex.prettyPrint()
+      } else if (ex.name === 'Invariant Violation') {
+        console.log()
+        console.log(chalk.bgRed(chalk.bold(' ' + ex.name + ' ')))
+        console.log()
+        console.log(' ' + ex.message)
+        console.log()
+        console.log(' ' + chalk.blue('Run') + ' ' + chalk.bold('navy doctor') + ' ' + chalk.blue('to attempt troubleshooting'))
+        console.log()
+        console.log(chalk.dim(ex.stack.split('\n').slice(1).join('\n')))
+        console.log()
       } else {
         console.error(ex.stack)
       }
+
+      process.exit(1)
     })
   }
 
@@ -290,6 +303,11 @@ program
   .option('--json', 'output JSON instead of a table')
   .description('List all of the imported navies')
   .action(lazyRequire('./status'))
+
+program
+  .command('doctor')
+  .description('Identifies and tries to fix some common issues which might cause Navy to stop working')
+  .action(lazyRequire('./doctor'))
 
 program
   .command('set-default <navy>')

@@ -2,6 +2,7 @@
 
 import path from 'path'
 import {execSync} from 'child_process'
+import invariant from 'invariant'
 import bluebird from 'bluebird'
 import {Navy} from '../../navy'
 import fs from '../../util/fs'
@@ -35,13 +36,8 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
     async getNavyPath(): Promise<string> {
       const envState: ?State = await navy.getState()
 
-      if (!envState) {
-        throw new Error('State doesn\'t exist for navy')
-      }
-
-      if (!envState.npmPackage) {
-        throw new Error('NPM config provider requires an NPM package')
-      }
+      invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
+      invariant(!!envState.npmPackage, 'NPM_PROVIDER_REQUIRES_PACKAGE', navy.name)
 
       const navyPath = await pathToModule(nodeModulesPath, envState.npmPackage)
 
@@ -57,13 +53,8 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
     async refreshConfig(): Promise<bool> {
       const envState: ?State = await navy.getState()
 
-      if (!envState) {
-        throw new Error('State doesn\'t exist for navy')
-      }
-
-      if (!envState.npmPackage) {
-        throw new Error('NPM Package not found in Navy state')
-      }
+      invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
+      invariant(!!envState.npmPackage, 'NPM_PROVIDER_REQUIRES_PACKAGE', navy.name)
 
       await tryAndInstall(envState.npmPackage)
 
@@ -73,11 +64,15 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
     async getLocationDisplayName(): Promise<string> {
       const envState: ?State = await navy.getState()
 
-      if (!envState) {
-        throw new Error('State doesn\'t exist for navy')
-      }
+      invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
 
       return envState.npmPackage
+    },
+
+    async isDangling(): Promise<boolean> {
+      const envState: ?State = await navy.getState()
+
+      return !envState || !envState.npmPackage
     },
   }
 }

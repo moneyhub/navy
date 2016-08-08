@@ -1,6 +1,7 @@
 /* @flow */
 
 import path from 'path'
+import invariant from 'invariant'
 import bluebird from 'bluebird'
 
 const debug = require('debug')('navy:state')
@@ -11,10 +12,7 @@ const rimraf = bluebird.promisify(require('rimraf'))
 
 export function pathToNavyRoot(): string {
   const home = process.env.HOME
-
-  if (!home) {
-    throw new Error('Home directory not available')
-  }
+  invariant(home, 'NO_HOME_DIRECTORY')
 
   return path.join(home, '.navy')
 }

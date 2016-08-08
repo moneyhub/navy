@@ -1,17 +1,15 @@
 /* @flow */
 
 import chalk from 'chalk'
+import invariant from 'invariant'
 import {getNavy} from '../'
-import {NavyError} from '../errors'
 
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
 
   const configProvider = await navy.getConfigProvider()
 
-  if (!configProvider) {
-    throw new NavyError('Could not resolve config provider')
-  }
+  invariant(configProvider, 'NO_CONFIG_PROVIDER', navy.name)
 
   if (!await configProvider.refreshConfig()) {
     return console.log(chalk.dim('Nothing to do'))
