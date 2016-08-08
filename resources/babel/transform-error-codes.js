@@ -52,9 +52,8 @@ module.exports = function (babel) {
               node.callee,
               [
                 node.arguments[0],
-                t.stringLiteral(errorCodes[errCode]),
-                ...node.arguments.slice(2),
-              ]
+                t.stringLiteral(errorCodes[errCode])
+              ].concat(node.arguments.slice(2))
             )
 
             newExpression[SEEN_SYMBOL] = true
