@@ -4,6 +4,8 @@ import inquirer from 'inquirer'
 import {getNavy} from '../'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 
+const SELECTED_WEIGHT = 100 // make sure selected services appear at the top
+
 export default async function (services: Array<string>, opts: Object): Promise<void> {
   const env = getNavy(opts.navy)
   const navyFile = (await env.getNavyFile()) || {}
@@ -19,7 +21,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
 
   if (!services || services.length === 0) {
     const choices = serviceNames
-      .sort(name => selectedServiceNames.indexOf(name) === -1 ? 100 : -1)
+      .sort(name => selectedServiceNames.indexOf(name) === -1 ? SELECTED_WEIGHT : -1)
       .map(name => ({
         name,
         checked: selectedServiceNames.indexOf(name) !== -1,

@@ -11,5 +11,6 @@
   "CLI_IMPORT_RESOLVE_OPTIONS_ERR": "Could not resolve import options from CLI arguments",
   "NO_HOME_DIRECTORY": "No home directory available",
   "PLUGIN_RESOLVE_ERR": "Could not resolve some of the plugins in Navyfile.js: %s",
-  "PLUGIN_DOESNT_EXPORT_FUNCTION": "Plugin %s doesn't export a function as the entrypoint"
+  "PLUGIN_DOESNT_EXPORT_FUNCTION": "Plugin %s doesn't export a function as the entrypoint",
+  "DOCKER_CONFIG_INVALID_AUTH_BASE64": "Invalid base64 string in docker/config.json for registry authentication"
 }

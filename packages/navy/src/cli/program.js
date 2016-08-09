@@ -20,6 +20,10 @@ const loadingLabelMap = {
   resetPort: 'Resetting port mapping...',
 }
 
+function removeFirstLineFromStackTrace(ex) {
+  return ex.stack.split('\n').slice(1).join('\n')
+}
+
 function wrapper(res) {
   if (res.catch) {
     res.catch(ex => {
@@ -35,7 +39,7 @@ function wrapper(res) {
         console.log()
         console.log(' ' + chalk.blue('Run') + ' ' + chalk.bold('navy doctor') + ' ' + chalk.blue('to attempt troubleshooting'))
         console.log()
-        console.log(chalk.dim(ex.stack.split('\n').slice(1).join('\n')))
+        console.log(chalk.dim(removeFirstLineFromStackTrace(ex.stack)))
         console.log()
       } else {
         console.error(ex.stack)
