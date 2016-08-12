@@ -1,25 +1,21 @@
 /* @flow */
 
-export default (config: Object, state: Object) => {
-  const newConfig = config
+import {middlewareHelpers} from './helpers'
 
-  Object.keys(state.services || {}).forEach(function (serviceName) {
-    const serviceConfig = newConfig.services[serviceName]
-    const serviceState = state.services[serviceName]
+function rewriteService(service, serviceName, serviceState) {
+  if (!serviceState || !serviceState._develop) return service
 
-    if (serviceState._develop) {
-      serviceConfig.stdin_open = true
-
-      serviceConfig.volumes = [
-        ...serviceConfig.volumes || [],
-        ...Object.keys(serviceState._develop.mounts).map(local => `${local}:${serviceState._develop.mounts[local]}`),
-      ]
-
-      if (serviceState._develop.command) {
-        serviceConfig.command = serviceState._develop.command
-      }
-    }
-  })
-
-  return newConfig
+  return {
+    ...service,
+    stdin_open: true,
+    volumes: middlewareHelpers.addVolumes(service,
+      Object.keys(serviceState._develop.mounts).map(local => `${local}:${serviceState._develop.mounts[local]}`),
+    ),
+    command: serviceState._develop.command
+      ? serviceState._develop.command
+      : service.command,
+  }
 }
+
+export default (config: Object, state: Object) =>
+  middlewareHelpers.rewriteServicesWithState(config, state, rewriteService)
