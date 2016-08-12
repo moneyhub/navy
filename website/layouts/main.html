@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ attributes.title }} | Navy</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/styles.css" />
+  </head>
+  <body>
+    <div id="sidebar">
+      <div id="logo">Na<span>v</span>y</div>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
+
+      {% block sidebar %}
+      <h4>Usage</h4>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/docs/cli-examples.html">Command Line Examples</a>
+        </li>
+        <li>
+          <a href="/docs/development-mode.html">Working on services locally</a>
+        </li>
+        <li>
+          <a href="/docs/http-proxy.html">Built in HTTP proxy (xip.io)</a>
+        </li>
+        <li>
+          <a href="/docs/multiple-navies.html">Working with Multiple Navies</a>
+        </li>
+        <li>
+          <a href="/docs/navyfile-config.html">Navyfile.js config</a>
+        </li>
+      </ul>
+
+      <h4>Advanced</h4>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/docs/writing-plugins.html">Writing plugins</a>
+        </li>
+        <li>
+          <a href="/docs/api/">API Documentation</a>
+        </li>
+      </ul>
+      {% endblock %}
+    </div>
+
+    <div id="page">
+      {% block body %}{{ content | safe }}{% endblock %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{% extends "./main.html" %}
+
+{% block body %}
+
+<div id="api-doc">
+  {{ content | safe }}
+</div>
+
+<script src="/js/api-doc.js"></script>
+
+{% endblock %}
+
+
+{% block sidebar %}
+<h4>API Documentation</h4>
+
+<ul class="side-nav api-doc-nav"></ul>
+{% endblock %}

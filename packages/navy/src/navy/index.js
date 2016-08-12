@@ -24,9 +24,22 @@ const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 
+/**
+ * A Navy instance
+ * @public
+ */
 export class Navy extends EventEmitter2 {
 
+  /**
+   * The name of the current Navy.
+   * @public
+   */
   name: string;
+
+  /**
+   * The normalised name of the current Navy (name without whitespaces).
+   * @public
+   */
   normalisedName: string;
 
   _pluginsLoaded: boolean;
@@ -61,6 +74,10 @@ export class Navy extends EventEmitter2 {
     this._pluginsLoaded = true
   }
 
+  /**
+   * Returns the current State for this Navy.
+   * @public
+   */
   async getState(): Promise<?State> {
     if (!this._cachedState) {
       this._cachedState = await getState(this.normalisedName)
@@ -140,6 +157,10 @@ export class Navy extends EventEmitter2 {
     }
   }
 
+  /**
+   * Saves a new State for this Navy.
+   * @public
+   */
   async saveState(state: State): Promise<void> {
     this._cachedState = state
 
@@ -147,10 +168,19 @@ export class Navy extends EventEmitter2 {
     await middlewareRunner(this, state)
   }
 
+  /**
+   * Registers a custom CLI command with the given name and callback function.
+   * Any command registered can be run using `navy run [name]`.
+   * @public
+   */
   registerCommand(name: string, action: Function) {
     this._registeredCommands[name] = action
   }
 
+  /**
+   * Registers a middleware reducer function. See [Writing Plugins](docs/writing-plugins.md).
+   * @public
+   */
   registerMiddleware(middlewareFn: Function) {
     this._registeredMiddleware.push(middlewareFn)
   }
@@ -163,10 +193,18 @@ export class Navy extends EventEmitter2 {
     await this._registeredCommands[name](args)
   }
 
+  /**
+   * Returns whether this Navy is initialised and ready to launch services.
+   * @public
+   */
   async isInitialised(): Promise<boolean> {
     return await this.getState() != null
   }
 
+  /**
+   * Initialises this Navy with the given State.
+   * @public
+   */
   async initialise(opts: State): Promise<void> {
     const state: State = {
       services: {},
@@ -177,10 +215,19 @@ export class Navy extends EventEmitter2 {
     await saveState(this.normalisedName, state)
   }
 
+  /**
+   * Deletes the state for this Navy. It won't be possible to interact with this Navy after calling this function
+   * unless you re-initialise it.
+   * @public
+   */
   async delete(): Promise<void> {
     await deleteState(this.normalisedName)
   }
 
+  /**
+   * Launches the given services for this Navy.
+   * @public
+   */
   async launch(services?: Array<string>, opts: ?Object): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
@@ -195,6 +242,11 @@ export class Navy extends EventEmitter2 {
     await reconfigureHTTPProxy()
   }
 
+  /**
+   * Relaunches (reconfigures) all of the services running in this Navy.
+   * This will pick up any changes to the compose configuration.
+   * @public
+   */
   async relaunch(opts: ?Object): Promise<void> {
     const services = await this.getLaunchedServiceNames()
 
@@ -205,6 +257,10 @@ export class Navy extends EventEmitter2 {
     await this.launch(undefined, opts)
   }
 
+  /**
+   * Destroys all of the services in this Navy and deletes the state.
+   * @public
+   */
   async destroy(): Promise<void> {
     if (!await this.isInitialised()) {
       throw new NavyNotInitialisedError(this.name)
@@ -222,10 +278,18 @@ export class Navy extends EventEmitter2 {
     await this.delete()
   }
 
+  /**
+   * Returns a list of launched services for this Navy.
+   * @public
+   */
   async ps(): Promise<ServiceList> {
     return await (await this.safeGetDriver()).ps()
   }
 
+  /**
+   * Starts the given services.
+   * @public
+   */
   async start(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
@@ -234,30 +298,51 @@ export class Navy extends EventEmitter2 {
     await (await this.safeGetDriver()).start(services)
   }
 
+  /**
+   * Stops the given services.
+   * @public
+   */
   async stop(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
     await (await this.safeGetDriver()).stop(services)
   }
 
+  /**
+   * Restarts the given services.
+   * @public
+   */
   async restart(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
     await (await this.safeGetDriver()).restart(services)
   }
 
+  /**
+   * Forcefully stops the given services.
+   * @public
+   */
   async kill(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
     await (await this.safeGetDriver()).kill(services)
   }
 
+  /**
+   * Removes the given services. Requires the services to be stopped first.
+   * @public
+   */
   async rm(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
     await (await this.safeGetDriver()).rm(services)
   }
 
+  /**
+   * Makes sure the images for the given services are up to date, and restarts any services
+   * with new images.
+   * @public
+   */
   async update(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
@@ -270,6 +355,10 @@ export class Navy extends EventEmitter2 {
     await (await this.safeGetDriver()).spawnLogStream(services)
   }
 
+  /**
+   * Locks down the given service to the given docker image tag.
+   * @public
+   */
   async useTag(service: string, tag: string): Promise<void> {
     const state = (await this.getState()) || {}
 
@@ -288,6 +377,10 @@ export class Navy extends EventEmitter2 {
     await this.launch([service], { noDeps: true })
   }
 
+  /**
+   * Resets the version of the given service if `useTag` was used.
+   * @public
+   */
   async resetTag(service: string): Promise<void> {
     const state = (await this.getState()) || {}
 
@@ -348,6 +441,10 @@ export class Navy extends EventEmitter2 {
     await this.launch([service], { noDeps: true })
   }
 
+  /**
+   * Waits for the given services to be healthy. Resolves when all services are healthy.
+   * @public
+   */
   async waitForHealthy(services?: Array<string>, progressCallback?: Function): Promise<boolean> {
     if (services == null) services = await this.getLaunchedServiceNames()
 
@@ -377,39 +474,71 @@ export class Navy extends EventEmitter2 {
     throw new NavyError('Timed out waiting for services to be healthy')
   }
 
+  /**
+   * Returns the external IP for accessing Docker and running services.
+   * @public
+   */
   async externalIP(): Promise<?string> {
     return getExternalIP()
   }
 
+  /**
+   * @deprecated
+   */
   async host(service?: string, index?: number): Promise<?string> {
     // getting host by service and index is now DEPRECATED
     return getExternalIP()
   }
 
+  /**
+   * Returns the external port for the given service and internal private port.
+   * @public
+   */
   async port(service: string, privatePort: number, index: ?number = 1): Promise<?number> {
     return await (await this.safeGetDriver()).port(service, privatePort, index)
   }
 
+  /**
+   * Returns the URL for the given service which can be used to access it if it exposes
+   * a HTTP server.
+   * @public
+   */
   async url(service: string): Promise<?string> {
     return getUrlForService(service, this.normalisedName)
   }
 
+  /**
+   * Returns an array of the names of the launched services for this Navy.
+   * @public
+   */
   async getLaunchedServiceNames(): Promise<Array<string>> {
     return await (await this.safeGetDriver()).getLaunchedServiceNames()
   }
 
+  /**
+   * Returns an array of the names of all of the possible services for this Navy.
+   * @public
+   */
   async getAvailableServiceNames(): Promise<Array<string>> {
     return await (await this.safeGetDriver()).getAvailableServiceNames()
   }
 
 }
 
-export function getNavy(envName: ?string): Navy {
-  invariant(envName, 'NO_NAVY_PROVIDED')
+/**
+ * Returns a `Navy` instance from the given Navy name.
+ * @public
+ */
+export function getNavy(navyName: ?string): Navy {
+  invariant(navyName, 'NO_NAVY_PROVIDED')
 
-  return new Navy(envName)
+  return new Navy(navyName)
 }
 
+/**
+ * Returns an array of `Navy` instances which are currently imported and launched.
+ * @public
+ */
 export async function getLaunchedNavies(): Promise<Array<Navy>> {
   try {
     const navyNames = await fs.readdirAsync(pathToNavys())
@@ -419,6 +548,10 @@ export async function getLaunchedNavies(): Promise<Array<Navy>> {
   }
 }
 
+/**
+ * Returns an array of names of Navies which are currently imported and launched.
+ * @public
+ */
 export async function getLaunchedNavyNames(): Promise<Array<string>> {
   try {
     return await fs.readdirAsync(pathToNavys())

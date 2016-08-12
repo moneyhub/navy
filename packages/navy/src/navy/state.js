@@ -57,6 +57,17 @@ export async function deleteState(normalisedEnvName: string): Promise<void> {
   await rimraf(path.dirname(pathToState(normalisedEnvName)))
 }
 
+/**
+ * A "state" object of the current services, and other internal Navy state.
+ * This can be used to hang "state" off services which can then be used by middleware at runtime to modify the
+ * runtime configuration.
+ *
+ * Accessing internal properties on state (properties other than "services") is not supported and backwards
+ * compatibility is not guaranteed.
+ *
+ * @public
+ * @property {object} services An object hash of the state of each service
+ */
 export type State = {
   driver?: string,
   configProvider?: string,

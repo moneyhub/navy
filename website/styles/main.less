@@ -1,0 +1,173 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  color: black;
+  font-size: 16px;
+}
+
+body {
+  margin: 0 20px;
+  background: fixed linear-gradient(white, #fcfcfc);
+}
+
+#logo {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 56px;
+  color: black;
+  text-transform: uppercase;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  text-shadow: 0 5px 0 #005d80, 0 10px 0 #00dcff;
+
+  span {
+    position: relative;
+    top: 10px;
+    text-shadow: 0 -5px 0 #00dcff, 0 -10px 0 #ccf8ff;
+  }
+
+  &:after {
+    content: 'Navy';
+    text-transform: uppercase;
+    transform: scale(1, -1);
+    display: inline-block;
+    text-shadow: none;
+    color: whitesmoke;
+    top: 97px;
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    background: -webkit-linear-gradient(#fff, #eee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+p {
+  margin: 20px 0;
+}
+
+h1 {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+code, pre {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  border: none;
+  background: #dcecf7;
+  color: black;
+  border-radius: 4px;
+}
+
+code {
+  padding: 2px 4px;
+  display: inline-block;
+}
+
+pre {
+  border-bottom: 2px solid #bdd1e0;
+  font-size: 14px;
+  padding: 9.5px;
+}
+
+pre > code {
+  padding: 0;
+}
+
+h1, h2, h3, a {
+  code {
+    background: none;
+  }
+}
+
+a {
+  color: #6A7277;
+  text-decoration: underline;
+
+  &:visited {
+    color: #6A7277;
+  }
+}
+
+#sidebar {
+  position: fixed;
+  width: 270px;
+  height: 100%;
+  height: 100vh;
+  padding: 20px 0;
+  overflow-y: auto;
+
+  ul.side-nav {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+      font-size: 1.1em;
+      margin-bottom: 2px;
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  ul.side-nav.api-doc-nav {
+    a {
+      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      font-size: 14px;
+    }
+
+    .doc-h2 {
+      margin-left: 10px;
+      font-size: 12px;
+    }
+
+    a.active {
+      font-weight: bold;
+    }
+  }
+}
+
+#page {
+  margin-left: 300px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+#api-doc {
+  padding-bottom: 80vh;
+
+  h1, h2 {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  }
+
+  h1 {
+    border-top: 1px solid #eeeeee;
+    padding-top: 15px;
+
+    &:first-child {
+      border-top: none;
+      padding-top: 0;
+    }
+  }
+
+  h2 {
+    font-size: 24px;
+    padding-top: 10px;
+  }
+}

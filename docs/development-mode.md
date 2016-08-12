@@ -1,8 +1,6 @@
 Using Navy's Development Mode
 =============================
 
-*This documentation is a work in progress and might be incomplete*
-
 Navy allows you to put services into development mode which will mount your source code into the container at runtime. This allows for rapid development and quick switching on and off of testing your local changes.
 
 
