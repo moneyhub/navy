@@ -4,9 +4,20 @@ import path from 'path'
 import invariant from 'invariant'
 import fs from '../../util/fs'
 import {Navy} from '../../navy'
+import {execAsync} from '../../util/exec-async'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
+
+async function cwdHasValidDockerComposeConfig() {
+  try {
+    await execAsync('docker-compose', ['config'], null, { cwd: process.cwd() })
+  } catch (ex) {
+    return false
+  }
+
+  return true
+}
 
 export default function createFileSystemConfigProvider(navy: Navy): ConfigProvider {
   return {
@@ -62,7 +73,11 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
 
 createFileSystemConfigProvider.importCliOptions = []
 
-createFileSystemConfigProvider.getImportOptionsForCLI = (opts) => {
+createFileSystemConfigProvider.getImportOptionsForCLI = async (opts) => {
+  const hasValidComposeConfig = await cwdHasValidDockerComposeConfig()
+
+  invariant(hasValidComposeConfig, 'NO_DOCKER_COMPOSE_FILE')
+
   return {
     configProvider: 'filesystem',
     path: process.cwd(),
