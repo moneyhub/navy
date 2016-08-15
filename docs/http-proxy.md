@@ -1,3 +1,7 @@
+---
+title: HTTP Proxy
+---
+
 HTTP Proxy
 ==========
 

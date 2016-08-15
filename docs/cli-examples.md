@@ -1,4 +1,8 @@
-Example day to day uses of the Navy CLI
+---
+title: Example usage
+---
+
+Example day to day usage of the Navy CLI
 ====================
 
 ## Viewing the status of all my services and Navies

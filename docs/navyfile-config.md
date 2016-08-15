@@ -1,3 +1,7 @@
+---
+title: Navyfile.js reference
+---
+
 `Navyfile.js` configuration reference
 =====================================
 

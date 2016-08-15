@@ -1,3 +1,7 @@
+---
+title: Development Mode
+---
+
 Using Navy's Development Mode
 =============================
 

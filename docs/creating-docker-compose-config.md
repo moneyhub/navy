@@ -1,3 +1,7 @@
+---
+title: Docker Compose Config
+---
+
 Creating your Docker Compose configuration
 ==========================================
 

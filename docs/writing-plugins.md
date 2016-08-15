@@ -1,3 +1,7 @@
+---
+title: Writing plugins
+---
+
 Writing plugins for Navy
 ========================
 

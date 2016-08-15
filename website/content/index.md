@@ -1,5 +1,5 @@
 ---
-title: Home
+title: Quick and powerful development environments using Docker and Docker Compose
 ---
 
 # Quick and powerful development environments using Docker and Docker Compose
