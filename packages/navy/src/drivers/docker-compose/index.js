@@ -128,7 +128,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async writeConfig(config: Object): Promise<void> {
-      const yamlOut = yaml.dump(config)
+      const yamlOut = yaml.safeDump(config, {skipInvalid: true})
       await fs.writeFileAsync(getCompiledDockerComposePath(), yamlOut)
 
       debug('Wrote docker-compose.tmp.yml', yamlOut)
