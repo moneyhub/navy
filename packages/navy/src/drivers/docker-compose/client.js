@@ -53,15 +53,23 @@ export function createComposeClient(navy: Navy): ComposeClient {
 
       composeArgs.push(command, ...args)
 
-      return await execAsync('docker-compose', composeArgs, childProcess => {
-        if (!noLog && !pipeLog) {
-          childProcess.stdout.on('data', data => log(data))
-          childProcess.stderr.on('data', data => log(data))
-        } else if (pipeLog) {
-          childProcess.stdout.on('data', data => process.stdout.write(data))
-          childProcess.stderr.on('data', data => process.stderr.write(data))
+      try {
+        return await execAsync('docker-compose', composeArgs, childProcess => {
+          if (!noLog && !pipeLog) {
+            childProcess.stdout.on('data', data => log(data))
+            childProcess.stderr.on('data', data => log(data))
+          } else if (pipeLog) {
+            childProcess.stdout.on('data', data => process.stdout.write(data))
+            childProcess.stderr.on('data', data => process.stderr.write(data))
+          }
+        }, composeOpts)
+      } catch (ex) {
+        if (ex.message && ex.message.indexOf('Can\'t find a suitable configuration file') !== -1) {
+          invariant(false, 'NO_DOCKER_COMPOSE_FILE')
         }
-      }, composeOpts)
+
+        throw ex
+      }
     },
 
     getCompiledDockerComposePath(): string {

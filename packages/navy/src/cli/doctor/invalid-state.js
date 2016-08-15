@@ -13,24 +13,24 @@ export default async function () {
 
     if (!configProvider) {
       await fix(
-        !configProvider,
         'Found Navy without config provider %s, removing',
         navy.name,
         async () => {
-          await navy.destroy()
+          await navy.delete()
         },
       )
 
       return
     }
 
-    await fix(
-      await configProvider.isDangling(),
-      'Found dangling Navy %s (invalid config), removing',
-      navy.name,
-      async () => {
-        await navy.destroy()
-      },
-    )
+    if (await configProvider.isDangling()) {
+      await fix(
+        'Found dangling Navy %s (invalid config), removing',
+        navy.name,
+        async () => {
+          await navy.destroy()
+        },
+      )
+    }
   }))
 }

@@ -35,7 +35,7 @@ function wrapper(res) {
         console.log()
         console.log(chalk.bgRed(chalk.bold(' ' + ex.name + ' ')))
         console.log()
-        console.log(' ' + ex.message)
+        console.log(' ' + ex.message.substring(ex.message.indexOf(': ') + 2))
         console.log()
         console.log(' ' + chalk.blue('Run') + ' ' + chalk.bold('navy doctor') + ' ' + chalk.blue('to attempt troubleshooting'))
         console.log()

@@ -1,7 +1,9 @@
 /* @flow */
 
 import chalk from 'chalk'
+import cleanTemporaryComposeFiles from './clean-compose-files'
 import checkForInvalidState from './invalid-state'
+import checkForInvalidComposeConfig from './invalid-compose-config'
 
 async function run(fns) {
   const errors = []
@@ -19,7 +21,9 @@ async function run(fns) {
 
 export default async function () {
   const errors = await run([
+    cleanTemporaryComposeFiles,
     checkForInvalidState,
+    checkForInvalidComposeConfig,
   ])
 
   if (errors.length > 0) {
@@ -31,5 +35,10 @@ export default async function () {
     return
   }
 
-  console.log(chalk.green('✔ Finished tests'))
+  console.log()
+  console.log(chalk.green(' ✔ Finished tests'))
+  console.log()
+  console.log(' Please try running Navy again if it wasn\'t working before.')
+  console.log(' If you still have problems, please open an issue at https://github.com/momentumft/navy/issues/new')
+  console.log()
 }

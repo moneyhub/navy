@@ -52,7 +52,7 @@ module.exports = function (babel) {
               node.callee,
               [
                 node.arguments[0],
-                t.stringLiteral(errorCodes[errCode])
+                t.stringLiteral(errCode + ': ' + errorCodes[errCode])
               ].concat(node.arguments.slice(2))
             )
 
