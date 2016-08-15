@@ -5,11 +5,13 @@ import {middlewareHelpers} from './helpers'
 function rewriteService(service, serviceName, serviceState) {
   if (!serviceState || !serviceState._develop) return service
 
+  const _serviceState = serviceState
+
   return {
     ...service,
     stdin_open: true,
     volumes: middlewareHelpers.addVolumes(service,
-      Object.keys(serviceState._develop.mounts).map(local => `${local}:${serviceState._develop.mounts[local]}`),
+      Object.keys(serviceState._develop.mounts).map(local => `${local}:${_serviceState._develop.mounts[local]}`),
     ),
     command: serviceState._develop.command
       ? serviceState._develop.command
