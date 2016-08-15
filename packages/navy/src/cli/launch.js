@@ -1,19 +1,20 @@
 /* @flow */
 
 import inquirer from 'inquirer'
-import {getNavy} from '../'
+import {getOrInitialiseNavy} from './util'
 import {startDriverLogging, stopDriverLogging} from '../driver-logging'
 
 const SELECTED_WEIGHT = 100 // make sure selected services appear at the top
 
 export default async function (services: Array<string>, opts: Object): Promise<void> {
-  const env = getNavy(opts.navy)
-  const navyFile = (await env.getNavyFile()) || {}
+  const navy = await getOrInitialiseNavy(opts.navy)
 
-  await env.ensurePluginsLoaded()
+  const navyFile = (await navy.getNavyFile()) || {}
 
-  const serviceNames = await env.getAvailableServiceNames()
-  const launchedServiceNames = await env.getLaunchedServiceNames()
+  await navy.ensurePluginsLoaded()
+
+  const serviceNames = await navy.getAvailableServiceNames()
+  const launchedServiceNames = await navy.getLaunchedServiceNames()
 
   const selectedServiceNames = launchedServiceNames.length > 0
     ? launchedServiceNames
@@ -41,9 +42,9 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     return
   }
 
-  await env.emitAsync('cli.before.launch')
+  await navy.emitAsync('cli.before.launch')
 
   startDriverLogging('Launching services...')
-  await env.launch(services)
+  await navy.launch(services)
   stopDriverLogging()
 }
