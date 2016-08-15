@@ -20,7 +20,7 @@ export default async function (opts: Object): Promise<void> {
         state,
         configProvider: state.configProvider,
         configLocation: await configProvider.getLocationDisplayName(),
-        url: getUrlForService('[service]', navy.normalisedName),
+        url: await getUrlForService('[service]', navy.normalisedName),
       }
     })), null, 2))
   }
@@ -37,7 +37,7 @@ export default async function (opts: Object): Promise<void> {
       ps.length.toString(),
       state.configProvider,
       await configProvider.getLocationDisplayName(),
-      getUrlForService(chalk.dim('service'), navy.normalisedName),
+      await getUrlForService(chalk.dim('service'), navy.normalisedName),
     ]
   }))
 

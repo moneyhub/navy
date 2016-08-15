@@ -1,6 +1,10 @@
 /* @flow */
 
-export function getExternalIP(): string {
+import dns from 'dns'
+
+const IPV4_FAMILY = 4
+
+export async function getExternalIP(): Promise<string> {
   const dockerHost = process.env.DOCKER_HOST
 
   // DEPRECATED use NAVY_EXTERNAL_IP instead
@@ -21,6 +25,17 @@ export function getExternalIP(): string {
 
     let ip = dockerHost.substring('tcp://'.length)
     ip = ip.substring(0, ip.lastIndexOf(':')).trim()
+
+    await new Promise((resolve, reject) => {
+      dns.lookup(ip, null, (err, _ip, ipFamily) => {
+        if (err || ipFamily !== IPV4_FAMILY) {
+          reject(new Error('Failed to lookup hostname "' + ip + '"'))
+        } else {
+          ip = _ip
+          resolve()
+        }
+      })
+    })
 
     return ip
   }

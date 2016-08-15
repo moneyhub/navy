@@ -492,7 +492,7 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async externalIP(): Promise<?string> {
-    return getExternalIP()
+    return await getExternalIP()
   }
 
   /**
@@ -500,7 +500,7 @@ export class Navy extends EventEmitter2 {
    */
   async host(service?: string, index?: number): Promise<?string> {
     // getting host by service and index is now DEPRECATED
-    return getExternalIP()
+    return await getExternalIP()
   }
 
   /**
@@ -517,7 +517,7 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async url(service: string): Promise<?string> {
-    return getUrlForService(service, this.normalisedName)
+    return await getUrlForService(service, this.normalisedName)
   }
 
   /**
