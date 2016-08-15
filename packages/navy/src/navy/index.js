@@ -446,16 +446,29 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async waitForHealthy(services?: Array<string>, progressCallback?: Function): Promise<boolean> {
-    if (services == null) services = await this.getLaunchedServiceNames()
+    if (services == null) {
+      services = (await this.ps())
+        .filter(service => service && service.raw && service.raw.State.Health)
+        .map(service => service.name)
+    }
 
     let tries = 0
 
     while (tries++ < 30) {
       const ps = await this.ps()
 
-      const serviceHealth = ps
-      .filter(service => services && services.indexOf(service.name) !== -1 && service.raw && service.raw.State.Health)
-      .map(service => ({
+      const specifiedServices = ps
+        .filter(service => services && services.indexOf(service.name) !== -1)
+
+      const servicesWithoutHealthInfo = specifiedServices
+        .filter(service => !service.raw || !service.raw.State.Health)
+        .map(service => service.name)
+
+      if (servicesWithoutHealthInfo.length > 0) {
+        throw new NavyError('The specified services don\'t have health checks: ' + servicesWithoutHealthInfo.join(', '))
+      }
+
+      const serviceHealth = specifiedServices.map(service => ({
         service: service.name,
         health: service.raw && service.raw.State.Health.Status,
       }))
