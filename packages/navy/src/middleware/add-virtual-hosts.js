@@ -1,6 +1,6 @@
 /* @flow */
 
-import {mapValues, find} from 'lodash'
+import {find} from 'lodash'
 import {Navy} from '../navy'
 import {getHostForService} from '../util/xipio'
 
@@ -20,29 +20,33 @@ const serviceHasPort80 = service =>
 export default (navy: Navy) =>
   async (config: Object, state: Object) => {
     const navyFile = await navy.getNavyFile()
+    const services = {}
+
+    await Promise.all(Object.keys(config.services).map(async serviceName => {
+      const service = config.services[serviceName]
+      let proxyConfig = getServiceHTTPProxyConfig(serviceName, navyFile)
+
+      // proxy port 80 even without config
+      if (!proxyConfig && serviceHasPort80(service)) {
+        proxyConfig = { port: 80 }
+      }
+
+      if (proxyConfig) {
+        return services[serviceName] = {
+          ...service,
+          environment: {
+            'VIRTUAL_HOST': await getHostForService(serviceName, navy.normalisedName),
+            'VIRTUAL_PORT': proxyConfig.port,
+            ...service.environment,
+          },
+        }
+      }
+
+      return services[serviceName] = service
+    }))
 
     return {
       ...config,
-      services: mapValues(config.services, (service, serviceName) => {
-        let proxyConfig = getServiceHTTPProxyConfig(serviceName, navyFile)
-
-        // proxy port 80 even without config
-        if (!proxyConfig && serviceHasPort80(service)) {
-          proxyConfig = { port: 80 }
-        }
-
-        if (proxyConfig) {
-          return {
-            ...service,
-            environment: {
-              'VIRTUAL_HOST': getHostForService(serviceName, navy.normalisedName),
-              'VIRTUAL_PORT': proxyConfig.port,
-              ...service.environment,
-            },
-          }
-        }
-
-        return service
-      }),
+      services,
     }
   }
