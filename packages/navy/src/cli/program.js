@@ -251,6 +251,17 @@ program
   `))
 
 program
+  .command('open <service>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Opens the given service in the default web browser, if the service is configured with a URL')
+  .action(lazyRequire('./open'))
+  .on('--help', () => console.log(`
+  Examples:
+    $ navy open mywebserver
+    Opening mywebserver...
+  `))
+
+program
   .command('host <service>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external host for the given service')
