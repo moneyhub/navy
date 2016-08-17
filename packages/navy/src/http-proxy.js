@@ -33,7 +33,7 @@ async function updateComposeConfig(navies: Array<string>) {
 
     services: {
       'nginx-proxy': {
-        image: 'jwilder/nginx-proxy:0.4.0',
+        image: 'madjam002/navy-proxy',
         ports: [
           '80:80',
         ],

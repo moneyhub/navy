@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+html, body {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 300;
+  color: white;
+  background: black;
+  font-size: 16px;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  margin: 0;
+}
+
+#logo {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 72px;
+  text-transform: uppercase;
+}
+
+#content {
+  padding-left: 48px;
+  max-width: 500px;
+}
+
+p {
+  margin: 20px 0;
+}
+
+h1 {
+  font-size: 34px;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+code {
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  padding: 2px 4px;
+  display: inline-block;
+}
+
+a {
+  color: #6A7277;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #6A7277;
+}
