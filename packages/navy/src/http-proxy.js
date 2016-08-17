@@ -3,22 +3,14 @@
 import os from 'os'
 import path from 'path'
 import yaml from 'js-yaml'
+import docker from './util/docker-client'
 import fs from './util/fs'
 import {execAsync} from './util/exec-async'
 import {log} from './driver-logging'
 import {getLaunchedNavyNames} from './navy'
 
 async function updateComposeConfig(navies: Array<string>) {
-  const networkIds = (await execAsync('docker', ['network', 'ls', '-q']))
-  .split('\n')
-  .map(net => net.trim())
-  .filter(net => !!net)
-
-  // example networks from navies
-  // dev_default
-  // myothernavy_default
-
-  const networks = JSON.parse(await execAsync('docker', ['network', 'inspect', ...networkIds]))
+  const networks = await docker.listNetworksAsync()
   .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
   .filter(net => {
     for (const navy of navies) {

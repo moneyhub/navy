@@ -1,12 +1,12 @@
 /* @flow */
 
 import {imageFromImageWithTag, localImageFromImage, tagFromImageWithTag} from 'simple-docker-registry-client'
-import {execAsync} from './exec-async'
 import {getRegistryClient} from './registry-client'
+import docker from './docker-client'
 
 export default async function hasUpdate(imageWithTag: string, currentImageId: string, navyFile: ?Object): Promise<boolean|string> {
-  const imageRaw = await execAsync('docker inspect ' + currentImageId)
-  const currentImageContainerId = JSON.parse(imageRaw)[0].ContainerConfig.Image
+  const imageConfig = await docker.getImage(currentImageId).inspectAsync()
+  const currentImageContainerId = imageConfig.ContainerConfig.Image
 
   const image = imageFromImageWithTag(imageWithTag)
 

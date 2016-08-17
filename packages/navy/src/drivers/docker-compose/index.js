@@ -3,9 +3,9 @@
 import yaml from 'js-yaml'
 import bluebird from 'bluebird'
 
+import docker from '../../util/docker-client'
 import {createComposeClient} from './client'
 import {Navy} from '../../navy'
-import {execAsync} from '../../util/exec-async'
 import {Status as ServiceStatus} from '../../service'
 
 import type {Driver} from '../../driver'
@@ -60,8 +60,9 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
       if (ids.length === 1 && ids[0] === '') return []
 
-      const inspectRaw = await execAsync('docker', ['inspect', ...ids])
-      const inspectResult = JSON.parse(inspectRaw)
+      const inspectResult = await Promise.all(ids.map(containerId =>
+        docker.getContainer(containerId).inspectAsync()
+      ))
 
       return inspectResult.map(service => ({
         id: service.Id,
@@ -144,17 +145,16 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async getLaunchedServiceNames(): Promise<Array<string>> {
       const projectName = navy.normalisedName
 
-      const psRaw = await execAsync('docker', [
-        'ps',
-        '-a',
-        `--filter="label=com.docker.compose.project=${projectName}"`,
-        '--format',
-        '"{{.Label \\"com.docker.compose.service\\"}}"',
-      ])
+      const ps = await docker.listContainersAsync({
+        all: true,
+        filters: {
+          label: [
+            `com.docker.compose.project=${projectName}`,
+          ],
+        },
+      })
 
-      const names = psRaw.trim().split('\n')
-
-      if (names.length === 1 && names[0].length === 0) return []
+      const names = ps.map(container => container.Labels['com.docker.compose.service'])
 
       return names
     },

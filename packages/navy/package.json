@@ -30,6 +30,7 @@
     "cli-spinners": "^0.1.2",
     "commander": "^2.9.0",
     "debug": "^2.2.0",
+    "dockerode": "^2.3.0",
     "eventemitter2": "^1.0.3",
     "inquirer": "^1.0.2",
     "invariant": "^2.2.1",
