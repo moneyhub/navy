@@ -57,15 +57,22 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async ps(): Promise<ServiceList> {
-      const ids = (await exec('ps', ['-q'], { noLog: true })).trim().split('\n')
+      const projectName = navy.normalisedName
 
-      if (ids.length === 1 && ids[0] === '') return []
+      const ps = await docker.listContainersAsync({
+        all: true,
+        filters: {
+          label: [
+            `com.docker.compose.project=${projectName}`,
+          ],
+        },
+      })
 
-      const inspectResult = await Promise.all(ids.map(containerId =>
-        docker.getContainer(containerId).inspectAsync()
+      const inspect = await Promise.all(ps.map(container =>
+        docker.getContainer(container.Id).inspectAsync()
       ))
 
-      return inspectResult.map(service => ({
+      return inspect.map(service => ({
         id: service.Id,
         name: service.Config.Labels['com.docker.compose.service'],
         image: service.Config.Image,
