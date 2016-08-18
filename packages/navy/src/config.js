@@ -43,4 +43,7 @@ export function getConfig(): Config {
 export async function setConfig(config: Config): Promise<void> {
   await mkdirp(path.dirname(getConfigPath()))
   await fs.writeFileAsync(getConfigPath(), JSON.stringify(config, null, 2))
+
+  // trash cached config
+  _config = null
 }
