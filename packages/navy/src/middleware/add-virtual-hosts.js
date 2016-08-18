@@ -21,6 +21,7 @@ export default (navy: Navy) =>
   async (config: Object, state: Object) => {
     const navyFile = await navy.getNavyFile()
     const services = {}
+    const externalIP = await navy.externalIP()
 
     await Promise.all(Object.keys(config.services).map(async serviceName => {
       const service = config.services[serviceName]
@@ -35,7 +36,7 @@ export default (navy: Navy) =>
         return services[serviceName] = {
           ...service,
           environment: {
-            'VIRTUAL_HOST': await getHostForService(serviceName, navy.normalisedName),
+            'VIRTUAL_HOST': await getHostForService(serviceName, navy.normalisedName, externalIP),
             'VIRTUAL_PORT': proxyConfig.port,
             ...service.environment,
           },

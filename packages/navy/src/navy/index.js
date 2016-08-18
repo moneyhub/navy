@@ -8,6 +8,7 @@ import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
 import {getState, saveState, deleteState, pathToNavys} from './state'
+import {getConfig} from '../config'
 import {NavyNotInitialisedError, NavyError} from '../errors'
 import {loadPlugins} from './plugin-interface'
 import {middlewareRunner} from './middleware'
@@ -243,11 +244,18 @@ export class Navy extends EventEmitter2 {
   }
 
   /**
+   * @deprecated
+   */
+  async relaunch(opts: ?Object): Promise<void> {
+    return await this.reconfigure(opts)
+  }
+
+  /**
    * Relaunches (reconfigures) all of the services running in this Navy.
    * This will pick up any changes to the compose configuration.
    * @public
    */
-  async relaunch(opts: ?Object): Promise<void> {
+  async reconfigure(opts: ?Object): Promise<void> {
     const services = await this.getLaunchedServiceNames()
 
     if (services.length === 0) {
@@ -491,8 +499,10 @@ export class Navy extends EventEmitter2 {
    * Returns the external IP for accessing Docker and running services.
    * @public
    */
-  async externalIP(): Promise<?string> {
-    return await getExternalIP()
+  async externalIP(): Promise<string> {
+    const config = await getConfig()
+
+    return await getExternalIP(config.externalIP)
   }
 
   /**
@@ -500,7 +510,7 @@ export class Navy extends EventEmitter2 {
    */
   async host(service?: string, index?: number): Promise<?string> {
     // getting host by service and index is now DEPRECATED
-    return await getExternalIP()
+    return await this.externalIP()
   }
 
   /**
@@ -517,7 +527,7 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async url(service: string): Promise<?string> {
-    return await getUrlForService(service, this.normalisedName)
+    return await getUrlForService(service, this.normalisedName, await this.externalIP())
   }
 
   /**

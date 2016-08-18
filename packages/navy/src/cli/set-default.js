@@ -3,6 +3,9 @@
 import chalk from 'chalk'
 import {setConfig, getConfig} from '../config'
 
+/**
+ * @deprecated
+ */
 export default async function (navy: string): Promise<void> {
   await setConfig({
     ...getConfig(),

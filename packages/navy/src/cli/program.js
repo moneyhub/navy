@@ -325,8 +325,13 @@ program
   .action(lazyRequire('./doctor'))
 
 program
+  .command('config')
+  .description('Modify and get Navy global config - run `navy config` for help')
+  .action(lazyRequire('./config/wrapper'))
+
+program
   .command('set-default <navy>')
-  .description('Set the default navy')
+  .description('Set the default navy. DEPRECATED - use `navy config set default-navy <navy>` instead')
   .action(lazyRequire('./set-default'))
 
 export default program

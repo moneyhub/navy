@@ -11,6 +11,7 @@ const mkdirp = bluebird.promisify(require('mkdirp'))
 
 export type Config = {
   defaultNavy: ?string,
+  externalIP: ?string,
 }
 
 let _config: ?Config = null
@@ -36,6 +37,7 @@ export function getConfig(): Config {
   } catch (ex) {
     return {
       defaultNavy: DEFAULT_ENVIRONMENT_NAME,
+      externalIP: null,
     }
   }
 }

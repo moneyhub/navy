@@ -1,6 +1,5 @@
 import chalk from 'chalk'
 import {getLaunchedNavies} from '../'
-import {getUrlForService} from '../util/xipio'
 import table from '../util/table'
 
 export default async function (opts: Object): Promise<void> {
@@ -20,7 +19,7 @@ export default async function (opts: Object): Promise<void> {
         state,
         configProvider: state.configProvider,
         configLocation: await configProvider.getLocationDisplayName(),
-        url: await getUrlForService('[service]', navy.normalisedName),
+        url: await navy.url('[service]'),
       }
     })), null, 2))
   }
@@ -37,7 +36,7 @@ export default async function (opts: Object): Promise<void> {
       ps.length.toString(),
       state.configProvider,
       await configProvider.getLocationDisplayName(),
-      await getUrlForService(chalk.dim('service'), navy.normalisedName),
+      await navy.url(chalk.dim('service')),
     ]
   }))
 

@@ -1,16 +1,12 @@
 /* @flow */
 
-import {getExternalIP} from './external-ip'
-
 const BASE = 'xip.io'
 
 function isValidIpv4Addr(ip) {
   return /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/g.test(ip)
 }
 
-export async function getXIPSubdomain() {
-  const externalIP = await getExternalIP()
-
+export async function getXIPSubdomain(externalIP: string) {
   if (externalIP === '127.0.0.1') {
     // shorten
     return `0.${BASE}`
@@ -24,10 +20,10 @@ export async function getXIPSubdomain() {
   return `${externalIP}.${BASE}`
 }
 
-export async function getHostForService(service: string, navyNormalisedName: string) {
-  return `${service}.${navyNormalisedName}.${process.env.NAVY_EXTERNAL_SUBDOMAIN || await getXIPSubdomain()}`
+export async function getHostForService(service: string, navyNormalisedName: string, externalIP: string) {
+  return `${service}.${navyNormalisedName}.${process.env.NAVY_EXTERNAL_SUBDOMAIN || await getXIPSubdomain(externalIP)}`
 }
 
-export async function getUrlForService(service: string, navyNormalisedName: string) {
-  return `http://${await getHostForService(service, navyNormalisedName)}`
+export async function getUrlForService(service: string, navyNormalisedName: string, externalIP: string) {
+  return `http://${await getHostForService(service, navyNormalisedName, externalIP)}`
 }
