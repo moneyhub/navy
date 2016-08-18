@@ -262,17 +262,6 @@ program
   `))
 
 program
-  .command('host <service>')
-  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .description('Prints the external host for the given service')
-  .action(basicCliWrapper('host', { driverLogging: false }))
-  .on('--help', () => console.log(`
-  Examples:
-    $ navy host mywebserver
-    localhost
-  `))
-
-program
   .command('port <service> <port>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Prints the external port for the given internal port of the given service')
@@ -330,6 +319,11 @@ program
   .action(lazyRequire('./config/wrapper'))
 
 program
+  .command('external-ip')
+  .description('Prints the external IP which services are accessible on')
+  .action(lazyRequire('./external-ip'))
+
+program
   .command('use-lan-ip')
   .description('Use your LAN ip address for connecting to Navy services')
   .action(lazyRequire('./lan-ip'))
@@ -338,6 +332,12 @@ program
   .command('use-local-ip')
   .description('Use your local ip address (127.0.0.1) for connecting to Navy services')
   .action(lazyRequire('./local-ip'))
+
+program
+  .command('host <service>')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Prints the external host for the given service. DEPRECATED - use `navy external-ip` instead')
+  .action(basicCliWrapper('host', { driverLogging: false }))
 
 program
   .command('set-default <navy>')
