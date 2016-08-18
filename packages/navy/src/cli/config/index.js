@@ -3,8 +3,7 @@
 import program from 'commander'
 import {getConfig, setConfig} from '../../config'
 import {NavyError} from '../../errors'
-import {getLaunchedNavies} from '../../'
-import {startDriverLogging, stopDriverLogging} from '../../driver-logging'
+import {reconfigureAllNavies} from '../util/reconfigure'
 
 const NAME_MAP = {
   'default-navy': 'defaultNavy',
@@ -20,13 +19,7 @@ export async function reconfigureIfNecessary(configProp: string) {
     return
   }
 
-  const navies = await getLaunchedNavies()
-
-  for (const navy of navies) {
-    startDriverLogging('Reconfiguring ' + navy.name)
-    await navy.reconfigure()
-    stopDriverLogging()
-  }
+  await reconfigureAllNavies()
 }
 
 program

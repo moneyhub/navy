@@ -330,6 +330,16 @@ program
   .action(lazyRequire('./config/wrapper'))
 
 program
+  .command('use-lan-ip')
+  .description('Use your LAN ip address for connecting to Navy services')
+  .action(lazyRequire('./lan-ip'))
+
+program
+  .command('use-local-ip')
+  .description('Use your local ip address (127.0.0.1) for connecting to Navy services')
+  .action(lazyRequire('./local-ip'))
+
+program
   .command('set-default <navy>')
   .description('Set the default navy. DEPRECATED - use `navy config set default-navy <navy>` instead')
   .action(lazyRequire('./set-default'))
