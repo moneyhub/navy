@@ -10,11 +10,18 @@
   <body>
     <div id="logo">Navy</div>
     <div id="content">
-      <h1>Service not running</h1>
+      <h1>Service not found</h1>
 
       <p>
-        You tried to access the service <code id="service-name"></code> which is either not running or does not expose
-        an HTTP interface.
+        You tried to access the service <code id="service-name"></code> which was not found.
+        Some possible causes of this might be:
+
+        <ul>
+          <li>The service is not running (check with <code>navy ps</code>)</li>
+          <li>The service has crashed</li>
+          <li>A service with the name given doesn't exist</li>
+          <li>You used the wrong IP address in the xip.io URL (check url with <code>navy url [servicename]</code>)</li>
+        </ul>
       </p>
     </div>
 
