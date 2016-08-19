@@ -27,7 +27,7 @@ export default function () {
 
   this.When(/I launch a service from the CLI prompt from the directory with my config in$/, async function () {
     const cmd = Automator.spawn(['launch'], {
-      cwd: path.join(__dirname, '../../dummy-navies/basic'),
+      cwd: path.join(__dirname, '../../test-projects/basic'),
       env: {
         ...process.env,
         NAVY_NAME: this.navy.name,

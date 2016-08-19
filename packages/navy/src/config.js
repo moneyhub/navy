@@ -6,6 +6,11 @@ import invariant from 'invariant'
 
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
 
+const DEFAULT_CONFIG = {
+  defaultNavy: DEFAULT_ENVIRONMENT_NAME,
+  externalIP: null,
+}
+
 const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 
@@ -35,14 +40,13 @@ export function getConfig(): Config {
 
     return _config
   } catch (ex) {
-    return {
-      defaultNavy: DEFAULT_ENVIRONMENT_NAME,
-      externalIP: null,
-    }
+    return DEFAULT_CONFIG
   }
 }
 
-export async function setConfig(config: Config): Promise<void> {
+export async function setConfig(config: ?Config): Promise<void> {
+  if (config == null) config = DEFAULT_CONFIG
+
   await mkdirp(path.dirname(getConfigPath()))
   await fs.writeFileAsync(getConfigPath(), JSON.stringify(config, null, 2))
 

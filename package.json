@@ -2,13 +2,12 @@
   "private": true,
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
   "options": {
-    "cucumber": "--strict --fail-fast -r ./preload.js -r ./environment.js -r ./hooks.js -r ./chai.js -r ./features -r ./steps ./features",
     "mocha": "--compilers js:babel-register packages/*/src/{,**}/__tests__/*.js"
   },
   "scripts": {
     "build": "./scripts/build.sh",
     "watch": "./scripts/watch.sh",
-    "integration": "cd test/integration && cucumberjs $npm_package_options_cucumber",
+    "integration": "./scripts/integration.sh",
     "lint": "eslint .",
     "flow": "flow",
     "unit": "mocha $npm_package_options_mocha",

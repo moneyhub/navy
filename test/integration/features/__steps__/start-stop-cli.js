@@ -24,7 +24,7 @@ export default function () {
   })
 
   this.Then(/I should see that the navy hasn't been initialised$/, async function () {
-    expect(this.result).to.contain('Navy "navy-test-navy" not imported')
+    expect(this.result).to.contain('Navy "dev" not imported')
   })
 
 }
