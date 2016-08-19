@@ -1,6 +1,15 @@
 import chalk from 'chalk'
 import {getLaunchedNavies} from '../'
 import table from '../util/table'
+import {getConfig} from '../config'
+
+function formatNavyName(navy, defaultNavy) {
+  if (navy.name === defaultNavy) {
+    return `${navy.name} ${chalk.cyan('(default)')}`
+  }
+
+  return navy.name
+}
 
 export default async function (opts: Object): Promise<void> {
   const navies = await getLaunchedNavies()
@@ -24,6 +33,10 @@ export default async function (opts: Object): Promise<void> {
     })), null, 2))
   }
 
+  const config = await getConfig()
+
+  const { defaultNavy } = config
+
   const rows = await Promise.all(navies.map(async navy => {
     const ps = await navy.ps()
     const state = await navy.getState()
@@ -31,7 +44,7 @@ export default async function (opts: Object): Promise<void> {
     const isActive = ps.reduce((active, service) => active || service.status === 'running', false)
 
     return [
-      navy.name,
+      formatNavyName(navy, defaultNavy),
       isActive ? chalk.green('yes') : chalk.red('no'),
       ps.length.toString(),
       state.configProvider,
