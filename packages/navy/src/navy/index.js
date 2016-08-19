@@ -382,7 +382,7 @@ export class Navy extends EventEmitter2 {
     })
 
     await this.kill([service])
-    await this.launch([service], { noDeps: true })
+    await this.update([service]) // pull and launch
   }
 
   /**
