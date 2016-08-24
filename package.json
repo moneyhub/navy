@@ -16,6 +16,7 @@
     "prepublish": "npm run build",
     "publish": "lerna publish",
     "publish-rc": "NPM_DIST_TAG=next npm run publish",
+    "publish-docs": "cd website && SITE_URL=https://momentumft.github.io/navy npm run build && gh-pages -d build",
     "bootstrap": "lerna bootstrap",
     "updated": "lerna updated"
   },

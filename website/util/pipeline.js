@@ -37,7 +37,12 @@ export function addLayout(layoutPath, opts = {}) {
   return async function addLayout(docs) {
     return await Promise.all(docs.map(doc => ({
       ...doc,
-      html: nunjucks.render(layoutPath, { content: doc.html, attributes: doc.attributes, ...opts }),
+      html: nunjucks.render(layoutPath, {
+        content: doc.html,
+        attributes: doc.attributes,
+        siteUrl: process.env.SITE_URL || 'http://localhost:8081/website/build',
+        ...opts,
+      }),
     })))
   }
 }

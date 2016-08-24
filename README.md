@@ -67,23 +67,10 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 ```sh
 $ npm install -g navy
 $ cd my-docker-compose-config # where your docker-compose.yml might live
-$ navy import # import the docker compose config into Navy
 $ navy launch # launch your services!
 ```
 
-[Now check out some example uses of Navy](docs/example-uses.md).
-
-If you don't have an existing `docker-compose.yml`, [check out the guide on writing your docker compose config](docs/creating-docker-compose-config.md).
-
-
-## Other useful guides
-
-- [Example uses of Navy in a day to day workflow](docs/example-uses.md)
-- [Working on services in your environment using Navy's development mode](docs/development-mode.md)
-- [Working with multiple Navies in parallel](docs/multiple-navies.md)
-- [Introduction to using the NodeJS API](docs/api-intro.md)
-- [Writing your own plugins](docs/writing-plugins.md)
-
+[Now check out the documentation on the Navy website](https://momentumft.github.io/navy/)
 
 ## License
 
