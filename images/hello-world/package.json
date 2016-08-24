@@ -1,0 +1,5 @@
+{
+  "name": "navy-hello-world",
+  "private": true,
+  "main": "src/index.js"
+}

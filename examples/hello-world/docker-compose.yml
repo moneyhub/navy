@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  main:
+    image: navycloud/hello-world
+    ports:
+      - "80"

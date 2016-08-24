@@ -28,7 +28,7 @@ You can set/export the `NAVY_NAME` environment variable.
 You can also just quickly change the name of the default Navy by using:
 
 ```sh
-$ navy set-default nameOfNavy
+$ navy config set default-navy [newname]
 ```
 
 All further commands which aren't overriding the name of the Navy by either CLI argument or Environment Variable will use the name provided here.
@@ -36,5 +36,5 @@ All further commands which aren't overriding the name of the Navy by either CLI 
 You can change it back to "dev" with:
 
 ```sh
-$ navy set-default dev
+$ navy config rm default-navy
 ```

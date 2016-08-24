@@ -1,19 +1,21 @@
 ---
-title: Example usage
+title: Example day-to-day usage of Navy
 ---
 
-Example day to day usage of the Navy CLI
-====================
+Example day-to-day usage of Navy
+================================
 
-## Viewing the status of all my services and Navies
+Now that you've got a hello world Navy set up, here's some examples of what you might want to do on a day-to-day basis.
 
-You can view all of your services across Navies by running:
+## Viewing the status of all your running services
+
+You can view all of your services for a Navy by running:
 
 ```sh
-$ navy status
+$ navy ps
 ```
 
-Alternatively, `navy ps` will show the services just from the current working Navy.
+![navy ps output](resources/3-navy-ps.png)
 
 
 ## Temporarily using a different version/tag of a service locally
@@ -35,7 +37,7 @@ $ navy reset-tag my-awesome-webapp
 
 ## Streaming logs for a service
 
-Navy works very similar to Docker Compose when it comes to streaming logs:
+Navy is very similar to Docker Compose when it comes to streaming logs:
 
 ```sh
 $ navy logs my-awesome-webapp
@@ -43,8 +45,8 @@ $ navy logs my-awesome-webapp
 
 ## Run multiple instances of your environment in parallel
 
-[See working with multiple Navies](multiple-navies.md).
+[See working with multiple Navies](4-multiple-navies.md).
 
 ## Working on a service locally
 
-[See working with Navy's development mode](development-mode.md).
+[See working with Navy's development mode](3-develop.md).
