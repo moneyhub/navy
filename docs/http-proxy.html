@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>HTTP Proxy | Navy</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/styles.css" />
+  </head>
+  <body>
+    <div id="sidebar">
+      <div id="logo">Na<span>v</span>y</div>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/">Home</a>
+        </li>
+      </ul>
+
+      
+      <h4>Usage</h4>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/docs/getting-started/1-intro.html">Getting started</a>
+        </li>
+        <li>
+          <a href="/docs/getting-started/2-day-to-day-usage.html">Day-to-day usage</a>
+        </li>
+        <li>
+          <a href="/docs/getting-started/3-develop.html">Developing services</a>
+        </li>
+        <li>
+          <a href="/docs/getting-started/4-multiple-navies.html">Working with Multiple Navies</a>
+        </li>
+      </ul>
+
+      <h4>Advanced</h4>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/docs/api-introduction.html">Node API tutorial</a>
+        </li>
+        <li>
+          <a href="/docs/writing-plugins.html">Writing plugins</a>
+        </li>
+        <li>
+          <a href="/docs/http-proxy.html">HTTP proxy</a>
+        </li>
+      </ul>
+
+      <h4>Reference</h4>
+
+      <ul class="side-nav">
+        <li>
+          <a href="/docs/navyfile-config.html">Navyfile.js config</a>
+        </li>
+        <li>
+          <a href="/docs/api/">API Documentation</a>
+        </li>
+      </ul>
+      
+    </div>
+
+    <div id="page">
+      <h1 id="httpproxy">HTTP Proxy</h1>
+
+<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
+
+<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
+
+<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
+[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
+</code></pre>
+
+<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
+
+<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+    </div>
+  </body>
+</html>
