@@ -3,18 +3,17 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "less": "mkdir -p build/css; lessc styles/main.less build/styles.css",
-    "html": "../node_modules/.bin/babel-node .",
-    "copy-public": "mkdir -p build/docs/getting-started; cp -R public/* build/; cp -R ../docs/getting-started/resources build/docs/getting-started/",
-    "build": "rm -rf build && npm run less; npm run copy-public; npm run html;",
-    "watch": "nodemon -e js,html,less,md -w ../docs -w ./styles -w ./public -w ./layouts --exec npm run build"
+    "build": "rm -rf build && ./node_modules/.bin/gulp build",
+    "watch": "rm -rf build && ./node_modules/.bin/gulp watch"
   },
   "devDependencies": {
     "bluebird": "^3.4.1",
     "documentation": "^4.0.0-beta9",
     "front-matter": "^2.1.0",
     "glob": "^7.0.5",
+    "gulp": "^3.9.1",
     "less": "^2.7.1",
+    "less-plugin-clean-css": "^1.5.1",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.10.0",
     "nunjucks": "^2.4.2",
