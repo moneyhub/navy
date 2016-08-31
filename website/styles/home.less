@@ -1,0 +1,105 @@
+#hero {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 100px;
+
+  .hero-content {
+    padding: 0 50px;
+  }
+
+  .hero-cta {
+    text-decoration: none;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 1.3em;
+  }
+
+  h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-weight: 200;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    transform: rotate(-5deg);
+    width: 150%;
+    height: 200px;
+    bottom: -100px;
+    background-color: #005d80;
+  }
+}
+
+#example-block {
+  background: #005d80;
+  min-height: 300px;
+  color: white;
+  padding: 40px 50px;
+  position: relative;
+  margin-bottom: 200px;
+
+  h2 {
+    font-weight: 200;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    transform: rotate(-5deg);
+    left: -30px;
+    width: 150%;
+    height: 200px;
+    bottom: -30px;
+    background-color: #005d80;
+    z-index: -1;
+  }
+
+  @keyframes blinker {
+    to { visibility: hidden; }
+  }
+
+  #cli-typer {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 3em;
+    flex: 5;
+
+    #cli-typer-value {
+      &::after {
+        content: '-';
+        position: relative;
+        background: white;
+        height: 64px;
+        animation: blinker 1s steps(2, start) infinite;
+      }
+
+      &.is-typing::after {
+        animation: none;
+      }
+    }
+  }
+
+  #compose-file-example {
+    flex: 3;
+    margin-top: 10px;
+
+    pre {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.3em;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}

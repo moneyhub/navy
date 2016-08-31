@@ -11,7 +11,7 @@ docNav.insertAdjacentHTML('beforeend', `
 
 const headingPositions = {}
 
-window.onscroll = function () {
+window.addEventListener('scroll', function () {
   const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop
 
   for (const heading of headings) {
@@ -27,4 +27,4 @@ window.onscroll = function () {
       document.querySelector('.api-doc-nav li[data-key=' + heading + '] a').setAttribute('class', 'active')
     }
   }
-}
+})

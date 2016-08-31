@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  vote:
+    image: docker/example-voting-app-vote
+    ports:
+      - "80"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379"
+
+  worker:
+    image: docker/example-voting-app-worker
+
+  db:
+    image: postgress:9.4
+
+  result:
+    image: mantika/docker-example-voting-app-result
+    ports:
+      - "80"
+      - "5858"

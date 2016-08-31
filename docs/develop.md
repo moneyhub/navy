@@ -1,5 +1,6 @@
 ---
 title: Developing services locally
+section: docs
 ---
 
 Developing services locally

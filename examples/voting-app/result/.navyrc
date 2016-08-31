@@ -1,0 +1,9 @@
+{
+  "services": ["result"],
+  "develop": {
+    "mounts": {
+      "./": "/app"
+    },
+    "command": "nodemon server.js"
+  }
+}

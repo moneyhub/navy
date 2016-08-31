@@ -1,5 +1,8 @@
+require('babel-register')
+
 const gulp = require('gulp')
 const {execSync} = require('child_process')
+const buildHTML = require('./')
 
 const exec = (cmd) => execSync(cmd, { stdio: 'inherit' })
 
@@ -12,6 +15,10 @@ const paths = {
 
 gulp.task('styles', () => {
   exec('./node_modules/.bin/lessc --clean-css="--s1 --advanced --compatibility=ie8" styles/main.less build/styles.css')
+
+  if (global.__devReload) {
+    global.__devReload()
+  }
 })
 
 gulp.task('resources', () => {
@@ -19,7 +26,7 @@ gulp.task('resources', () => {
   .pipe(gulp.dest('build/'))
 
   gulp.src('../docs/**/resources/*')
-  .pipe(gulp.dest('build/docs'))
+  .pipe(gulp.dest('build'))
 })
 
 gulp.task('client-js', () => {
@@ -27,12 +34,21 @@ gulp.task('client-js', () => {
 })
 
 gulp.task('html', () => {
-  exec('../node_modules/.bin/babel-node .')
+  return buildHTML()
+  .then(() => {
+    if (global.__devReload) {
+      global.__devReload()
+    }
+  })
+})
+
+gulp.task('dev-server', () => {
+  require('./dev-server') // this provides global.__devReload
 })
 
 gulp.task('build', ['styles', 'resources', 'client-js', 'html'])
 
-gulp.task('watch', ['build'], () => {
+gulp.task('watch', ['build', 'dev-server'], () => {
   gulp.watch(paths.styles, ['styles'])
   gulp.watch(paths.resources, ['resources'])
   gulp.watch(paths.clientJs, ['client-js'])

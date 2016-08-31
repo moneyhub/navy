@@ -1,0 +1,39 @@
+{% extends "./main.html" %}
+
+{% block body %}
+
+<div id="hero">
+  <div class="hero-content">
+    <h1>Easy development environments made possible</h1>
+    <h2>Navy is a which makes working on your application easier when it has many services.</h2>
+    <a href="{{ siteUrl }}/getting-started/install.html" class="hero-cta">Get started 👉</a>
+  </div>
+</div>
+
+<div id="example-block">
+  <h2>It's super easy to get started...</h2>
+  <div class="side-by-side">
+    <div id="cli-typer">$ <span id="cli-typer-value"></span></div>
+    <div id="compose-file-example">
+      <pre>
+  version: '2'
+
+  services:
+    main:
+      image: navycloud/hello-world
+      ports:
+        - "80"
+      </pre>
+    </div>
+  </div>
+</div>
+
+<h1>Some other content</h1>
+<h2>Foo</h2>
+
+{% endblock %}
+
+{% block js %}
+<script src="//cdn.jsdelivr.net/theaterjs/latest/theater.min.js"></script>
+<script src="{{ siteUrl }}/js/home.js"></script>
+{% endblock %}

@@ -1,5 +1,6 @@
 ---
 title: HTTP Proxy
+section: docs
 ---
 
 HTTP Proxy

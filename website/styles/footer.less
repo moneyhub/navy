@@ -1,0 +1,54 @@
+footer {
+  background: darken(#005d80, 15%);
+  padding: 50px 40px;
+  color: white;
+  height: 320px;
+
+  .link-section {
+    &:not(:first-child) { padding-left: 50px; }
+
+    h3 {
+      text-transform: lowercase;
+      font-weight: 200;
+      font-size: 1.3em;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        font-size: 1.05em;
+        margin-bottom: 4px;
+
+        a {
+          color: rgba(255, 255, 255, 0.8);
+          text-decoration: none;
+
+          &:hover {
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  .built-by {
+    font-size: 1.2em;
+    margin-top: 30px;
+
+    a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      border-bottom: thin dashed rgba(255, 255, 255, 0.8);
+
+      &:hover {
+        color: white;
+        border-bottom-color: white;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 ---
 title: Navyfile.js reference
+section: docs
 ---
 
 `Navyfile.js` configuration reference

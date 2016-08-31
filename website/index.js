@@ -7,50 +7,33 @@ import {
 } from './util/pipeline'
 import buildApiDocs from './api-docs'
 
-function buildNav(docs) {
-  const items = []
-
-  for (const doc of docs) {
-    if (doc.attributes && doc.attributes.title) {
-      items.push({
-        name: doc.attributes.title,
-        path: '/docs/' + doc.pathWithoutExtension + '.html',
-      })
-    }
-  }
-
-  return items
-}
-
-async function run() {
+export default async function run() {
   console.log('Building static content...')
 
-  const sitePaths = await glob('content/**/*.md')
-  const docsPaths = await glob('../docs/**/*.md')
-
-  const siteContent = await getContent(sitePaths, 'content')
-  const docsContent = await getContent(docsPaths, '../docs')
-
-  const nav = buildNav([
-    ...siteContent,
-    ...docsContent,
-  ])
+  const siteContent = await getContent(await glob('content/**/*.md'), 'content')
+  const gettingStartedContent = await getContent(await glob('../docs/getting-started/**/*.md'), '../docs/getting-started')
+  const docsContent = await getContent(await glob('../docs/*.md'), '../docs')
 
   await Promise.resolve(siteContent)
   .then(convertMarkdown)
-  .then(addLayout('layouts/main.html', { nav }))
+  .then(addLayout('layouts/main.html'))
   .then(write('build'))
+
+  await Promise.resolve(gettingStartedContent)
+  .then(convertMarkdown)
+  .then(addLayout('layouts/getting-started.html'))
+  .then(write('build/getting-started'))
 
   await Promise.resolve(docsContent)
   .then(convertMarkdown)
-  .then(addLayout('layouts/main.html', { nav }))
+  .then(addLayout('layouts/main.html'))
   .then(write('build/docs'))
 
   console.log('Building API documentation')
 
   await Promise.resolve(buildApiDocs())
   .then(convertMarkdown)
-  .then(addLayout('layouts/api.html', { nav }))
+  .then(addLayout('layouts/api.html'))
   .then(write('build/docs/api'))
 
   console.log('Done')
@@ -60,5 +43,3 @@ process.on('unhandledRejection', err => {
   console.log(err.stack)
   process.exit(1)
 })
-
-run()

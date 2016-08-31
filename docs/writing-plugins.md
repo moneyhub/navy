@@ -1,5 +1,6 @@
 ---
 title: Writing plugins
+section: docs
 ---
 
 Writing plugins for Navy

@@ -1,41 +1,10 @@
 ---
-title: Getting Started
+title: Hello world with Navy
+section: install
 ---
 
-Getting Started with Navy
-=========================
-
-If you haven't yet got Docker and Docker Compose installed, head over to <https://www.docker.com/products/docker>.
-
-Make sure you've got at least Docker 1.10.0 installed and Docker Compose 1.7.0:
-
-```sh
-$ docker -v
-Docker version 1.12.1, build 23cf638, experimental
-$ docker-compose -v
-docker-compose version 1.8.0, build f3628c7
-```
-
-You'll also need NodeJS and NPM. You can get these at <https://nodejs.org>.
-
-
-## Installing Navy
-
-You can install the latest version of Navy easily using NPM:
-
-```sh
-$ npm install -g navy
-```
-
-Once installed, make sure it's working with:
-
-```sh
-$ navy --version
-2.5.0
-```
-
-
-## Hello world!
+Hello world with Navy
+=====================
 
 To start with, we're going to use the `navycloud/hello-world` Docker image to get started with Navy.
 
@@ -72,7 +41,8 @@ Now open a web browser and go to the URL which `navy ps` shows (<http://main.dev
 ![Website output](resources/4-hello-world-website.png)
 
 
-### Sorted!
+Sorted!
+-------
 
 That's the "Hello world" of Navy! Now you'll want to make a `docker-compose.yml` config file for your own application. It's worth noting a few things at this point before you start exploring Navy though:
 
@@ -90,3 +60,5 @@ That's the "Hello world" of Navy! Now you'll want to make a `docker-compose.yml`
   If you publish port 80 from your service, Navy will automatically provide a URL which you can access the service on without using an IP and random port.
 
   For more information, [see the Navy HTTP Proxy](../http-proxy.md).
+
+<span class="move-on-link">[Move on to some examples](examples.md)</span>

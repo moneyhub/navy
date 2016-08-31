@@ -1,5 +1,6 @@
 ---
 title: Example day-to-day usage of Navy
+section: docs
 ---
 
 Example day-to-day usage of Navy
@@ -14,9 +15,6 @@ You can view all of your services for a Navy by running:
 ```sh
 $ navy ps
 ```
-
-![navy ps output](resources/3-navy-ps.png)
-
 
 ## Temporarily using a different version/tag of a service locally
 
@@ -45,8 +43,8 @@ $ navy logs my-awesome-webapp
 
 ## Run multiple instances of your environment in parallel
 
-[See working with multiple Navies](4-multiple-navies.md).
+[See working with multiple Navies](multiple-navies.md).
 
 ## Working on a service locally
 
-[See working with Navy's development mode](3-develop.md).
+[See working with Navy's development mode](develop.md).

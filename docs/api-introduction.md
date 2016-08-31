@@ -1,5 +1,6 @@
 ---
 title: NodeJS API Introduction
+section: docs
 ---
 
 Introduction to using the NodeJS API

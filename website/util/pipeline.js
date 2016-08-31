@@ -35,12 +35,14 @@ export async function convertMarkdown(docs) {
 
 export function addLayout(layoutPath, opts = {}) {
   return async function addLayout(docs) {
+    nunjucks.configure('', { noCache: true })
+
     return await Promise.all(docs.map(doc => ({
       ...doc,
-      html: nunjucks.render(layoutPath, {
+      html: nunjucks.render(doc.attributes && doc.attributes.layout ? `layouts/${doc.attributes.layout}.html` : layoutPath, {
         content: doc.html,
         attributes: doc.attributes,
-        siteUrl: process.env.SITE_URL || 'http://localhost:8081/website/build',
+        siteUrl: process.env.SITE_URL || 'http://localhost:3000',
         ...opts,
       }),
     })))
