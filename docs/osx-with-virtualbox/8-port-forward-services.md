@@ -9,7 +9,7 @@ IFS=' '
 output=$(navy ps)
 while read -r line; do
   running=$(echo $line | awk '{ print $4 }');
-  if [ "$running" == "running" ]; then
+  if test "$running" = "running"; then
     service=$(echo $line | awk '{ print $2 }');
     internal=$(echo $line | grep -o -- '->[0-9]\+/tcp' | grep -o '[0-9]\+');
     external=$(navy port "$service" "$internal");
