@@ -52,8 +52,8 @@ function wrapper(res) {
   return res
 }
 
-function basicCliWrapper(fnName, opts = {}) {
-  const driverLogging = opts.driverLogging == null ? true : opts.driverLogging
+function basicCliWrapper(fnName, wrapperOpts = {}) {
+  const driverLogging = wrapperOpts.driverLogging == null ? true : wrapperOpts.driverLogging
 
   return async function (maybeServices, ...args) {
     const { getNavy } = require('../navy')
@@ -61,6 +61,12 @@ function basicCliWrapper(fnName, opts = {}) {
     const opts = args.length === 0 ? maybeServices : args[args.length - 1]
     const otherArgs = args.slice(0, args.length - 1)
     const envName = opts.navy
+
+    if (wrapperOpts.serviceBasedAlias && maybeServices.length) {
+      console.log(`This command should not be called with a list of services. calling '${wrapperOpts.serviceBasedAlias}' instead`)
+      fnName = wrapperOpts.serviceBasedAlias
+      maybeServices = maybeServices.split(' ')
+    }
 
     process.on('unhandledRejection', ex => {
       stopDriverLogging({ success: false })
@@ -132,7 +138,7 @@ program
   .command('destroy')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Destroys a navy and all related data and services')
-  .action(basicCliWrapper('destroy'))
+  .action(basicCliWrapper('destroy', {serviceBasedAlias: 'kill'}))
   .on('--help', () => console.log(`
   This will destroy an entire navy and all of its data and services.
 
