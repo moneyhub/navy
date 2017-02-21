@@ -3,24 +3,41 @@ sudo: required
 language: node_js
 
 node_js:
-  - "7"
-  - "6"
-  - "4"
+  - 7
+  - 6
+  - 4
+
+dist: trusty
 
 services:
   - docker
 
 env:
-  DOCKER_VERSION: 1.13.1-0~ubuntu-trusty
-  DOCKER_COMPOSE_VERSION: 1.8.0
-  DEBUG: "navy:*"
-  NAVY_DEBUG: "navy:*"
+  matrix:
+    - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
+    - DOCKER_VERSION=1.12.6-0~ubuntu-trusty
+  global:
+    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.8.0
+
+cache:
+  directories:
+    - $(npm config get cache)
+
+matrix:
+  fast_finish: true
+
+  include:
+    - node_js: 6
+      env: DOCKER_VERSION=1.11.2-0~trusty
+    - node_js: 6
+      env: DOCKER_VERSION=1.10.3-0~trusty
 
 before_install:
   # list docker-engine versions
   - apt-cache madison docker-engine
 
   # upgrade docker-engine to specific version
+  - sudo apt-get purge -y docker-engine
   - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
 
   # reinstall docker-compose at specific version
