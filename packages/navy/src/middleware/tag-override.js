@@ -7,7 +7,7 @@ export default (config: Object, state: Object) => {
     const serviceConfig = newConfig.services[serviceName]
     const serviceState = state.services[serviceName]
 
-    if (serviceState._tag) {
+    if (serviceState._tag && serviceConfig) {
       let image = serviceConfig.image
 
       // strip existing tag off if it exists

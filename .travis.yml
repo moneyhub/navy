@@ -13,7 +13,7 @@ services:
   - docker
 
 env:
-  DOCKER_VERSION: 1.12.0-0~trusty
+  DOCKER_VERSION: 1.13.1-0~ubuntu-trusty
   DOCKER_COMPOSE_VERSION: 1.8.0
   DEBUG: "navy:*"
   NAVY_DEBUG: "navy:*"
