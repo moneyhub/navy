@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,56 +71,38 @@
 
     <div id="page">
       <h1 id="introductiontousingthenodejsapi">Introduction to using the NodeJS API</h1>
-
 <p><em>This documentation is a work in progress and might be incomplete</em></p>
-
 <p>One of the great things about Navy is that it allows you to launch and manipulate your environments, or "navies",
 from the NodeJS api. Some example use cases of this might be:</p>
-
 <ul>
 <li>Bringing up all of your services to run integration tests against, maybe in a mocha "before" hook</li>
-
 <li>Accessing information like the IP and ports of services to connect to in a test run</li>
-
 <li>Ability to asynchronously wait for a service to become available</li>
 </ul>
-
 <h2 id="launchinganavy">Launching a Navy</h2>
-
 <p>First of all, you need to obtain an instance of a "navy".
 Navies can have any name, and the name is used to identify the navy for when you have multiple ones running in parallel.</p>
-
 <p>In this example, we're going to be using a navy named "dev".</p>
-
 <pre><code class="js language-js">import {getNavy} from 'navy'
 
 const navy = getNavy('dev')
 </code></pre>
-
 <p>Before we can launch any services, we need to initialise the navy. This is where important information gets passed in
 such as the path to the directory containing your <code>docker-compose.yml</code> file.</p>
-
 <pre><code class="js language-js">navy.initialise({
   configProvider: 'filesystem',
   path: '/some/path/to/directory/containing/docker-compose/file'
 })
 </code></pre>
-
 <p>Here we are passing in <code>filesystem</code> as the config provider. A config provider is what provides the docker compose configuration
 to Navy. At the moment we only support <code>filesystem</code>, but there are plans for more in the future.</p>
-
 <p>Most API methods on the <code>navy</code> instance will return a Promise which resolves then the action has been completed.</p>
-
 <p>Now you can launch some services:</p>
-
 <pre><code class="js language-js">navy.launch(['some', 'services', 'here'])
 </code></pre>
-
 <p>You can optionally pass an array to <code>launch</code> like we have above, which specifies what services from <code>docker-compose.yml</code> should
 be launched. If you don't pass an array, all services will be launched.</p>
-
 <h2 id="nextsteps">Next steps</h2>
-
 <p>These docs are very much a work in progress. If you want to see what else you can do with your <code>navy</code> instance, check out the
 integration tests or the <code>packages/navy/src/navy/index.js</code> file.</p>
     </div>

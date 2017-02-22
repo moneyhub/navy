@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTTP Proxy | Navy</title>
+    <title> | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
@@ -70,14 +70,33 @@
     </div>
 
     <div id="page">
-      <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
-</code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
-<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+      <h1 id="createanewdockermachine">Create a new docker-machine</h1>
+<p>Now that docker Toolbox has been installed you'll need to create a new docker-machine. This will run on VirtualBox with the side effect of creating a virtual disk that can be copied to and external HDD.</p>
+<ol>
+<li>First you'll want to create a new instance of your docker-machine using VirtualBox.
+<code>
+$ docker-machine create --driver virtualbox default
+</code></li>
+<li>Next, copy the docker environment variables so that docker and docker-compose know that you're using VirtualBox:
+<code>
+$ eval $(docker-machine env default)
+</code>
+<em>Tip: to speed this up in future, add and alias to your .bash_profile or .zshrc e.g.</em>
+<code>
+alias dockerize='eval "$(docker-machine env default)"'
+</code>
+<em>Then just use the following to copy these into your current shell</em>
+<code>
+$ dockerize
+</code></li>
+<li>Confirm that your new docker-machine is running:
+<code>
+$ docker-machine start default
+$ docker-machine ls
+NAME             ACTIVE   DRIVER         STATE     URL                         SWARM   DOCKER    ERRORS
+default          *        virtualbox     Running   tcp://192.168.99.101:2376           v1.10.1
+</code></li>
+</ol>
     </div>
   </body>
 </html>

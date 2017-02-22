@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTTP Proxy | Navy</title>
+    <title> | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
@@ -70,14 +70,29 @@
     </div>
 
     <div id="page">
-      <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
+      <h1 id="portforwardeachactivenavyservicetoyourvirtialboxdockermachine">Port forward each active Navy service to your VirtialBox docker-machine</h1>
+<p>The final step is to port-forward each external port used for each active service to your docker-machine running on VirtualBox.</p>
+<p>The complication here is that Navy at the moment will only return each services external port if your know both the service name and it's internal port. To simplify this process you can use the following bash script which essentially reads the output of <code>$ navy ps</code> and port-forwards each active service to your docker-machine on VirtualBox.</p>
+<p>Copy the following :</p>
+<pre><code>IFS=' '
+output=$(navy ps)
+while read -r line; do
+  running=$(echo $line | awk '{ print $4 }');
+  if test "$running" = "running"; then
+    service=$(echo $line | awk '{ print $2 }');
+    internal=$(echo $line | grep -o -- '-&gt;[0-9]\+/tcp' | grep -o '[0-9]\+');
+    external=$(navy port "$service" "$internal");
+    VBoxManage controlvm "default" natpf1 delete "${service}"&gt;/dev/null 2&gt;&amp;1
+    VBoxManage controlvm "default" natpf1 "${service},tcp,,${external},,${external}"&gt;/dev/null 2&gt;&amp;1
+    echo "Adding port forwarding for: \`${service}\` from \`${internal}\` to \`${external}\`"
+  fi
+done &lt;&lt;&lt; "$output"
 </code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
-<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+<p>Save this script to a file e.g. map-navy-ports.sh and execute that file from the command line</p>
+<pre><code>$ map-navy-ports.sh
+</code></pre>
+<p>You can check that this has worked by going to yout VirtualBix GUI for your docker-machine, right click and select settings &gt; Network &gt; Advanced &gt; Port Forwarding</p>
+<p>You should then see a list of each service with it's external port mapped.</p>
     </div>
   </body>
 </html>

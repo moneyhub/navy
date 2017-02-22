@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTTP Proxy | Navy</title>
+    <title> | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
@@ -70,14 +70,22 @@
     </div>
 
     <div id="page">
-      <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
-</code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
-<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+      <h1 id="restartnavyusingexternalip">Restart Navy using External IP</h1>
+<p>Now that you have your docker-machine installed on your external HDD, you'll need to wake it up and restart Navy. As your docker-machine will be running from the IP supplied by VirtrualBox, you'll need to run your Navy services from your Dev machines IP and then foward each serivces port to your docker-machine running on VirtualBox (Phew!).</p>
+<ol>
+<li><p>Restart your docker-machine</p>
+<pre><code>$ docker-machine start default
+</code></pre></li>
+<li><p>Set your Navy config to use your external-ip
+<code>
+$ navy config set external-ip 10.2.3.4 # or whatever your external IP is
+</code></p></li>
+<li><p>Navy should now restart each service using your external IP. To check that this has happened correctly run, you should see that your exc:
+<code>
+$ navy external-ip
+10.2.3.4
+</code></p></li>
+</ol>
     </div>
   </body>
 </html>

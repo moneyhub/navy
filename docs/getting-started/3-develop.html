@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,15 +71,10 @@
 
     <div id="page">
       <h1 id="developingserviceslocally">Developing services locally</h1>
-
 <p>Navy allows you to put services into development mode which will mount your source code into the container at runtime. This allows for rapid development and quick switching on and off of testing your local changes.</p>
-
 <h2 id="thenavyrcfile">The <code>.navyrc</code> file</h2>
-
 <p>Before you can use the development mode on a service, you need to go to the corresponding repo/directory for where your source code is for that service and create a <code>.navyrc</code> file. This basically tells Navy the names of the services in your environment that the repo corresponds to and how the source code should be mounted in.</p>
-
 <p><code>~/dev/my-awesome-webapp/.navyrc</code>:</p>
-
 <pre><code class="json language-json">{
   "services": ["my-awesome-webapp"],
   "develop": {
@@ -90,17 +85,11 @@
   }
 }
 </code></pre>
-
 <p>Here we are mounting the root of the repo into <code>/usr/src/app</code> which is where our Docker container looks for the source code of the app to run.</p>
-
 <p>We're also overriding the run command of the container to be <code>npm run start-watch</code>. <code>start-watch</code> could be an npm script in your <code>package.json</code> which runs your application with something like Nodemon which will watch your source code and restart the app when changes are detected.</p>
-
 <h2 id="puttingtheserviceintodevelopmentmode">Putting the service into development mode</h2>
-
 <p>Now that you have your <code>.navyrc</code> file, you can run <code>navy develop</code> from the same directory and it will put <code>my-awesome-webapp</code> into development mode and mount the source code and override the command.</p>
-
 <p>Here's what this might look like:</p>
-
 <pre><code class="sh language-sh">$ navy develop
 
 🚧 my-awesome-webapp has now restarted in development 🚧
@@ -118,11 +107,8 @@
 My awesome webapp server starting...
 Now listening on port 80!
 </code></pre>
-
 <p>As you can see, <code>navy develop</code> has restarted the service and automatically streamed the logs to the terminal.</p>
-
 <p><code>navy develop</code> actually attaches itself to stdin and stdout directly which enables you to write commands to your application, just like you would be able to if you were running it directly on your machine with Node. So with Nodemon, I can type <code>rs</code> to manually restart the server:</p>
-
 <pre><code class="sh language-sh">My awesome webapp server starting...
 Now listening on port 80!
 
@@ -132,25 +118,18 @@ rs
 My awesome webapp server starting...
 Now listening on port 80!
 </code></pre>
-
 <p>It's worth noting that if you <code>Ctrl+C</code> out of <code>navy develop</code>, the service will continue running in development mode, you have just detached from the process. To reattach or restart the service, just run <code>navy develop</code> again.</p>
-
 <p>When your service is in development mode, it will show in <code>navy status</code> or <code>navy ps</code>:</p>
-
 <pre><code class="sh language-sh">  dev (default navy)
 
   ID        Name             Image                                Status
   c51666e…  my-awesome-web…  myorganisation/myawesomewebapp       running (development)
   b53959a…  redis            redis:2.8                            running
 </code></pre>
-
 <h2 id="takingtheserviceoutofdevelopmentmode">Taking the service out of development mode</h2>
-
 <p>You can quickly switch back to the live code that's baked into your Docker image with one command:</p>
-
 <pre><code class="sh language-sh">$ navy live
 </code></pre>
-
 <p>Make sure you run it from the same directory where you ran <code>navy develop</code>.</p>
     </div>
   </body>

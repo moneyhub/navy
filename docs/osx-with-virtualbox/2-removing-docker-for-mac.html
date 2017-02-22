@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTTP Proxy | Navy</title>
+    <title> | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
@@ -70,14 +70,37 @@
     </div>
 
     <div id="page">
-      <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
-</code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
-<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+      <h1 id="removingdockerformac">Removing Docker for Mac</h1>
+<ol>
+<li>Remove all existing docker images and containers using the following<ul>
+<li>Delete all containers
+<code>
+$ docker rm $(docker ps -a -q)
+</code></li>
+<li>Delete all images
+<code>
+$ docker rmi $(docker images -q)
+</code></li></ul></li>
+<li>Next uninstall docker for Mac, run
+<code>
+$ /Applications/Docker.app/Contents/MacOS/Docker --uninstall
+</code></li>
+<li>You'll also need to reset your your docker environment variables as Docker for Mac will have created symlinks for docker, docker-compose and docker-machine. Firstly check to see if any Docker environment variables exist:
+<code>
+$ env | grep DOCKER
+DOCKER_HOST=tcp://192.168.99.100:2376
+DOCKER_MACHINE_NAME=default
+DOCKER_TLS_VERIFY=1
+DOCKER_CERT_PATH=/Users/victoriabialas/.docker/machine/machines/default
+</code>
+If they do exist then remove then with :
+<code>
+$ unset DOCKER_TLS_VERIFY
+$ unset DOCKER_CERT_PATH
+$ unset DOCKER_MACHINE_NAME
+$ unset DOCKER_HOST
+</code></li>
+</ol>
     </div>
   </body>
 </html>

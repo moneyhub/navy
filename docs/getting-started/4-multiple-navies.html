@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,34 +71,20 @@
 
     <div id="page">
       <h1 id="workingwithmultiplenavies">Working with multiple Navies</h1>
-
 <p>You can launch multiple Navies in parallel and operate them.</p>
-
 <p>Unlike with Docker Compose, when you launch a Navy (with <code>navy import</code> and <code>navy launch</code>), you can then operate on that Navy from any directory on your machine, no need to remain in the same directory as your configuration.</p>
-
 <p>Navies all have a name (which ends up being the Docker Compose project name) which defaults to "dev" when not specified. So when you run Navy commands, the Navy which it will be operating on will be "dev".</p>
-
 <p>You can change the Navy that the CLI will operate on by using various different methods:</p>
-
 <h3 id="commandline">Command line</h3>
-
 <p>Just add <code>-e nameOfNavy</code> to each command to change which Navy the command will run for.</p>
-
 <h3 id="environmentvariables">Environment variables</h3>
-
 <p>You can set/export the <code>NAVY_NAME</code> environment variable.</p>
-
 <h3 id="configfile">Config file</h3>
-
 <p>You can also just quickly change the name of the default Navy by using:</p>
-
 <pre><code class="sh language-sh">$ navy config set default-navy [newname]
 </code></pre>
-
 <p>All further commands which aren't overriding the name of the Navy by either CLI argument or Environment Variable will use the name provided here.</p>
-
 <p>You can change it back to "dev" with:</p>
-
 <pre><code class="sh language-sh">$ navy config rm default-navy
 </code></pre>
     </div>

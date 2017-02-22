@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,38 +71,25 @@
 
     <div id="page">
       <h1 id="gettingstartedwithnavy">Getting Started with Navy</h1>
-
 <p>If you haven't yet got Docker and Docker Compose installed, head over to <a href="https://www.docker.com/products/docker">https://www.docker.com/products/docker</a>.</p>
-
 <p>Make sure you've got at least Docker 1.10.0 installed and Docker Compose 1.7.0:</p>
-
 <pre><code class="sh language-sh">$ docker -v
 Docker version 1.12.1, build 23cf638, experimental
 $ docker-compose -v
 docker-compose version 1.8.0, build f3628c7
 </code></pre>
-
 <p>You'll also need NodeJS and NPM. You can get these at <a href="https://nodejs.org">https://nodejs.org</a>.</p>
-
 <h2 id="installingnavy">Installing Navy</h2>
-
 <p>You can install the latest version of Navy easily using NPM:</p>
-
 <pre><code class="sh language-sh">$ npm install -g navy
 </code></pre>
-
 <p>Once installed, make sure it's working with:</p>
-
 <pre><code class="sh language-sh">$ navy --version
 2.5.0
 </code></pre>
-
 <h2 id="helloworld">Hello world!</h2>
-
 <p>To start with, we're going to use the <code>navycloud/hello-world</code> Docker image to get started with Navy.</p>
-
 <p>Create a new file <code>docker-compose.yml</code> with the following:</p>
-
 <pre><code class="yaml language-yaml">version: '2'
 
 services:
@@ -111,44 +98,26 @@ services:
     ports:
       - "80"
 </code></pre>
-
 <p>Now from your terminal run:</p>
-
 <pre><code class="sh language-sh">$ navy launch
 </code></pre>
-
 <p><img src="resources/1-launch-prompt.png" alt="Launch prompt" /></p>
-
 <p>Select the <code>main</code> service to launch by pressing the space bar and then press enter:</p>
-
 <p><img src="resources/2-after-launch.png" alt="After launching" /></p>
-
 <p>Now run <code>navy ps</code>, you should see your service running:</p>
-
 <p><img src="resources/3-navy-ps.png" alt="navy ps output" /></p>
-
 <p>Now open a web browser and go to the URL which <code>navy ps</code> shows (<a href="http://main.dev.0.xip.io">http://main.dev.0.xip.io</a>). You can also just run <code>navy open main</code> as well which will automatically open your browser to the correct URL.</p>
-
 <p><img src="resources/4-hello-world-website.png" alt="Website output" /></p>
-
 <h3 id="sorted">Sorted!</h3>
-
 <p>That's the "Hello world" of Navy! Now you'll want to make a <code>docker-compose.yml</code> config file for your own application. It's worth noting a few things at this point before you start exploring Navy though:</p>
-
 <ul>
 <li><h4 id="anavyisglobal">A "Navy" is global</h4>
-
 <p>When you run <code>navy launch</code> and spin up some services, you've created and launched a "Navy".
 Seeing as Navy is designed to make dev lives easier, Navies which are launched are global and can be operated on from any working directory. This is one of the main differences to Docker Compose (You have to be in the same directory as your <code>docker-compose.yml</code> file to use Docker Compose).</p>
-
 <p>When you spin up a Navy, you give it a name which makes it identifiable. By default, Navy uses the name "dev".</p>
-
 <p>If you want to run multiple Navies on your machine at once, you need to change the name of the Navy that you're operating/launching on. <a href="4-multiple-navies.html">See working with multiple Navies for more information</a>.</p></li>
-
 <li><h4 id="navyautomaticallyallowsyoutoaccessyourservicesusingxipiointhebrowser">Navy automatically allows you to access your services using *.xip.io in the browser</h4>
-
 <p>If you publish port 80 from your service, Navy will automatically provide a URL which you can access the service on without using an IP and random port.</p>
-
 <p>For more information, <a href="../http-proxy.html">see the Navy HTTP Proxy</a>.</p></li>
 </ul>
     </div>

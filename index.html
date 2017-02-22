@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,9 +71,7 @@
 
     <div id="page">
       <h1 id="quickandpowerfuldevelopmentenvironmentsusingdockeranddockercompose">Quick and powerful development environments using Docker and Docker Compose</h1>
-
 <p>Define your app's environment with a compose file (<code>docker-compose.yml</code>):</p>
-
 <pre><code class="yaml language-yaml">version: '2'
 
 services:
@@ -95,47 +93,32 @@ services:
   redis:
     image: redis
 </code></pre>
-
 <p>Now run <code>navy launch</code> and Navy will launch all of your services.</p>
-
 <p>You will get a prompt asking which services you'd like to launch, which is extremely useful if you have a microservice-like
 architecture and have lots of services which aren't all required. If a service you select has dependencies defined in the
 compose file, they will be launched regardless of whether you selected them.</p>
-
 <p>Navy builds on top of Docker Compose, so if you already use Docker Compose then you can get started without any additional
 configuration.</p>
-
 <h4 id="youmightwanttousenavyif">You might want to use Navy if:</h4>
-
 <ul>
 <li><p><strong>You have a lot of services which talk to each-other or have similar dependencies</strong></p>
-
 <p>Navy centralises your compose file for your entire applications stack, so you can get a complete picture of what
 is needed to run any part of your app, all in one place.</p></li>
-
 <li><p><strong>Your workflow involves working on multiple/different services every day</strong></p>
-
 <p>Unlike Docker Compose, Navy's environment isn't static and doesn't require configuration changes to change how your
 services are running. If you want to work on a service locally, you can easily mount the source code from your machine
 into the service without breaking how other services talk to it. All this can be done with a simple command.</p></li>
-
 <li><p><strong>You want to spin up isolated environments for integration tests</strong></p>
-
 <p>Navy is also a NodeJS API, which allows you to quickly spin up an isolated environment with services of your choice
 for an integration test, all from within your test run. Navy handles waiting for services to become available before
 letting your tests commence.</p></li>
-
 <li><p><strong>You want the developer experience to be easier</strong></p>
-
 <p>Navy has a load of small things to help make your life easier:</p>
-
 <ul>
 <li>Access HTTP services using <code>myservice.dev.0.xip.io</code> instead of using pesky IPs and ports.
 Great for testing on other devices as well.</li>
-
 <li>Easily revert services to an old version. Makes it easier to find bugs that are only visible with a certain
 version of all your services.</li>
-
 <li>Lock down ports for services which you debug often, like Mongo or Redis. It can be annoying entering a random
 port into Robomongo every time you want to view what's in your database.</li></ul></li>
 </ul>

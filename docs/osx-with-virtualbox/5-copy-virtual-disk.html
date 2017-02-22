@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTTP Proxy | Navy</title>
+    <title> | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
@@ -70,14 +70,15 @@
     </div>
 
     <div id="page">
-      <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
-</code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
-<p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
+      <h1 id="copythevirutaldiskforyourdockermachinetoyourexternalhdd">Copy the virutal disk for your docker-machine to your external HDD</h1>
+<ul>
+<li><p>In VirtualBox GUI, Navigate to the settings for the specific VM you want to relocate. Click on the Storage item and select your vdi file (your hard disk). Click on ‘Remove Attachment’.</p></li>
+<li><p>When you have done that, click on OK and then open up the Virtual Media Manager from the VirtualBox file menu.</p></li>
+<li><p>Select your disk.(vdi/.htmlk) file again from the Hard drives tab and click on the Remove button.</p></li>
+<li><p>VirtualBox will now prompt you to confirm your selection to remove the hard disk (unless you selected not to show this message at an earlier time). Click on the ‘Remove’ button.</p></li>
+<li><p>Because we want to relocate the VM, you need to keep the hard disk. If you delete it here… well, just don’t.</p></li>
+<li><p>Once you have done that, go the the disk location for your VM (mine was at “C:\Users[username]\VirtualBox”, but your path will be different) and copy it to your external drive. Go make a cup of coffee.</p></li>
+</ul>
     </div>
   </body>
 </html>

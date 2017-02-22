@@ -63,7 +63,7 @@
 
       <div class="side-links">
         <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
-          <img src="https://momentumft.github.io/navy/github-logo.png" width="24">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
           View on GitHub
         </a>
       </div>
@@ -71,11 +71,8 @@
 
     <div id="page">
       <h1 id="navyfilejsconfigurationreference"><code>Navyfile.js</code> configuration reference</h1>
-
 <p>A <code>Navyfile.js</code> file can be provided alongside your Compose config to configure additional functionality in Navy.</p>
-
 <p><code>Navyfile.js</code>:</p>
-
 <pre><code class="js language-js">module.exports = {
   plugins: [
     'navy-plugin-nodejs'
@@ -92,23 +89,14 @@
   ]
 }
 </code></pre>
-
 <h2 id="reference">Reference</h2>
-
 <h3 id="pluginsarraystring"><code>plugins: ?Array&lt;string&gt;</code></h3>
-
 <p>Specifies a list of plugins to load at runtime. This should be an array of strings of NPM packages. Packages specified in this array need to be installed via a <code>package.json</code> in the same directory as <code>Navyfile.js</code>.</p>
-
 <h3 id="launchdefaultsarraystring"><code>launchDefaults: ?Array&lt;string&gt;</code></h3>
-
 <p>A list of service names in the compose configuration which should be selected by default when doing a <code>navy launch</code> with a Navy which hasn't been launched yet.</p>
-
 <h3 id="httpproxykeystringportnumber"><code>httpProxy: ?{[key: string]: { port: Number }}</code></h3>
-
 <p>If using the <a href="http-proxy.html">built in HTTP proxy</a>, you can tell Navy what port a service listens for HTTP connections here. If a service publishes port 80, it will automatically be registered with the HTTP proxy, so configuration here is unnecessary.</p>
-
 <h3 id="ignoreunauthorizedrequestsforregistriesarraystring"><code>ignoreUnauthorizedRequestsForRegistries: ?Array&lt;string&gt;</code></h3>
-
 <p>A list of URLs for registries which are considered insecure (have an invalid certificate, e.g self signed). Note that this does not tell Navy to communicate with a registry over HTTP, Navy can only communicate with Docker registries over HTTPS at the moment.</p>
     </div>
   </body>
