@@ -506,14 +506,6 @@ export class Navy extends EventEmitter2 {
   }
 
   /**
-   * @deprecated
-   */
-  async host(service?: string, index?: number): Promise<?string> {
-    // getting host by service and index is now DEPRECATED
-    return await this.externalIP()
-  }
-
-  /**
    * Returns the external port for the given service and internal private port.
    * @public
    */

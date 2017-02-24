@@ -339,15 +339,4 @@ program
   .description('Use your local ip address (127.0.0.1) for connecting to Navy services')
   .action(lazyRequire('./local-ip'))
 
-program
-  .command('host <service>')
-  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .description('Prints the external host for the given service. DEPRECATED - use `navy external-ip` instead')
-  .action(basicCliWrapper('host', { driverLogging: false }))
-
-program
-  .command('set-default <navy>')
-  .description('Set the default navy. DEPRECATED - use `navy config set default-navy <navy>` instead')
-  .action(lazyRequire('./set-default'))
-
 export default program
