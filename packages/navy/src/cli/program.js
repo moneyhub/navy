@@ -253,7 +253,7 @@ program
   .on('--help', () => console.log(`
   Examples:
     $ navy url mywebserver
-    http://mywebserver.dev.0.xip.io
+    http://mywebserver.dev.0.0.0.0.nip.io
   `))
 
 program
