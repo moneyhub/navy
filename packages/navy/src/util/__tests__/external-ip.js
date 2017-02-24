@@ -21,7 +21,7 @@ describe('getExternalIP', function () {
     process.env.DOCKER_HOST = 'tcp://localhost:2375'
     expect(await getExternalIP()).to.equal('127.0.0.1')
 
-    process.env.DOCKER_HOST = 'tcp://testfoo.192.168.1.13.xip.io:2375'
+    process.env.DOCKER_HOST = 'tcp://testfoo.192.168.1.13.nip.io:2375'
     expect(await getExternalIP()).to.equal('192.168.1.13')
     delete process.env.DOCKER_HOST
   })

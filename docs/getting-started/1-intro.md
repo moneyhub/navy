@@ -67,7 +67,7 @@ Now run `navy ps`, you should see your service running:
 
 ![navy ps output](resources/3-navy-ps.png)
 
-Now open a web browser and go to the URL which `navy ps` shows (<http://main.dev.0.xip.io>). You can also just run `navy open main` as well which will automatically open your browser to the correct URL.
+Now open a web browser and go to the URL which `navy ps` shows (<http://main.dev.0.0.0.0.nip.io>). You can also just run `navy open main` as well which will automatically open your browser to the correct URL.
 
 ![Website output](resources/4-hello-world-website.png)
 
@@ -85,7 +85,7 @@ That's the "Hello world" of Navy! Now you'll want to make a `docker-compose.yml`
 
   If you want to run multiple Navies on your machine at once, you need to change the name of the Navy that you're operating/launching on. [See working with multiple Navies for more information](4-multiple-navies.md).
 
-- #### Navy automatically allows you to access your services using *.xip.io in the browser
+- #### Navy automatically allows you to access your services using *.nip.io in the browser
 
   If you publish port 80 from your service, Navy will automatically provide a URL which you can access the service on without using an IP and random port.
 

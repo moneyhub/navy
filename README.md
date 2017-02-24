@@ -49,7 +49,7 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 
 - **Built in HTTP proxy**
 
-  Access your services using `myservice.dev.xip.io` rather than using pesky IP addresses and random ports.
+  Access your services using `myservice.dev.nip.io` rather than using pesky IP addresses and random ports.
   This is also great for testing your services on other devices like tablets and phones.
 
 - **Javascript API for interfacing with Docker and Docker Compose**

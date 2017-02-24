@@ -60,7 +60,7 @@ configuration.
 - **You want the developer experience to be easier**
 
   Navy has a load of small things to help make your life easier:
-    - Access HTTP services using `myservice.dev.0.xip.io` instead of using pesky IPs and ports.
+    - Access HTTP services using `myservice.dev.127.0.0.1.nip.io` instead of using pesky IPs and ports.
       Great for testing on other devices as well.
     - Easily revert services to an old version. Makes it easier to find bugs that are only visible with a certain
       version of all your services.

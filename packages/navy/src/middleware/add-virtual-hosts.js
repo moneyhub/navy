@@ -2,7 +2,7 @@
 
 import {find} from 'lodash'
 import {Navy} from '../navy'
-import {getHostForService} from '../util/xipio'
+import {getHostForService} from '../util/nipio'
 
 const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   if (navyFile && navyFile.httpProxy && navyFile.httpProxy[serviceName]) {
