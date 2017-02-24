@@ -7,14 +7,9 @@ function isValidIpv4Addr(ip) {
 }
 
 export async function getNIPSubdomain(externalIP: string) {
-  if (externalIP === '127.0.0.1') {
-    // shorten
-    return `0.0.0.0.${BASE}`
-  }
-
   if (!isValidIpv4Addr(externalIP)) {
     // invalid IP address, fallback to local
-    return `0.0.0.0.${BASE}`
+    return `127.0.0.1.${BASE}`
   }
 
   return `${externalIP}.${BASE}`
