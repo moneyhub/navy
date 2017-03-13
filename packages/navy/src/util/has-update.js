@@ -5,7 +5,7 @@ import {getRegistryClient} from './registry-client'
 import docker from './docker-client'
 
 export default async function hasUpdate(imageWithTag: string, currentImageId: string, navyFile: ?Object): Promise<boolean|string> {
-  const imageConfig = await docker.getImage(currentImageId).inspectAsync()
+  const imageConfig = await docker.getImage(currentImageId).inspect()
   const currentImageContainerId = imageConfig.ContainerConfig.Image
 
   const image = imageFromImageWithTag(imageWithTag)

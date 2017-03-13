@@ -10,7 +10,7 @@ import {log} from './driver-logging'
 import {getLaunchedNavyNames} from './navy'
 
 async function updateComposeConfig(navies: Array<string>) {
-  const networks = await docker.listNetworksAsync()
+  const networks = await docker.listNetworks()
   .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
   .filter(net => {
     for (const navy of navies) {

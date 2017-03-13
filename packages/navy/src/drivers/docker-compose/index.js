@@ -59,7 +59,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async ps(): Promise<ServiceList> {
       const projectName = navy.normalisedName
 
-      const ps = await docker.listContainersAsync({
+      const ps = await docker.listContainers({
         all: true,
         filters: {
           label: [
@@ -69,7 +69,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       })
 
       const inspect = await Promise.all(ps.map(container =>
-        docker.getContainer(container.Id).inspectAsync()
+        docker.getContainer(container.Id).inspect()
       ))
 
       return inspect.map(service => ({
@@ -126,7 +126,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       if (index == null) index = 1
 
       const containerName = getContainerName(navy, service, index)
-      const container = await docker.getContainer(containerName).inspectAsync()
+      const container = await docker.getContainer(containerName).inspect()
 
       const portConfig = container.NetworkSettings.Ports[`${privatePort}/tcp`]
 
@@ -154,7 +154,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async getLaunchedServiceNames(): Promise<Array<string>> {
       const projectName = navy.normalisedName
 
-      const ps = await docker.listContainersAsync({
+      const ps = await docker.listContainers({
         all: true,
         filters: {
           label: [
