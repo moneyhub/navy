@@ -14,7 +14,7 @@ import {loadPlugins} from './plugin-interface'
 import {middlewareRunner} from './middleware'
 import {reconfigureHTTPProxy} from '../http-proxy'
 import {getExternalIP} from '../util/external-ip'
-import {getUrlFromService} from '../util/nipio'
+import {getUrlFromService} from '../util/service-host'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
