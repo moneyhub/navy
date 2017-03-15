@@ -2,7 +2,7 @@
 
 import {find} from 'lodash'
 import {Navy} from '../navy'
-import {getHostForService} from '../util/nipio'
+import {createHostForService} from '../util/nipio'
 
 const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   if (navyFile && navyFile.httpProxy && navyFile.httpProxy[serviceName]) {
@@ -36,7 +36,7 @@ export default (navy: Navy) =>
         return services[serviceName] = {
           ...service,
           environment: {
-            'VIRTUAL_HOST': await getHostForService(serviceName, navy.normalisedName, externalIP),
+            'VIRTUAL_HOST': await createHostForService(serviceName, navy.normalisedName, externalIP),
             'VIRTUAL_PORT': proxyConfig.port,
             ...service.environment,
           },

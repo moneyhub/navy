@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai'
-import {getNIPSubdomain, getHostForService} from '../nipio'
+import {getNIPSubdomain, getUrlFromService, createHostForService} from '../nipio'
 
 describe('nipio', function () {
 
@@ -18,13 +18,41 @@ describe('nipio', function () {
 
   })
 
-  describe('getHostForService', function () {
+  describe('createHostForService', function () {
 
     it('should return the correct url host for a service', async function () {
-      expect(await getHostForService('someservice', 'mynavy', '127.0.0.1')).to.equal('someservice.mynavy.127.0.0.1.nip.io')
-      expect(await getHostForService('someservice', 'mynavy', '192.168.1.10')).to.equal('someservice.mynavy.192.168.1.10.nip.io')
+      expect(await createHostForService('someservice', 'mynavy', '127.0.0.1')).to.equal('someservice.mynavy.127.0.0.1.nip.io')
+      expect(await createHostForService('someservice', 'mynavy', '192.168.1.10')).to.equal('someservice.mynavy.192.168.1.10.nip.io')
     })
 
+  })
+
+  describe('getUrlFromService', function () {
+
+    it('should extract the host from service ENV config', function () {
+      const service = {
+        raw: {
+          Config: {
+            Env: [
+              'VIRTUAL_HOST=myservice.coolnavy.127.0.0.1.nip.io',
+            ],
+          },
+        },
+      }
+
+      expect(getUrlFromService(service)).to.equal('http://myservice.coolnavy.127.0.0.1.nip.io')
+    })
+
+    it('should return \'-\' when the service object is not valid', function () {
+      const service = {
+        raw: {
+          Config: {},
+        },
+      }
+
+      expect(getUrlFromService(service)).to.equal('-')
+      expect(getUrlFromService(undefined)).to.equal('-')
+    })
   })
 
 })

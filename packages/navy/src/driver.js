@@ -8,7 +8,7 @@ import type {ServiceList} from './service'
 export type Driver = {
   launch(services: Array<string>, opts: ?Object): Promise<void>;
   destroy(): Promise<void>;
-  ps(): Promise<ServiceList>;
+  ps(service: ?string): Promise<ServiceList>;
   start(services: ?Array<string>): Promise<void>;
   stop(services: ?Array<string>): Promise<void>;
   restart(services: ?Array<string>): Promise<void>;
