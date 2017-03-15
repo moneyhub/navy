@@ -43,6 +43,8 @@ function getPorts(service) {
   }).join(', ')
 }
 
+const getDisplayUrl = (serviceUrl) => serviceUrl != null ? serviceUrl : '-'
+
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
   const ps = await navy.ps()
@@ -63,7 +65,7 @@ export default async function (opts: Object): Promise<void> {
         service.name,
         getStatus(service, state),
         getPorts(service),
-        getUrlFromService(service),
+        getDisplayUrl(getUrlFromService(service)),
       ]),
     ]))
   }
@@ -76,7 +78,7 @@ export default async function (opts: Object): Promise<void> {
       service.image,
       getStatus(service, state),
       getPorts(service),
-      getUrlFromService(service),
+      getDisplayUrl(getUrlFromService(service)),
     ]),
   ]))
 }

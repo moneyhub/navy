@@ -43,15 +43,15 @@ describe('nipio', function () {
       expect(getUrlFromService(service)).to.equal('http://myservice.coolnavy.127.0.0.1.nip.io')
     })
 
-    it('should return \'-\' when the service object is not valid', function () {
+    it('should return null when the service object is not valid', function () {
       const service = {
         raw: {
           Config: {},
         },
       }
 
-      expect(getUrlFromService(service)).to.equal('-')
-      expect(getUrlFromService(undefined)).to.equal('-')
+      expect(getUrlFromService(service)).to.equal(null)
+      expect(getUrlFromService(undefined)).to.equal(null)
     })
   })
 

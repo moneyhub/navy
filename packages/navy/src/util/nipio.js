@@ -23,7 +23,7 @@ export async function createHostForService(service: string, navyNormalisedName: 
 
 export function getUrlFromService(service: Service) {
   if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Env) {
-    return '-'
+    return null
   }
 
   const env = service.raw.Config.Env
@@ -34,5 +34,5 @@ export function getUrlFromService(service: Service) {
     }
   }
 
-  return '-'
+  return null
 }
