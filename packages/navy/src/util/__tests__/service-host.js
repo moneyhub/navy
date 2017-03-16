@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai'
-import {getNIPSubdomain, getUrlFromService, createHostForService} from '../service-host'
+import {getNIPSubdomain, getUrlFromService, createHostForService, createUrlForService} from '../service-host'
 
 describe('service-host', function () {
 
@@ -20,11 +20,18 @@ describe('service-host', function () {
 
   describe('createHostForService', function () {
 
-    it('should return the correct url host for a service', async function () {
+    it('should return the correct host for a service', async function () {
       expect(await createHostForService('someservice', 'mynavy', '127.0.0.1')).to.equal('someservice.mynavy.127.0.0.1.nip.io')
       expect(await createHostForService('someservice', 'mynavy', '192.168.1.10')).to.equal('someservice.mynavy.192.168.1.10.nip.io')
     })
 
+  })
+
+  describe('createUrlForService', function () {
+
+    it('should return the correct url for a service', async function () {
+      expect(await createUrlForService('someservice', 'mynavy', '192.168.99.100')).to.equal('http://someservice.mynavy.192.168.99.100.nip.io')
+    })
   })
 
   describe('getUrlFromService', function () {

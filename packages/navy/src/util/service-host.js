@@ -21,6 +21,10 @@ export async function createHostForService(service: string, navyNormalisedName: 
   return `${service}.${navyNormalisedName}.${process.env.NAVY_EXTERNAL_SUBDOMAIN || await getNIPSubdomain(externalIP)}`
 }
 
+export async function createUrlForService(service: string, navyNormalisedName: string, externalIP: string) {
+  return `http://${await createHostForService(service, navyNormalisedName, externalIP)}`
+}
+
 export function getUrlFromService(service: Service) {
   if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Env) {
     return null

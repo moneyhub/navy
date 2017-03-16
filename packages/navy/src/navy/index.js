@@ -14,7 +14,7 @@ import {loadPlugins} from './plugin-interface'
 import {middlewareRunner} from './middleware'
 import {reconfigureHTTPProxy} from '../http-proxy'
 import {getExternalIP} from '../util/external-ip'
-import {getUrlFromService} from '../util/service-host'
+import {createUrlForService, getUrlFromService} from '../util/service-host'
 
 import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
@@ -520,7 +520,7 @@ export class Navy extends EventEmitter2 {
    */
   async url(service: string): Promise<?string> {
     const ps = await (await this.safeGetDriver()).ps(service)
-    return getUrlFromService(ps.pop())
+    return getUrlFromService(ps.pop()) || createUrlForService(service, this.normalisedName, await this.externalIP())
   }
 
   /**
