@@ -2,7 +2,8 @@
 
 import chalk from 'chalk'
 
-import {getNavy, Navy} from '../'
+import {getNavy} from '../'
+import {getUrlFromService} from '../util/service-host'
 import table from '../util/table'
 
 const SMALL_WINDOW_COLUMNS = 185
@@ -42,21 +43,7 @@ function getPorts(service) {
   }).join(', ')
 }
 
-function getUrl(service, navy: Navy) {
-  if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Env) {
-    return '-'
-  }
-
-  const env = service.raw.Config.Env
-
-  for (const envVar of env) {
-    if (envVar.indexOf('VIRTUAL_HOST=') === 0) {
-      return envVar.substring('VIRTUAL_HOST='.length)
-    }
-  }
-
-  return '-'
-}
+const getDisplayUrl = (serviceUrl) => serviceUrl != null ? serviceUrl : '-'
 
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
@@ -78,7 +65,7 @@ export default async function (opts: Object): Promise<void> {
         service.name,
         getStatus(service, state),
         getPorts(service),
-        getUrl(service, navy),
+        getDisplayUrl(getUrlFromService(service)),
       ]),
     ]))
   }
@@ -91,7 +78,7 @@ export default async function (opts: Object): Promise<void> {
       service.image,
       getStatus(service, state),
       getPorts(service),
-      getUrl(service, navy),
+      getDisplayUrl(getUrlFromService(service)),
     ]),
   ]))
 }
