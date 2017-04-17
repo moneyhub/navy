@@ -1,8 +1,9 @@
 /* @flow */
 
-import fs from 'fs'
 import path from 'path'
 import chalk from 'chalk'
+
+import fs from '../util/fs'
 import {getNavy} from '../'
 import {getImportOptionsForCLI} from '../config-provider'
 import {importNavy} from './util'

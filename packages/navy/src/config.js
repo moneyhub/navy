@@ -4,6 +4,8 @@ import path from 'path'
 import bluebird from 'bluebird'
 import invariant from 'invariant'
 
+import fs from './util/fs'
+
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
 
 const DEFAULT_CONFIG = {
@@ -11,7 +13,6 @@ const DEFAULT_CONFIG = {
   externalIP: null,
 }
 
-const fs = bluebird.promisifyAll(require('fs'))
 const mkdirp = bluebird.promisify(require('mkdirp'))
 
 export type Config = {
