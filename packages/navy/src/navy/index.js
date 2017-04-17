@@ -1,9 +1,9 @@
 /* @flow */
 
-import bluebird from 'bluebird'
 import invariant from 'invariant'
 import {EventEmitter2} from 'eventemitter2'
 
+import fs from '../util/fs'
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
@@ -20,8 +20,6 @@ import type {Driver, CreateDriver} from '../driver'
 import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
 import type {State} from './state'
 import type {ServiceList} from '../service'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 export type {State}
 

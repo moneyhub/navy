@@ -1,8 +1,8 @@
 /* @flow */
 
 import yaml from 'js-yaml'
-import bluebird from 'bluebird'
 
+import fs from '../../util/fs'
 import docker from '../../util/docker-client'
 import {createComposeClient} from './client'
 import {Navy} from '../../navy'
@@ -11,8 +11,6 @@ import {getContainerName} from '../../util'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 const debug = require('debug')('navy:docker-compose')
 

@@ -1,17 +1,15 @@
 /* @flow */
 
 import path from 'path'
-import bluebird from 'bluebird'
 import invariant from 'invariant'
 
+import fs from '../../util/fs'
 import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 import {log} from '../../driver-logging'
 import {pathToNavy} from '../../navy/state'
 
 import type {ConfigProvider} from '../../config-provider'
-
-const fs = bluebird.promisifyAll(require('fs'))
 
 export type ComposeClient = {
   exec(command: string, args: any, opts?: Object): Promise<string>,
