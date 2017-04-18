@@ -84,8 +84,9 @@ export function createComposeClient(navy: Navy): ComposeClient {
 
     async getDockerComposeFilePath(): Promise<?string> {
       try {
-        await fs.statAsync(client.getCompiledDockerComposePath())
-        return client.getCompiledDockerComposePath()
+        const compiledComposePath = await client.getCompiledDockerComposePath()
+        await fs.statAsync(compiledComposePath)
+        return compiledComposePath
       } catch (ex) {
         return null
       }
