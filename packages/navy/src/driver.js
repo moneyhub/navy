@@ -1,9 +1,9 @@
 /* @flow */
 
 import DockerCompose from './drivers/docker-compose'
-import {Navy} from './navy'
 
 import type {ServiceList} from './service'
+import type {Navy} from './navy'
 
 export type Driver = {
   launch(services: Array<string>, opts: ?Object): Promise<void>;

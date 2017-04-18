@@ -4,13 +4,13 @@ import path from 'path'
 import {execSync} from 'child_process'
 import invariant from 'invariant'
 import bluebird from 'bluebird'
-import {Navy} from '../../navy'
 import fs from '../../util/fs'
 import {pathToNavyRoot} from '../../navy/state'
 import {pathToModule} from './util'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
+import type {Navy} from '../../navy'
 
 const mkdirp = bluebird.promisify(require('mkdirp'))
 

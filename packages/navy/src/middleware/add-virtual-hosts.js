@@ -1,8 +1,9 @@
 /* @flow */
 
 import {find} from 'lodash'
-import {Navy} from '../navy'
 import {createHostForService} from '../util/service-host'
+
+import type {Navy} from '../navy'
 
 const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   if (navyFile && navyFile.httpProxy && navyFile.httpProxy[serviceName]) {

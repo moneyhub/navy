@@ -3,11 +3,11 @@
 import path from 'path'
 import invariant from 'invariant'
 import fs from '../../util/fs'
-import {Navy} from '../../navy'
 import {execAsync} from '../../util/exec-async'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
+import type {Navy} from '../../navy'
 
 async function cwdHasValidDockerComposeConfig() {
   try {

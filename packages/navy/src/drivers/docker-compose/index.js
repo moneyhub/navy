@@ -5,12 +5,12 @@ import yaml from 'js-yaml'
 import fs from '../../util/fs'
 import docker from '../../util/docker-client'
 import {createComposeClient} from './client'
-import {Navy} from '../../navy'
 import {Status as ServiceStatus} from '../../service'
 import {getContainerName} from '../../util'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
+import type {Navy} from '../../navy'
 
 const debug = require('debug')('navy:docker-compose')
 
