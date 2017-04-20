@@ -1,6 +1,6 @@
 {
   "name": "navy",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Quick and powerful development environments using Docker and Docker Compose",
   "main": "lib/index.js",
   "bin": {
