@@ -16,7 +16,7 @@ services:
   web:
     image: mycompany/myapp
     ports:
-      - "80:80"
+      - "80"
     depends_on:
       - redis
 
