@@ -6,7 +6,7 @@ import fs from '../../util/fs'
 import docker from '../../util/docker-client'
 import {createComposeClient} from './client'
 import {Status as ServiceStatus} from '../../service'
-import {getContainerName} from '../../util'
+import {getContainerName} from './containers'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'

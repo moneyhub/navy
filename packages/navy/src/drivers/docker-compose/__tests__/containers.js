@@ -1,9 +1,9 @@
 /* eslint-env mocha */
 
 import {expect} from 'chai'
-import {getContainerName} from '../'
+import {getContainerName} from '../containers'
 
-describe('util', function () {
+describe('docker-compose', function () {
 
   describe('getContainerName', function () {
 
