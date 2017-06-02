@@ -345,12 +345,13 @@ export class Navy extends EventEmitter2 {
   }
 
   /**
-   * Makes sure the images for the given services are up to date, and restarts any services
-   * with new images.
+   * Makes sure the images for the given services are up to date, and restarts any running
+   * services with new images.
    * @public
    */
   async update(services?: Array<string>): Promise<void> {
-    if (!services) services = await this.getLaunchedServiceNames()
+    // update all images by default
+    if (!services) services = await this.getAvailableServiceNames()
 
     await (await this.safeGetDriver()).update(services)
   }

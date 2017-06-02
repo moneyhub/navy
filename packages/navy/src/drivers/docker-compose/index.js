@@ -116,7 +116,17 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       }
 
       await exec('pull', services)
-      await exec('up', ['-d', '--no-deps', ...services])
+
+      // only relaunch services which are already running
+      const launchedServiceNames = toLookupTable(await this.getLaunchedServiceNames())
+      const servicesToRelaunch = services.filter((name) => launchedServiceNames[name])
+
+      if (servicesToRelaunch.length) {
+        await exec('up', ['-d', '--no-deps', ...services])
+      }
+    },
+
+    async up(services: ?Array<string>): Promise<void> {
     },
 
     async spawnLogStream(services: ?Array<string>): Promise<void> {
@@ -181,4 +191,10 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
   }
 
   return driver
+}
+
+function toLookupTable(keys: Array<string>): Object {
+  const lookupTable = {}
+  keys.forEach((key) => lookupTable[key] = true)
+  return lookupTable
 }
