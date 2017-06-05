@@ -227,8 +227,26 @@ export class Navy extends EventEmitter2 {
    * Launches the given services for this Navy.
    * @public
    */
-  async launch(services?: Array<string>, opts: ?Object): Promise<void> {
-    if (!services) services = await this.getLaunchedServiceNames()
+  async launch(serviceNames?: Array<string>, opts: ?Object): Promise<void> {
+    if (!serviceNames) serviceNames = await this.getLaunchedServiceNames()
+
+    const availableServices = await (
+      await this.safeGetDriver()
+    ).getAvailableServiceNames()
+
+    const validServiceNames = serviceNames
+      .filter((serviceName) => {
+        if (availableServices.indexOf(serviceName) !== -1) {
+          return true
+        }
+        console.log(`Unknown service name: ${serviceName}`)
+        return false
+      })
+
+    const allServiceNamesInvalid = serviceNames.length > 0 && validServiceNames.length === 0
+    if (allServiceNamesInvalid) {
+      return
+    }
 
     const state = await this.getState()
 
@@ -236,7 +254,7 @@ export class Navy extends EventEmitter2 {
       await middlewareRunner(this, state)
     }
 
-    await (await this.safeGetDriver()).launch(services, opts)
+    await (await this.safeGetDriver()).launch(validServiceNames, opts)
 
     await reconfigureHTTPProxy()
   }
