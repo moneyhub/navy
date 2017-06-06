@@ -122,7 +122,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       const servicesToRelaunch = services.filter((name) => launchedServiceNames[name])
 
       if (servicesToRelaunch.length) {
-        await exec('up', ['-d', '--no-deps', ...services])
+        await exec('up', ['-d', '--no-deps', ...servicesToRelaunch])
       }
     },
 
