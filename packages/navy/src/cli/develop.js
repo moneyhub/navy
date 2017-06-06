@@ -2,11 +2,11 @@
 
 import path from 'path'
 import chalk from 'chalk'
-import {execSync} from 'child_process'
 import invariant from 'invariant'
 
 import {getNavy} from '../'
 import {NavyError} from '../errors'
+import docker from '../util/docker-client'
 import getNavyRc from '../util/navyrc'
 
 export default async function (service: string, opts: Object): Promise<void> {
@@ -68,14 +68,14 @@ export default async function (service: string, opts: Object): Promise<void> {
 
   const containerId = container.id
 
-  // this loop ends when the user Ctrl+C's out of the CLI process
-
-  while (true) {
-    // $FlowIgnore some weird bug with execSync
-    execSync(`docker attach --sig-proxy=false ${containerId}`, { stdio: 'inherit' })
-
-    console.log()
-    console.log(chalk.dim(`-------> ${service} exited`))
-    console.log()
-  }
+  const containerObj = docker.getContainer(containerId)
+  containerObj.attach({stream: true, stdout: true, stderr: true})
+    .then(stream =>
+      containerObj.modem.demuxStream(stream, process.stdout, process.stderr)
+    )
+    .catch(() => {
+      console.log()
+      console.log(chalk.dim(`-------> ${service} exited`))
+      console.log()
+    })
 }
