@@ -126,9 +126,6 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       }
     },
 
-    async up(services: ?Array<string>): Promise<void> {
-    },
-
     async spawnLogStream(services: ?Array<string>): Promise<void> {
       if (!services) {
         services = []
