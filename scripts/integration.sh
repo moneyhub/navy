@@ -1,3 +1,5 @@
+set -e
+
 echo ""
 echo "SETTING UP ENVIRONMENT"
 echo "This may take several minutes to build the necessary docker containers..."
@@ -5,11 +7,18 @@ echo "This will only take a while the first time you run the tests, subsequent r
 echo ""
 echo ""
 
+DOCKER_TAG=${DOCKER_TAG:-1.12-dind}
+DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.8.0}
+
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
-  docker:1.12-dind --storage-driver=aufs
+  docker:$DOCKER_TAG --storage-driver=aufs
 
-docker build -t navy-test-runner -f test/integration/runner/Dockerfile .
+docker build \
+    -t navy-test-runner \
+    -f test/integration/runner/Dockerfile \
+    --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
+    .
 
 echo ""
 echo ""

@@ -14,8 +14,8 @@ services:
 
 env:
   matrix:
-    - DOCKER_VERSION=1.13.1-0~ubuntu-trusty
-    - DOCKER_VERSION=1.12.6-0~ubuntu-trusty
+    - DOCKER_TAG=1.13-dind
+    - DOCKER_TAG=1.12-dind
   global:
     - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.8.0
 
@@ -28,27 +28,14 @@ matrix:
 
   include:
     - node_js: 6
-      env: DOCKER_VERSION=1.11.2-0~trusty
+      env: DOCKER_TAG=1.11-dind
     - node_js: 6
-      env: DOCKER_VERSION=1.10.3-0~trusty
+      env: DOCKER_TAG=1.10-dind
 
 before_install:
-  # list docker-engine versions
-  - apt-cache madison docker-engine
-
-  # upgrade docker-engine to specific version
-  - sudo apt-get purge -y docker-engine
-  - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=${DOCKER_VERSION}
-
-  # reinstall docker-compose at specific version
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-
   # print versions
   - docker --version
-  - docker-compose --version
+  - echo $TRAVIS_NODE_VERSION
 
 before_script:
   # bootstrap packages
