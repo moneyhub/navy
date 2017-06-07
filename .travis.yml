@@ -35,7 +35,6 @@ matrix:
 before_install:
   # print versions
   - docker --version
-  - echo $TRAVIS_NODE_VERSION
 
 before_script:
   # bootstrap packages

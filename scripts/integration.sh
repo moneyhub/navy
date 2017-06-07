@@ -9,6 +9,7 @@ echo ""
 
 DOCKER_TAG=${DOCKER_TAG:-1.12-dind}
 DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.8.0}
+NODE_VERSION=${TRAVIS_NODE_VERSION:-6}
 
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
@@ -18,6 +19,7 @@ docker build \
     -t navy-test-runner \
     -f test/integration/runner/Dockerfile \
     --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
+    --build-arg NODE_VERSION=$NODE_VERSION \
     .
 
 echo ""
