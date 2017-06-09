@@ -3,9 +3,9 @@ sudo: required
 language: node_js
 
 node_js:
+  - 8
   - 7
   - 6
-  - 4
 
 dist: trusty
 
@@ -17,7 +17,7 @@ env:
     - DOCKER_TAG=1.13-dind
     - DOCKER_TAG=1.12-dind
   global:
-    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.8.0
+    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.10.1
 
 cache:
   directories:

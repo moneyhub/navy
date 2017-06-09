@@ -8,7 +8,7 @@ echo ""
 echo ""
 
 DOCKER_TAG=${DOCKER_TAG:-1.12-dind}
-DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.8.0}
+DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.10.1}
 NODE_VERSION=${TRAVIS_NODE_VERSION:-6}
 
 docker run -d --name navy-test-runner-daemon --privileged \
@@ -43,3 +43,5 @@ docker run --rm -it --link \
     -r ./features \
     -r ./steps \
     ./features "$@"
+
+docker rm --force navy-test-runner-daemon
