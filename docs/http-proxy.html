@@ -71,12 +71,12 @@
 
     <div id="page">
       <h1 id="httpproxy">HTTP Proxy</h1>
-<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.xip.io</code>.</p>
-<p>This takes advantage of the <a href="http://xip.io">xip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
-<pre><code>[servicename].[navyname].0.xip.io               resolves to 0.0.0.0
-[servicename].[navyname].192.168.1.10.xip.io    resolves to 192.168.1.10
+<p>Navy includes a built in Nginx reverse proxy which allows you to access all of your HTTP services on port 80 using <code>[servicename].[navyname].0.0.0.0.nip.io</code>.</p>
+<p>This takes advantage of the <a href="http://nip.io">nip.io</a> service, which provides a URL which resolves to whatever IP address you put in the subdomain, for example:</p>
+<pre><code>[servicename].[navyname].0.0.0.0.nip.io               resolves to 0.0.0.0
+[servicename].[navyname].192.168.1.10.nip.io    resolves to 192.168.1.10
 </code></pre>
-<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for xip.io domains so you can easily test your services on other devices on your LAN.</p>
+<p>This allows Navy to easily proxy all of your HTTP services by using virtual hosts in nginx, and also allows for you to quickly reconfigure Navy so it is using your external LAN IP for nip.io domains so you can easily test your services on other devices on your LAN.</p>
 <p>Navy will automatically pick up and proxy any services which publish port 80, but if your service uses another port then you will need to <a href="navyfile-config.html">explicitly configure it in <code>Navyfile.js</code></a>.</p>
     </div>
   </body>
