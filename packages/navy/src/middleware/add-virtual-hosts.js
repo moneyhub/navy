@@ -15,7 +15,8 @@ const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
 
 const serviceHasPort80 = service =>
   service.ports && find(service.ports, port =>
-    port.toString() === '80'
+    // Should handle "80" (short syntax), "80:80" (long syntax), and "80/tcp" (including protocol) formats.
+    port.toString() === '80' || port.toString().startsWith('80:') || port.toString().startsWith('80/')
   )
 
 export default (navy: Navy) =>
