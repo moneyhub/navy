@@ -7,8 +7,8 @@ echo "This will only take a while the first time you run the tests, subsequent r
 echo ""
 echo ""
 
-DOCKER_TAG=${DOCKER_TAG:-1.12-dind}
-DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.10.1}
+DOCKER_TAG=${DOCKER_TAG:-17.03-dind}
+DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.12.0}
 NODE_VERSION=${TRAVIS_NODE_VERSION:-6}
 
 docker run -d --name navy-test-runner-daemon --privileged \

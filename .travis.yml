@@ -14,10 +14,10 @@ services:
 
 env:
   matrix:
-    - DOCKER_TAG=1.13-dind
-    - DOCKER_TAG=1.12-dind
+    - DOCKER_TAG=17.06-dind
+    - DOCKER_TAG=17.03-dind
   global:
-    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.10.1
+    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.12.0
 
 cache:
   directories:
@@ -28,9 +28,9 @@ matrix:
 
   include:
     - node_js: 6
-      env: DOCKER_TAG=1.11-dind
+      env: DOCKER_TAG=1.13-dind
     - node_js: 6
-      env: DOCKER_TAG=1.10-dind
+      env: DOCKER_TAG=1.12-dind
 
 before_install:
   # print versions
