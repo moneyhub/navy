@@ -7,7 +7,7 @@ import fs from '../util/fs'
 import {resolveDriverFromName} from '../driver'
 import {resolveConfigProviderFromName} from '../config-provider'
 import {normaliseNavyName} from './util'
-import {getState, saveState, deleteState, pathToNavys} from './state'
+import {getState, saveState, deleteState, pathToNavys, pathToNavy} from './state'
 import {getConfig} from '../config'
 import {NavyNotInitialisedError, NavyError} from '../errors'
 import {loadPlugins} from './plugin-interface'
@@ -575,7 +575,9 @@ export function getNavy(navyName: ?string): Navy {
 export async function getLaunchedNavies(): Promise<Array<Navy>> {
   try {
     const navyNames = await fs.readdirAsync(pathToNavys())
-    return navyNames.map(name => getNavy(name))
+    return navyNames
+      .filter(node => fs.lstatSync(pathToNavy(node)).isDirectory())
+      .map(name => getNavy(name))
   } catch (ex) {
     return []
   }
