@@ -8,8 +8,9 @@
   },
   "devDependencies": {
     "bluebird": "^3.4.1",
-    "documentation": "^4.0.0-beta9",
+    "documentation": "^5.0.0",
     "front-matter": "^2.1.0",
+    "gh-pages": "^0.12.0",
     "glob": "^7.0.5",
     "gulp": "^3.9.1",
     "less": "^2.7.1",
