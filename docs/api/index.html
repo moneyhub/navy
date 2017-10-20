@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>API Docs | Navy</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://momentumft.github.io/navy/styles.css" />
+  </head>
+  <body>
+    <div id="sidebar">
+      <div id="logo">Na<span>v</span>y</div>
+
+      <ul class="side-nav">
+        <li>
+          <a href="https://momentumft.github.io/navy/">Home</a>
+        </li>
+      </ul>
+
+      
+<h4>API Documentation</h4>
+
+<ul class="side-nav api-doc-nav"></ul>
+
+
+      <div class="side-links">
+        <a href="https://github.com/momentumft/navy" target="_blank" class="link-with-image">
+          <img src="https://momentumft.github.io/navy/github-logo.png" width="32">
+          View on GitHub
+        </a>
+      </div>
+    </div>
+
+    <div id="page">
+      
+
+<div id="api-doc">
+  <h1 id="navy">Navy</h1>
+<p><strong>Extends EventEmitter2</strong></p>
+<p>A Navy instance</p>
+<h2 id="name">name</h2>
+<p>The name of the current Navy.</p>
+<h2 id="normalisedname">normalisedName</h2>
+<p>The normalised name of the current Navy (name without whitespaces).</p>
+<h2 id="getstate">getState</h2>
+<p>Returns the current State for this Navy.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#state">State</a>?></strong> </p>
+<h2 id="savestate">saveState</h2>
+<p>Saves a new State for this Navy.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>state</code> <strong><a href="#state">State</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="registercommand">registerCommand</h2>
+<p>Registers a custom CLI command with the given name and callback function.
+Any command registered can be run using <code>navy run [name]</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+<li><code>action</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a></strong> </li>
+</ul>
+<h2 id="registermiddleware">registerMiddleware</h2>
+<p>Registers a middleware reducer function. See <a href="docs/writing-plugins.html">Writing Plugins</a>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>middlewareFn</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a></strong> </li>
+</ul>
+<h2 id="isinitialised">isInitialised</h2>
+<p>Returns whether this Navy is initialised and ready to launch services.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>></strong> </p>
+<h2 id="initialise">initialise</h2>
+<p>Initialises this Navy with the given State.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>opts</code> <strong><a href="#state">State</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="delete">delete</h2>
+<p>Deletes the state for this Navy. It won't be possible to interact with this Navy after calling this function
+unless you re-initialise it.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="launch">launch</h2>
+<p>Launches the given services for this Navy.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>serviceNames</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+<li><code>opts</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?</strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="reconfigure">reconfigure</h2>
+<p>Relaunches (reconfigures) all of the services running in this Navy.
+This will pick up any changes to the compose configuration.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>opts</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>?</strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="destroy">destroy</h2>
+<p>Destroys all of the services in this Navy and deletes the state.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="ps">ps</h2>
+<p>Returns a list of launched services for this Navy.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;ServiceList></strong> </p>
+<h2 id="start">start</h2>
+<p>Starts the given services.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="stop">stop</h2>
+<p>Stops the given services.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="restart">restart</h2>
+<p>Restarts the given services.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="kill">kill</h2>
+<p>Forcefully stops the given services.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="rm">rm</h2>
+<p>Removes the given services. Requires the services to be stopped first.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="update">update</h2>
+<p>Makes sure the images for the given services are up to date, and restarts any running
+services with new images.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="usetag">useTag</h2>
+<p>Locks down the given service to the given docker image tag.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>service</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+<li><code>tag</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="resettag">resetTag</h2>
+<p>Resets the version of the given service if <code>useTag</code> was used.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>service</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;Any></strong> </p>
+<h2 id="waitforhealthy">waitForHealthy</h2>
+<p>Waits for the given services to be healthy. Resolves when all services are healthy.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </li>
+<li><code>progressCallback</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a>></strong> </p>
+<h2 id="externalip">externalIP</h2>
+<p>Returns the external IP for accessing Docker and running services.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>></strong> </p>
+<h2 id="port">port</h2>
+<p>Returns the external port for the given service and internal private port.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>service</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+<li><code>privatePort</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></strong> </li>
+<li><code>index</code> <strong>[<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?]</strong>  (optional, default <code>1</code>)</li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a>?></strong> </p>
+<h2 id="url">url</h2>
+<p>Returns the URL for the given service which can be used to access it if it exposes
+a HTTP server.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>service</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></strong> </li>
+</ul>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?></strong> </p>
+<h2 id="getlaunchedservicenames">getLaunchedServiceNames</h2>
+<p>Returns an array of the names of the launched services for this Navy.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>></strong> </p>
+<h2 id="getavailableservicenames">getAvailableServiceNames</h2>
+<p>Returns an array of the names of all of the possible services for this Navy.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>></strong> </p>
+<h1 id="getnavy">getNavy</h1>
+<p>Returns a <code>Navy</code> instance from the given Navy name.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>navyName</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>?</strong> </li>
+</ul>
+<p>Returns <strong><a href="#navy">Navy</a></strong> </p>
+<h1 id="getlaunchednavies">getLaunchedNavies</h1>
+<p>Returns an array of <code>Navy</code> instances which are currently imported and launched.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="#navy">Navy</a>>></strong> </p>
+<h1 id="getlaunchednavynames">getLaunchedNavyNames</h1>
+<p>Returns an array of names of Navies which are currently imported and launched.</p>
+<p>Returns <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>>></strong> </p>
+<h1 id="state">State</h1>
+<p>A "state" object of the current services, and other internal Navy state.
+This can be used to hang "state" off services which can then be used by middleware at runtime to modify the
+runtime configuration.</p>
+<p>Accessing internal properties on state (properties other than "services") is not supported and backwards
+compatibility is not guaranteed.</p>
+<p><strong>Properties</strong></p>
+<ul>
+<li><code>services</code> <strong><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a></strong> An object hash of the state of each service</li>
+</ul>
+</div>
+
+<script src="https://momentumft.github.io/navy/js/api-doc.js"></script>
+
+
+    </div>
+  </body>
+</html>
