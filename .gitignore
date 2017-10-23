@@ -3,3 +3,4 @@ npm-debug.log
 lib
 website/build
 */**/package-lock.json
+.vscode
