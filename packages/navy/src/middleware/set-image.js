@@ -9,10 +9,7 @@ export default (config: Object, state: Object) => ({
     const serviceState = state.services[serviceName] || {}
     return {
       ...serviceConfig,
-      image: {
-        ...serviceConfig.image,
-        ...serviceState.image,
-      },
+      image: serviceState.image || serviceConfig.image,
     }
   }),
 })
