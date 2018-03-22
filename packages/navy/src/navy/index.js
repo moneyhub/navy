@@ -42,7 +42,6 @@ export class Navy extends EventEmitter2 {
   normalisedName: string;
 
   _pluginsLoaded: boolean;
-  _cachedState: ?State;
   _registeredCommands: Object;
   _registeredMiddleware: Array<Function>;
 
@@ -78,11 +77,7 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async getState(): Promise<?State> {
-    if (!this._cachedState) {
-      this._cachedState = await getState(this.normalisedName)
-    }
-
-    return this._cachedState
+    return await getState(this.normalisedName)
   }
 
   /**
@@ -161,8 +156,6 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async saveState(state: State): Promise<void> {
-    this._cachedState = state
-
     await saveState(this.normalisedName, state)
     await middlewareRunner(this, state)
   }
