@@ -290,6 +290,8 @@ export class Navy extends EventEmitter2 {
       throw new NavyNotInitialisedError(this.name)
     }
 
+    this._cachedState = undefined
+
     await reconfigureHTTPProxy({
       navies: (await getLaunchedNavyNames())
         .filter(navy => navy !== this.normalisedName),
