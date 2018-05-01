@@ -75,6 +75,6 @@ export async function getRegistryClient(image: string, navyFile: ?Object) {
   opts.credentials = credentialsFromAuth(auth)
 
   return {
-    request: url => registryRequest(url, opts),
+    request: (url: string) => registryRequest(url, opts),
   }
 }

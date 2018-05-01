@@ -21,7 +21,7 @@ async function cwdHasValidDockerComposeConfig() {
 
 export default function createFileSystemConfigProvider(navy: Navy): ConfigProvider {
   return {
-    async getNavyPath(): Promise<string> {
+    async getNavyPath(): Promise<?string> {
       const envState: ?State = await navy.getState()
 
       invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
@@ -45,7 +45,7 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
       return false
     },
 
-    async getLocationDisplayName(): Promise<string> {
+    async getLocationDisplayName(): Promise<?string> {
       const envState: ?State = await navy.getState()
 
       invariant(!!envState, 'STATE_NONEXISTANT', navy.name)

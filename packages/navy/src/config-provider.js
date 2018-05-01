@@ -13,10 +13,10 @@ const PROVIDERS = [
 ]
 
 export type ConfigProvider = {
-  getNavyPath(): Promise<string>;
+  getNavyPath(): Promise<?string>;
   getNavyFilePath(): Promise<string>;
   refreshConfig(): Promise<bool>;
-  getLocationDisplayName(): Promise<string>;
+  getLocationDisplayName(): Promise<?string>;
   isDangling(): Promise<boolean>;
 }
 

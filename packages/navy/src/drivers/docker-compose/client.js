@@ -74,7 +74,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
       return path.join(pathToNavy(navy.normalisedName), 'docker-compose.tmp.yml')
     },
 
-    async getOriginalDockerComposeDirectory(): Promise<string> {
+    async getOriginalDockerComposeDirectory(): Promise<?string> {
       const configProvider: ?ConfigProvider = await navy.getConfigProvider()
 
       invariant(configProvider, 'NO_CONFIG_PROVIDER', navy.name)

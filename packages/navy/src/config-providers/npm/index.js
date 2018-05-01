@@ -33,7 +33,7 @@ async function tryAndInstall(pkgName: string) {
 
 export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
   return {
-    async getNavyPath(): Promise<string> {
+    async getNavyPath(): Promise<?string> {
       const envState: ?State = await navy.getState()
 
       invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
@@ -61,7 +61,7 @@ export default function createNpmConfigProvider(navy: Navy): ConfigProvider {
       return true
     },
 
-    async getLocationDisplayName(): Promise<string> {
+    async getLocationDisplayName(): Promise<?string> {
       const envState: ?State = await navy.getState()
 
       invariant(!!envState, 'STATE_NONEXISTANT', navy.name)
