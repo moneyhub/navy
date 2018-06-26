@@ -40,6 +40,7 @@
     "mkdirp": "^0.5.1",
     "opn": "^5.3.0",
     "pad": "^1.0.0",
+    "promise-retry": "^1.1.1",
     "resolve": "^1.1.7",
     "rimraf": "^2.5.2",
     "simple-docker-registry-client": "^1.1.0",

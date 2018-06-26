@@ -47,6 +47,11 @@ declare module "navy" {
     waitForHealthy: (
       services?: Array<string> | null,
       progressCallback?: (healthData: Array<ServiceHealthData>) => void,
+      retryConfig?: {
+        factor?: number,
+        retries?: number,
+        minTimeout?: number,
+      },
     ) => Promise<boolean>
     ps(): Promise<ServiceList>
   }
