@@ -2,6 +2,7 @@
 
 import invariant from 'invariant'
 import {EventEmitter2} from 'eventemitter2'
+import retryPromise from 'promise-retry'
 
 import fs from '../util/fs'
 import {resolveDriverFromName} from '../driver'
@@ -22,6 +23,12 @@ import type {State} from './state'
 import type {ServiceList} from '../service'
 
 export type {State}
+
+export type RetryConfig = {
+  factor?: number,
+  retries?: number,
+  minTimeout?: number,
+}
 
 /**
  * A Navy instance
@@ -463,46 +470,49 @@ export class Navy extends EventEmitter2 {
    * Waits for the given services to be healthy. Resolves when all services are healthy.
    * @public
    */
-  async waitForHealthy(services?: Array<string>, progressCallback?: Function): Promise<boolean> {
+  async waitForHealthy(
+    services?: Array<string>,
+    progressCallback?: Function,
+    retryConfig?: RetryConfig = {factor: 1.1, retries: 30, minTimeout: 200}
+  ): Promise<boolean> {
     if (services == null) {
       services = (await this.ps())
         .filter(service => service && service.raw && service.raw.State.Health)
         .map(service => service.name)
     }
 
-    let tries = 0
+    return retryPromise(
+      retryConfig,
+      async (retry) => {
+        const ps = await this.ps()
 
-    while (tries++ < 30) {
-      const ps = await this.ps()
+        const specifiedServices = ps
+          .filter(service => services && services.indexOf(service.name) !== -1)
 
-      const specifiedServices = ps
-        .filter(service => services && services.indexOf(service.name) !== -1)
+        const servicesWithoutHealthInfo = specifiedServices
+          .filter(service => !service.raw || !service.raw.State.Health)
+          .map(service => service.name)
 
-      const servicesWithoutHealthInfo = specifiedServices
-        .filter(service => !service.raw || !service.raw.State.Health)
-        .map(service => service.name)
+        if (servicesWithoutHealthInfo.length > 0) {
+          throw new NavyError('The specified services don\'t have health checks: ' + servicesWithoutHealthInfo.join(', '))
+        }
 
-      if (servicesWithoutHealthInfo.length > 0) {
-        throw new NavyError('The specified services don\'t have health checks: ' + servicesWithoutHealthInfo.join(', '))
+        const serviceHealth = specifiedServices.map(service => ({
+          service: service.name,
+          health: service.raw && service.raw.State.Health.Status,
+        }))
+
+        if (progressCallback) progressCallback(serviceHealth)
+
+        const unhealthy = serviceHealth.filter(service => service.health !== 'healthy')
+
+        if (unhealthy.length === 0) {
+          return true
+        }
+
+        retry('Timed out waiting for services to be healthy')
       }
-
-      const serviceHealth = specifiedServices.map(service => ({
-        service: service.name,
-        health: service.raw && service.raw.State.Health.Status,
-      }))
-
-      if (progressCallback) progressCallback(serviceHealth)
-
-      const unhealthy = serviceHealth.filter(service => service.health !== 'healthy')
-
-      if (unhealthy.length === 0) {
-        return true
-      }
-
-      await new Promise(resolve => setTimeout(resolve, 2000))
-    }
-
-    throw new NavyError('Timed out waiting for services to be healthy')
+    )
   }
 
   /**
