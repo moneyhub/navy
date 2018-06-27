@@ -481,38 +481,41 @@ export class Navy extends EventEmitter2 {
         .map(service => service.name)
     }
 
-    return retryPromise(
-      retryConfig,
-      async (retry) => {
-        const ps = await this.ps()
+    try {
+      await retryPromise(
+        retryConfig,
+        async (retry) => {
+          const ps = await this.ps()
 
-        const specifiedServices = ps
-          .filter(service => services && services.indexOf(service.name) !== -1)
+          const specifiedServices = ps
+            .filter(service => services && services.indexOf(service.name) !== -1)
 
-        const servicesWithoutHealthInfo = specifiedServices
-          .filter(service => !service.raw || !service.raw.State.Health)
-          .map(service => service.name)
+          const servicesWithoutHealthInfo = specifiedServices
+            .filter(service => !service.raw || !service.raw.State.Health)
+            .map(service => service.name)
 
-        if (servicesWithoutHealthInfo.length > 0) {
-          throw new NavyError('The specified services don\'t have health checks: ' + servicesWithoutHealthInfo.join(', '))
+          if (servicesWithoutHealthInfo.length > 0) {
+            throw new NavyError('The specified services don\'t have health checks: ' + servicesWithoutHealthInfo.join(', '))
+          }
+
+          const serviceHealth = specifiedServices.map(service => ({
+            service: service.name,
+            health: service.raw && service.raw.State.Health.Status,
+          }))
+
+          if (progressCallback) progressCallback(serviceHealth)
+
+          const unhealthy = serviceHealth.filter(service => service.health !== 'healthy')
+
+          if (unhealthy.length !== 0) {
+            retry('Timed out waiting for services to be healthy. Unhealthy services: ' + unhealthy.map(s => s.service).join(', '))
+          }
         }
-
-        const serviceHealth = specifiedServices.map(service => ({
-          service: service.name,
-          health: service.raw && service.raw.State.Health.Status,
-        }))
-
-        if (progressCallback) progressCallback(serviceHealth)
-
-        const unhealthy = serviceHealth.filter(service => service.health !== 'healthy')
-
-        if (unhealthy.length === 0) {
-          return true
-        }
-
-        retry('Timed out waiting for services to be healthy. Unhealthy services: ' + unhealthy.map(s => s.service).join(', '))
-      }
-    )
+      )
+    } catch (e) {
+      throw new NavyError(e.message)
+    }
+    return true
   }
 
   /**
