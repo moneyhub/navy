@@ -510,7 +510,7 @@ export class Navy extends EventEmitter2 {
           return true
         }
 
-        retry('Timed out waiting for services to be healthy')
+        retry('Timed out waiting for services to be healthy. Unhealthy services: ' + unhealthy.map(s => s.service).join(', '))
       }
     )
   }
