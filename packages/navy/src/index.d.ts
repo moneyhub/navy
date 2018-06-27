@@ -37,12 +37,18 @@ declare module "navy" {
       services?: Array<string> | null,
       opts?: LaunchOptions,
     ) => Promise<void>
+    start: (services?: Array<string>) => Promise<void>
+    stop: (services?: Array<string>) => Promise<void>
+    restart: (services?: Array<string>) => Promise<void>
+    kill: (services?: Array<string>) => Promise<void>
+    rm: (services?: Array<string>) => Promise<void>
+    update: (services?: Array<string>) => Promise<void>
     port: (
       service: string,
       privatePort: number,
       index?: number,
     ) => Promise<number | undefined>
-    spawnLogStream: (services: Array<string>) => Promise<void>
+    spawnLogStream: (services?: Array<string>) => Promise<void>
     url: (service: string) => Promise<string>
     waitForHealthy: (
       services?: Array<string> | null,
