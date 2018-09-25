@@ -15,6 +15,11 @@ docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
   docker:$DOCKER_TAG --storage-driver=aufs
 
+clean_daemon() {
+  docker rm --force navy-test-runner-daemon
+}
+trap clean_daemon EXIT
+
 docker build \
     -t navy-test-runner \
     -f test/integration/runner/Dockerfile \
@@ -43,5 +48,3 @@ docker run --rm -it --link \
     -r ./features \
     -r ./steps \
     ./features "$@"
-
-docker rm --force navy-test-runner-daemon
