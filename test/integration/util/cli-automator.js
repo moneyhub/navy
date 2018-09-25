@@ -1,5 +1,6 @@
 import path from 'path'
-import pty from 'pty.js'
+import {execSync} from 'child_process'
+import * as pty from 'node-pty'
 import stripAnsi from 'strip-ansi'
 import {ENV_NAME} from '../environment'
 
@@ -37,11 +38,15 @@ export default class Automator {
 
     this.output = ''
 
+    const cwd = this.opts.cwd || path.join(__dirname, '../dummy-navies/basic')
+
+    execSync('mkdir -p ' + cwd)
+
     this.term = pty.spawn(NAVY_BIN, this.args, {
       name: 'xterm-color',
       cols: 130,
       rows: 30,
-      cwd: this.opts.cwd || path.join(__dirname, '../dummy-navies/basic'),
+      cwd,
       env: {
         NAVY_NAME: ENV_NAME,
         ...(this.opts.env || process.env),
@@ -77,13 +82,19 @@ export default class Automator {
     }
 
     return new Promise(resolve =>
-      this.term.once('exit', () => resolve(stripAnsi(this.output)))
+      this.term.on('exit', () => resolve(stripAnsi(this.output)))
     )
   }
 
   waitForLaunch() {
+    let resolved = false
     return new Promise((resolve, reject) => {
-      this.term.once('data', resolve)
+      this.term.on('data', () => {
+        if (!resolved) {
+          resolved = true
+          resolve()
+        }
+      })
     })
   }
 
