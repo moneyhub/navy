@@ -8,6 +8,7 @@
     "build": "./scripts/build.sh",
     "watch": "./scripts/watch.sh",
     "integration": "./scripts/integration.sh",
+    "integration-local": "cd test/integration && ../../node_modules/.bin/cucumberjs --strict --fail-fast -r ./preload.js -r ./environment.js -r ./hooks.js -r ./chai.js -r ./features -r ./steps ./features",
     "lint": "eslint .",
     "flow": "flow",
     "unit": "mocha $npm_package_options_mocha",
