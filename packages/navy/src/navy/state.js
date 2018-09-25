@@ -1,7 +1,7 @@
 /* @flow */
 
 import path from 'path'
-import invariant from 'invariant'
+import {invariant} from '../error-codes'
 import bluebird from 'bluebird'
 
 import fs from '../util/fs'

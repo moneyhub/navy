@@ -1,11 +1,11 @@
 /* @flow */
 
-import invariant from 'invariant'
 import FileSystem from './config-providers/filesystem'
 import NPM from './config-providers/npm'
 
 import type {State} from './navy/state'
 import type {Navy} from './navy'
+import {invariant} from './error-codes'
 
 const PROVIDERS = [
   NPM,

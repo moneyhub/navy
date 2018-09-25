@@ -1,7 +1,7 @@
 /* @flow */
 
 import path from 'path'
-import invariant from 'invariant'
+import {invariant} from '../error-codes'
 import {registryRequest} from 'simple-docker-registry-client'
 import fs from './fs'
 

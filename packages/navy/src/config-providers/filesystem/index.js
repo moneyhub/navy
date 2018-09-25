@@ -1,13 +1,13 @@
 /* @flow */
 
 import path from 'path'
-import invariant from 'invariant'
 import fs from '../../util/fs'
 import {execAsync} from '../../util/exec-async'
 
 import type {ConfigProvider} from '../../config-provider'
 import type {State} from '../../navy'
 import type {Navy} from '../../navy'
+import {invariant} from '../../error-codes'
 
 async function cwdHasValidDockerComposeConfig() {
   try {

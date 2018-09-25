@@ -1,6 +1,6 @@
 /* @flow */
 
-import invariant from 'invariant'
+import {invariant} from '../error-codes'
 import {EventEmitter2} from 'eventemitter2'
 import retryPromise from 'promise-retry'
 

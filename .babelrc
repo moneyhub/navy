@@ -3,7 +3,6 @@
   "plugins": [
     "add-module-exports",
     "transform-flow-strip-types",
-    "transform-runtime",
-    "./resources/babel/transform-error-codes.js"
+    "transform-runtime"
   ]
 }

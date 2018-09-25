@@ -2,7 +2,7 @@
 
 import path from 'path'
 import bluebird from 'bluebird'
-import invariant from 'invariant'
+import {invariant} from './error-codes'
 
 import fs from './util/fs'
 

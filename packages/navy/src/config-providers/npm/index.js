@@ -2,7 +2,7 @@
 
 import path from 'path'
 import {execSync} from 'child_process'
-import invariant from 'invariant'
+import {invariant} from '../../error-codes'
 import bluebird from 'bluebird'
 import fs from '../../util/fs'
 import {pathToNavyRoot} from '../../navy/state'

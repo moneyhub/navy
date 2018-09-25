@@ -1,7 +1,7 @@
 /* @flow */
 
 import path from 'path'
-import invariant from 'invariant'
+import {invariant} from '../../error-codes'
 
 import fs from '../../util/fs'
 import {execAsync} from '../../util/exec-async'

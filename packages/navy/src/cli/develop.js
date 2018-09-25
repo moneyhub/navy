@@ -2,12 +2,12 @@
 
 import path from 'path'
 import chalk from 'chalk'
-import invariant from 'invariant'
 
 import {getNavy} from '../'
 import {NavyError} from '../errors'
 import docker from '../util/docker-client'
 import getNavyRc from '../util/navyrc'
+import {assertInvariant} from '../error-codes'
 
 export default async function (service: string, opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
@@ -64,7 +64,7 @@ export default async function (service: string, opts: Object): Promise<void> {
 
   const container = (await navy.ps()).filter(_service => _service.name === service)[0]
 
-  invariant(container, 'DEVELOP_NO_CONTAINER_ID')
+  assertInvariant(container, 'DEVELOP_NO_CONTAINER_ID')
 
   const containerId = container.id
 

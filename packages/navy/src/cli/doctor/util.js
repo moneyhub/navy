@@ -1,11 +1,11 @@
 /* @flow */
 
 import util from 'util'
-import invariant from 'invariant'
 import chalk from 'chalk'
+import {assertInvariant} from '../../error-codes'
 
 export const fix = async (message: string, ...params: Array<any>) => {
-  invariant(params.length > 0, 'DOCTOR_FIX_NO_PARAMS')
+  assertInvariant(params.length > 0, 'DOCTOR_FIX_NO_PARAMS')
 
   const fixCallback = params[params.length - 1]
 

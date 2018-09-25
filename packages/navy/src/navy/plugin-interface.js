@@ -1,7 +1,7 @@
 /* @flow */
 
 import bluebird from 'bluebird'
-import invariant from 'invariant'
+import {invariant} from '../error-codes'
 
 import type {ConfigProvider} from '../config-provider'
 import type {Navy} from './'
