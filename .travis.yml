@@ -27,9 +27,9 @@ matrix:
   fast_finish: true
 
   include:
-    - node_js: 8
+    - node_js: 10
       env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.14.0
-    - node-js: 8
+    - node-js: 10
       env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.22.0
 
 before_install:
