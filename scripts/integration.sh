@@ -13,7 +13,7 @@ NODE_VERSION=${TRAVIS_NODE_VERSION:-6}
 
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
-  docker:$DOCKER_TAG --storage-driver=aufs
+  docker:$DOCKER_TAG --storage-driver=overlay
 
 docker build \
     -t navy-test-runner \
