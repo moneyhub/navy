@@ -6,7 +6,6 @@ node_js:
   - 8
   - 6
   - 10
-  - 11
 
 dist: trusty
 
@@ -15,8 +14,8 @@ services:
 
 env:
   matrix:
-    - DOCKER_TAG=17.06-dind
-    - DOCKER_TAG=17.12-dind
+    - DOCKER_TAG=18.06-dind
+    - DOCKER_TAG=18.09-dind
   global:
     - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.12.0
 
@@ -29,9 +28,9 @@ matrix:
 
   include:
     - node_js: 8
-      env: DOCKER_TAG=17.06-dind DOCKER_COMPOSE_VERSION=1.13.0
+      env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.13.0
     - node-js: 8
-      env: DOCKER_TAG=17.06-dind DOCKER_COMPOSE_VERSION=1.14.0
+      env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.14.0
 
 before_install:
   # print versions
