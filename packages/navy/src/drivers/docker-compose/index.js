@@ -6,7 +6,6 @@ import fs from '../../util/fs'
 import docker from '../../util/docker-client'
 import {createComposeClient} from './client'
 import {Status as ServiceStatus} from '../../service'
-import {getContainerName} from './containers'
 
 import type {Driver} from '../../driver'
 import type {ServiceList} from '../../service'
@@ -137,10 +136,12 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async port(service: string, privatePort: number, index: ?number): Promise<?number> {
       if (index == null) index = 1
 
-      const containerName = getContainerName(navy, service, index)
-      const container = await docker.getContainer(containerName).inspect()
+      const container = (await this.ps(service)).pop()
+      if (!container) {
+        return null
+      }
 
-      const portConfig = container.NetworkSettings.Ports[`${privatePort}/tcp`]
+      const portConfig = container.raw.NetworkSettings.Ports[`${privatePort}/tcp`]
 
       if (!Array.isArray(portConfig) || portConfig.length === 0) {
         return null
