@@ -1,4 +1,4 @@
-Navy [![Build Status](https://img.shields.io/travis/momentumft/navy/master.svg?style=flat)](https://travis-ci.org/momentumft/navy) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/momentumft/navy.svg)](https://github.com/momentumft/navy)
+Navy [![Build Status](https://img.shields.io/travis/moneyhub/navy/master.svg?style=flat)](https://travis-ci.org/moneyhub/navy) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/moneyhub/navy.svg)](https://github.com/moneyhub/navy)
 ==================
 
 > A tool for easy multi-service development powered by Docker Compose
@@ -70,10 +70,10 @@ $ cd my-docker-compose-config # where your docker-compose.yml might live
 $ navy launch # launch your services!
 ```
 
-[Now check out the documentation on the Navy website](https://momentumft.github.io/navy/)
+[Now check out the documentation on the Navy website](https://moneyhub.github.io/navy/)
 
 ## License
 
 Licensed under the MIT License.
 
-[View the full license here](https://raw.githubusercontent.com/momentumft/navy/master/LICENSE).
+[View the full license here](https://raw.githubusercontent.com/moneyhub/navy/master/LICENSE).
