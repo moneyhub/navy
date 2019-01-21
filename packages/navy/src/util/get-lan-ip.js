@@ -3,15 +3,24 @@
 import dns from 'dns'
 import os from 'os'
 
+const LOOPBACK_PREFIX = /^127\./
+
 export async function getLANIP() {
   const ifAddress = findInterfaceAddress()
   try {
     const hostnameAddr = await resolveHostname()
+    // No interface address, so can only use hostname resolution.
+    if (!ifAddress) {
+      return hostnameAddr
+    }
 
-    if (ifAddress && hostnameAddr !== ifAddress) {
+    // If hostname address is a loopback IP, then use the iface IP.
+    if (LOOPBACK_PREFIX.test(hostnameAddr)) {
       return ifAddress
     }
 
+    // Both are valid external IPv4 addresses, default to the
+    // hostname resolution IP.
     return hostnameAddr
   } catch (error) {
     if (ifAddress) {
