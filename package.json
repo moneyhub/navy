@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "navy-monorepo",
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
   "options": {
     "mocha": "--compilers js:babel-register packages/*/src/{,**}/__tests__/*.js"
