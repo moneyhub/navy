@@ -39,7 +39,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
       } = opts
 
       const composeOpts: Object = {
-        maxBuffer: maxBuffer || 1024 * 1024,
+        maxBuffer: maxBuffer || Infinity,
       }
       const composeFilePath = await client.getDockerComposeFilePath()
 
