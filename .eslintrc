@@ -3,7 +3,7 @@
 
   extends: "standard"
 
-  plugins: ["flow-vars"]
+  plugins: ["flowtype", "import", "chai-friendly"]
 
   rules:
     space-before-function-paren: [2, {"anonymous": "always", "named": "never"}]
@@ -17,5 +17,13 @@
     generator-star-spacing: 0
     no-duplicate-imports: 0
 
-    flow-vars/define-flow-type: 2
-    flow-vars/use-flow-type: 2
+    indent: ["error", 2, {"SwitchCase": 1, "MemberExpression": 1}]
+    indent-legacy: "off"
+
+    no-return-await: "off"
+
+    flowtype/define-flow-type: 2
+    flowtype/use-flow-type: 2
+
+    import/no-duplicates: "off"
+
