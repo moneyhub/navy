@@ -40,7 +40,7 @@
     "chai": "^4.2.0",
     "chai-properties": "^1.4.0",
     "cucumber": "^0.10.2",
-    "eslint": "^2.7.0",
+    "eslint": "^4.18.2",
     "eslint-config-standard": "^5.1.0",
     "eslint-plugin-flow-vars": "^0.3.0",
     "eslint-plugin-promise": "^1.1.0",
