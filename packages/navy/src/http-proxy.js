@@ -11,16 +11,16 @@ import {getLaunchedNavyNames} from './navy'
 
 async function updateComposeConfig(navies: Array<string>) {
   const networks = await docker.listNetworks()
-  .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
-  .filter(net => {
-    for (const navy of navies) {
-      if (net.Name.indexOf(navy + '_') === 0) {
-        return true
+    .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
+    .filter(net => {
+      for (const navy of navies) {
+        if (net.Name.indexOf(navy + '_') === 0) {
+          return true
+        }
       }
-    }
 
-    return false
-  })
+      return false
+    })
 
   const networksConfig = {}
 

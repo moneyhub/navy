@@ -29,8 +29,9 @@ export function pathToNavy(normalisedEnvName: string): string {
 export function pathToState(normalisedEnvName: string): string {
   return path.join(pathToNavy(normalisedEnvName), 'state.json')
 }
-
+/* eslint-disable no-use-before-define */
 export async function getState(normalisedEnvName: string): Promise<?State> {
+/* eslint-enable no-use-before-define */
   try {
     const statePath = pathToState(normalisedEnvName)
     const file = (await fs.readFileAsync(statePath)).toString()

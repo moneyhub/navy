@@ -37,21 +37,21 @@ async function run() {
   ])
 
   await Promise.resolve(siteContent)
-  .then(convertMarkdown)
-  .then(addLayout('layouts/main.html', { nav }))
-  .then(write('build'))
+    .then(convertMarkdown)
+    .then(addLayout('layouts/main.html', { nav }))
+    .then(write('build'))
 
   await Promise.resolve(docsContent)
-  .then(convertMarkdown)
-  .then(addLayout('layouts/main.html', { nav }))
-  .then(write('build/docs'))
+    .then(convertMarkdown)
+    .then(addLayout('layouts/main.html', { nav }))
+    .then(write('build/docs'))
 
   console.log('Building API documentation')
 
   await Promise.resolve(buildApiDocs())
-  .then(convertMarkdown)
-  .then(addLayout('layouts/api.html', { nav }))
-  .then(write('build/docs/api'))
+    .then(convertMarkdown)
+    .then(addLayout('layouts/api.html', { nav }))
+    .then(write('build/docs/api'))
 
   console.log('Done')
 }

@@ -47,7 +47,7 @@ export function credentialsFromAuth(auth: ?Object) {
       'DOCKER_CONFIG_INVALID_AUTH_BASE64',
     )
 
-    const decoded = new Buffer(auth.auth, 'base64').toString()
+    const decoded = Buffer.from(auth.auth, 'base64').toString()
     const parts = decoded.split(':')
 
     return {

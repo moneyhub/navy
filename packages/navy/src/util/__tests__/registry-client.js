@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+/* eslint-disable no-unused-expressions */
+/* eslint-enable chai-friendly/no-unused-expressions */
 
 import {expect} from 'chai'
 import {getAuthForRegistry, registryFromImage, credentialsFromAuth} from '../registry-client'

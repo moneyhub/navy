@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-enable chai-friendly/no-unused-expressions */
+
 import chai, {expect, Assertion} from 'chai'
 import {find} from 'lodash/fp'
 

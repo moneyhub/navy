@@ -16,10 +16,10 @@ gulp.task('styles', () => {
 
 gulp.task('resources', () => {
   gulp.src('public/**/*')
-  .pipe(gulp.dest('build/'))
+    .pipe(gulp.dest('build/'))
 
   gulp.src('../docs/**/resources/*')
-  .pipe(gulp.dest('build/docs'))
+    .pipe(gulp.dest('build/docs'))
 })
 
 gulp.task('client-js', () => {
