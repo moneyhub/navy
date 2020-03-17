@@ -1,6 +1,6 @@
 {
   "name": "navy-plugin-nodejs",
-  "version": "4.1.1",
+  "version": "4.1.2-rc.1",
   "description": "A set of helpers to help improve the experience of developing NodeJS applications with Navy",
   "main": "lib/index.js",
   "scripts": {
