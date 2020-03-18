@@ -14,6 +14,7 @@
     "unit": "mocha $npm_package_options_mocha",
     "unit-watch": "mocha -w $npm_package_options_mocha",
     "test": "./scripts/test.sh",
+    "preinstall": "npx npm-force-resolutions",
     "prepublish": "npm run build",
     "publish": "lerna publish",
     "publish-rc": "NPM_DIST_TAG=next npm run publish",
@@ -56,5 +57,8 @@
     "node-pty": "^0.7.8",
     "rimraf": "^2.7.1",
     "strip-ansi": "^3.0.1"
+  },
+  "resolutions": {
+    "mkdirp": "^0.5.3"
   }
 }
