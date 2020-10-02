@@ -14,9 +14,14 @@ const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
 }
 
 const serviceHasPort80 = service =>
-  service.ports && find(service.ports, port =>
-    // Should handle "80" (short syntax), "80:80" (long syntax), and "80/tcp" (including protocol) formats.
-    port.toString() === '80' || port.toString().startsWith('80:') || port.toString().startsWith('80/')
+  service.ports && find(service.ports, portDefinition => {
+      // In older versions of Docker Compose `ports` could just be an array of string/number,
+      // but it's changed to e.g. {target: "80"}
+      const port = "target" in portDefinition ? portDefinition.target : portDefinition
+
+      // Should handle "80" (short syntax), "80:80" (long syntax), and "80/tcp" (including protocol) formats.
+      return port.toString() === '80' || port.toString().startsWith('80:') || port.toString().startsWith('80/')
+    }
   )
 
 export default (navy: Navy) =>
