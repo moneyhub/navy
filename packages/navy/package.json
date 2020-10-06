@@ -1,6 +1,6 @@
 {
   "name": "navy",
-  "version": "4.1.2-rc.2",
+  "version": "4.2.0",
   "description": "Quick and powerful development environments using Docker and Docker Compose",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
