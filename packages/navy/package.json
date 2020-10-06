@@ -37,7 +37,7 @@
     "invariant": "^2.2.4",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
-    "mkdirp": "^0.5.3",
+    "mkdirp": "^0.5.5",
     "opn": "^5.5.0",
     "pad": "^1.0.0",
     "promise-retry": "^1.1.1",
