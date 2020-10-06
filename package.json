@@ -51,7 +51,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "flow-bin": "^0.71.0",
     "lerna": "^3.20.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "mocha": "^5.2.0",
     "node-fetch": "^1.5.3",
     "node-pty": "^0.7.8",
@@ -59,6 +59,6 @@
     "strip-ansi": "^3.0.1"
   },
   "resolutions": {
-    "mkdirp": "^0.5.3"
+    "mkdirp": "^0.5.5"
   }
 }
