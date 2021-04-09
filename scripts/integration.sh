@@ -24,6 +24,8 @@ docker build \
     -f test/integration/runner/Dockerfile \
     --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
     --build-arg NODE_VERSION=$NODE_VERSION \
+    --build-arg DOCKERHUB_PULL_USERNAME=$DOCKERHUB_PULL_USERNAME \
+    --build-arg DOCKERHUB_PULL_PASSWORD=$DOCKERHUB_PULL_PASSWORD \
     .
 
 echo ""
