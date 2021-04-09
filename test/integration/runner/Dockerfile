@@ -2,6 +2,8 @@ FROM ubuntu:16.04
 
 ARG DOCKER_COMPOSE_VERSION
 ARG NODE_VERSION
+ARG DOCKERHUB_PULL_USERNAME
+ARG DOCKERHUB_PULL_PASSWORD
 
 RUN apt-get update -y && apt-get install -y build-essential git curl
 
@@ -12,6 +14,12 @@ RUN chmod +x /usr/local/bin/docker-compose
 
 ADD ./test/integration/runner/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENV DOCKERHUB_PULL_USERNAME $DOCKERHUB_PULL_USERNAME
+ENV DOCKERHUB_PULL_PASSWORD $DOCKERHUB_PULL_PASSWORD
+
+ADD ./test/integration/runner/docker-login.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-login.sh
 
 WORKDIR /usr/src/app
 ADD package.json ./
