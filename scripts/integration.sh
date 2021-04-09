@@ -11,6 +11,10 @@ DOCKER_TAG=${DOCKER_TAG:-18.09-dind}
 DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.23.1}
 NODE_VERSION=${TRAVIS_NODE_VERSION:-10}
 
+if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
+  echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
+fi
+
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
   docker:$DOCKER_TAG --storage-driver=overlay
