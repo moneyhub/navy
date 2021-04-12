@@ -13,17 +13,24 @@ const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   return null
 }
 
-const serviceHasPort80 = service =>
-  service.ports && find(service.ports, portDefinition => {
-    // In older versions of Docker Compose `ports` could just be an array of string/number,
-    // but it's changed to e.g. {target: "80"}
-    const port = typeof portDefinition === 'object' && 'target' in portDefinition
-      ? portDefinition.target
-      : portDefinition
+const serviceGetAutoProxyPortOr80 = (service, navyFile) => {
+  const autoPorts: any[] = (navyFile && Array.isArray(navyFile.httpProxyAutoPorts) && navyFile.httpProxyAutoPorts) || ['80']
+  return service.ports && find(autoPorts, autoPort => {
+    const autoPortString = autoPort.toString()
 
-    // Should handle "80" (short syntax), "80:80" (long syntax), and "80/tcp" (including protocol) formats.
-    return port.toString() === '80' || port.toString().startsWith('80:') || port.toString().startsWith('80/')
+    return find(service.ports, portDefinition => {
+      // In older versions of Docker Compose `ports` could just be an array of string/number,
+      // but it's changed to e.g. {target: "80"}
+      const port = typeof portDefinition === 'object' && 'target' in portDefinition
+        ? portDefinition.target
+        : portDefinition
+
+      const portString = port.toString()
+
+      return portString === autoPortString || portString.startsWith(`${autoPortString}:`) || portString.startsWith(`${autoPortString}/`)
+    })
   })
+}
 
 export default (navy: Navy) =>
   async (config: Object, state: Object) => {
@@ -35,9 +42,12 @@ export default (navy: Navy) =>
       const service = config.services[serviceName]
       let proxyConfig = getServiceHTTPProxyConfig(serviceName, navyFile)
 
-      // proxy port 80 even without config
-      if (!proxyConfig && serviceHasPort80(service)) {
-        proxyConfig = { port: 80 }
+      // proxy port 80 even without service config, or a different port with config httpProxyAutoPorts
+      if (!proxyConfig) {
+        const autoPort = serviceGetAutoProxyPortOr80(service, navyFile)
+        if (autoPort) {
+          proxyConfig = { port: parseInt(autoPort) }
+        }
       }
 
       if (proxyConfig) {

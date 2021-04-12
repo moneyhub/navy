@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  helloworld-otherportnot80:
+    image: dockercloud/hello-world
+    ports:
+      - "8000"
+    environment:
+      LISTEN_PORT: "8000"

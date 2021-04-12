@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  helloworld-otherautoport:
+    image: dockercloud/hello-world
+    ports:
+      - "4080"
+    environment:
+      LISTEN_PORT: "4080"

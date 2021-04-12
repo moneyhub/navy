@@ -16,6 +16,16 @@ export default function () {
     this.serviceForProxy = 'helloworld-otherport'
   })
 
+  this.When(/I launch a service which exposes a different port which has been explicitly configured to use the HTTP proxy, not port 80$/, async function () {
+    await this.navy.launch(['helloworld-otherportnot80'])
+    this.serviceForProxy = 'helloworld-otherportnot80'
+  })
+
+  this.When(/I launch a service which exposes a different port which has been explicitly configured as a HTTP proxy auto-port$/, async function () {
+    await this.navy.launch(['helloworld-otherautoport'])
+    this.serviceForProxy = 'helloworld-otherautoport'
+  })
+
   this.Then(/I should be able to make a HTTP request to the service through the proxy$/, async function () {
     await retry(async () => {
       const res = await fetch(await this.navy.url(this.serviceForProxy))
