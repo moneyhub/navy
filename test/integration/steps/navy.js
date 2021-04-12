@@ -19,6 +19,14 @@ export default function () {
     this.navy = await setUpNavy('dev', 'http-proxy-custom-port')
   })
 
+  this.Given(/I am working with a test navy which has a service with a different port, not port 80$/, async function () {
+    this.navy = await setUpNavy('dev', 'http-proxy-custom-port-not-80')
+  })
+
+  this.Given(/I am working with a test navy which has a service with a different port, with a custom proxy auto-port$/, async function () {
+    this.navy = await setUpNavy('dev', 'http-proxy-custom-auto-port')
+  })
+
   this.Given(/I am working with a test navy which has a fixed external port$/, async function () {
     this.navy = await setUpNavy('dev', 'with-fixed-port')
   })
