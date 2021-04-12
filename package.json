@@ -53,7 +53,7 @@
     "lerna": "^3.20.2",
     "lodash": "^4.17.20",
     "mocha": "^5.2.0",
-    "node-fetch": "^1.5.3",
+    "node-fetch": "^2.6.1",
     "node-pty": "^0.7.8",
     "rimraf": "^2.7.1",
     "strip-ansi": "^3.0.1"
