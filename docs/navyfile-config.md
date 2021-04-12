@@ -18,6 +18,9 @@ module.exports = {
     'myservice',
     'myotherservice'
   ],
+  httpProxyAutoPorts: [
+    4080,
+  ],
   httpProxy: {
     myotherservice: { port: 8080 }
   },
@@ -38,9 +41,13 @@ Specifies a list of plugins to load at runtime. This should be an array of strin
 
 A list of service names in the compose configuration which should be selected by default when doing a `navy launch` with a Navy which hasn't been launched yet.
 
+### `httpProxyAutoPorts: ?Array<Number | string>`
+
+If using the [built in HTTP proxy](http-proxy.md), you can tell Navy to automatically register a service with the HTTP proxy, if it publishes any port in this list. This overrides port 80 for automatic registration.
+
 ### `httpProxy: ?{[key: string]: { port: Number }}`
 
-If using the [built in HTTP proxy](http-proxy.md), you can tell Navy what port a service listens for HTTP connections here. If a service publishes port 80, it will automatically be registered with the HTTP proxy, so configuration here is unnecessary.
+If using the [built in HTTP proxy](http-proxy.md), you can tell Navy what port a service listens for HTTP connections here. If a service publishes port 80, or alternatively a port specified in `httpProxyAutoPorts`, it will automatically be registered with the HTTP proxy, so configuration here is unnecessary.
 
 ### `ignoreUnauthorizedRequestsForRegistries: ?Array<string>`
 
