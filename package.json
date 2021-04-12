@@ -59,6 +59,7 @@
     "strip-ansi": "^3.0.1"
   },
   "resolutions": {
-    "mkdirp": "^0.5.5"
+    "mkdirp": "^0.5.5",
+    "chokidar": "^3.5.1"
   }
 }
