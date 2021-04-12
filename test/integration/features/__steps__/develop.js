@@ -42,7 +42,7 @@ export default function () {
       const url = await this.navy.url(TEST_SERVICE_NAME)
 
       expect((await fetch(url)
-        .then(res => res.text())
+        .then(res => res.textConverted())
       ).trim()).to.equal('Hello from the local source code!')
 
       const psOutput = await Automator.spawn(['ps']).waitForDone()
@@ -55,7 +55,7 @@ export default function () {
     const url = await this.navy.url(TEST_SERVICE_NAME)
 
     expect((await fetch(url)
-      .then(res => res.text())
+      .then(res => res.textConverted())
     ).trim()).to.not.equal('Hello from the local source code!')
 
     const psOutput = await Automator.spawn(['ps']).waitForDone()
