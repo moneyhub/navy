@@ -234,6 +234,15 @@ program
   .action(basicCliWrapper('resetTag'))
 
 program
+  .command('tls [services...]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .description('Enables services to listen on https')
+  .action(lazyRequire('./tls'))
+  .on('--help', () => console.log(`
+   Requires config key tlsCa-dir to point to dir with ca.crt and ca.key.
+  `))
+
+program
   .command('use-port <service> <internal> <external>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Uses a specific external port for the given service and internal port')

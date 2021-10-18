@@ -11,6 +11,7 @@ const DEFAULT_ENVIRONMENT_NAME = 'dev'
 const DEFAULT_CONFIG = {
   defaultNavy: DEFAULT_ENVIRONMENT_NAME,
   externalIP: null,
+  tlsCaDir: null,
 }
 
 const mkdirp = bluebird.promisify(require('mkdirp'))
@@ -18,6 +19,7 @@ const mkdirp = bluebird.promisify(require('mkdirp'))
 export type Config = {
   defaultNavy: ?string,
   externalIP: ?string,
+  tlsCaDir: ?string,
 }
 
 let _config: ?Config = null

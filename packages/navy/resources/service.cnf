@@ -1,0 +1,9 @@
+[req]
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+countryName=		UK
+stateOrProvinceName=	Bristol
+localityName=		Bristol
+organizationName=	Moneyhub-Dev
+organizationalUnitName=	Dev
