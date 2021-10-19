@@ -236,6 +236,7 @@ program
 program
   .command('tls [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .option('--generateca', 'generate self-signed root ca')
   .description('Enables services to listen on https')
   .action(lazyRequire('./tls'))
   .on('--help', () => console.log(`

@@ -5,7 +5,7 @@ import invariant from 'invariant'
 import {NavyError} from '../errors'
 const fs = require('fs')
 
-export async function getTlsConfigPath(create: boolean = false) {
+export async function getTlsConfigPath(create: boolean = false): string {
 
   const home = process.env.HOME
   invariant(home, 'NO_HOME_DIRECTORY')
@@ -22,6 +22,21 @@ export async function getTlsConfigPath(create: boolean = false) {
   return tlsConfigPath
 }
 
+export async function generateRootCA(): Promise<void> {
+  const config = await getConfig()
+
+  try {
+    await execAsync('openssl', ['ecparam', '-out', `${config.tlsCaDir}/ca.key`, '-name', 'prime256v1', '-genkey'])
+    await execAsync('openssl', ['req', '-new', '-sha256', '-key', `${config.tlsCaDir}/ca.key`,
+      '-subj', '/CN=moneyhub-dev-ca.local', '-out', `${config.tlsCaDir}/ca.csr`,
+      '-config', path.join(__dirname, '../../resources/service.cnf')])
+    await execAsync('openssl', ['x509', '-req', '-sha256', '-days', '10000', '-in', `${config.tlsCaDir}/ca.csr`,
+      '-signkey', `${config.tlsCaDir}/ca.key`, '-out', `${config.tlsCaDir}/ca.crt`])
+    console.log(`🔐 Self-signed CA generated, path ${config.tlsCaDir}/ca.crt`)
+  } catch (e) {
+    throw new NavyError(e)
+  }
+}
 export async function createTlsCert(tlsCaDir: string, serviceUrl: string): Promise<void> {
   const certName = serviceUrl.split('//')[1]
   const tlsConfigPath = await getTlsConfigPath(true)
