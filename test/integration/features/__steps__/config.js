@@ -39,10 +39,20 @@ export default function () {
     expect(JSON.parse(this.config)).to.eql({
       defaultNavy: 'someothernavy',
       externalIP: null,
+      tlsCaDir: null,
     })
 
     expect(this.status).to.not.contain('dev (default)')
     expect(this.status).to.contain('someothernavy (default)')
+  })
+
+  this.When(/I set the tlsCaDir/, async function () {
+    await Automator.spawn(['config', 'set', 'tlsCa-dir', '/tmp']).waitForDone()
+    this.tlsCaDir = await Automator.spawn(['config', 'get', 'tlsCa-dir']).waitForDone()
+  })
+
+  this.Then(/I should see that tlsCaDir is set/, async function () {
+    expect(this.tlsCaDir.trim()).to.eql('/tmp')
   })
 
   this.Then(/I should see that the default external IP is connect$/, async function () {
@@ -88,27 +98,10 @@ export default function () {
     expect(JSON.parse(this.config)).to.eql({
       defaultNavy: 'dev',
       externalIP: '192.168.3.105',
+      tlsCaDir: null,
     })
 
     expect(this.ip.trim()).to.equal('192.168.3.105')
-  })
-
-  this.When(/I set the tlsCaDir$/, async function () {
-    this.navy = await setUpNavy('dev') // navy "dev" needs to be initialised so we can see if services get reconfigured
-    await this.navy.launch(['helloworld', 'anotherservice'])
-
-    await Automator.spawn(['config', 'set', 'tlsCaDir', '/tmp']).waitForDone()
-    this.config = await Automator.spawn(['config', 'json']).waitForDone()
-    this.tlsCadir = await Automator.spawn(['external-ip']).waitForDone()
-  })
-
-  this.Then(/I should see that tlsCaDir is set/, async function () {
-    expect(JSON.parse(this.config)).to.eql({
-      defaultNavy: 'dev',
-      tlsCaDir: '/tmp',
-    })
-
-    expect(this.tlsCaDir).to.equal('/tmp')
   })
 
 }

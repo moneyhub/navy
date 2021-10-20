@@ -4,6 +4,10 @@ Feature: Retrieving and setting config
     When I get the current config
     Then I should see the current config
 
+  Scenario: Setting tlsCaDir path
+    When I set the tlsCaDir
+    Then I should see that tlsCaDir is set
+
   Scenario: Default navy
     When I get the status of all my navies
     Then I should see that the default navy is correct
