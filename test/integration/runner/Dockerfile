@@ -1,9 +1,11 @@
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 
 ARG DOCKER_COMPOSE_VERSION
 ARG NODE_VERSION
 ARG DOCKERHUB_PULL_USERNAME
 ARG DOCKERHUB_PULL_PASSWORD
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y && apt-get install -y build-essential git curl
 
