@@ -28,7 +28,7 @@ export async function generateRootCA(): Promise<void> {
   try {
     await execAsync('openssl', ['ecparam', '-out', `${config.tlsCaDir}/ca.key`, '-name', 'prime256v1', '-genkey'])
     await execAsync('openssl', ['req', '-new', '-sha256', '-key', `${config.tlsCaDir}/ca.key`,
-      '-subj', '/CN=moneyhub-dev-ca.local', '-out', `${config.tlsCaDir}/ca.csr`,
+      '-subj', '/CN=navy-ca.local', '-out', `${config.tlsCaDir}/ca.csr`,
       '-config', path.join(__dirname, '../../resources/service.cnf')])
     await execAsync('openssl', ['x509', '-req', '-sha256', '-days', '10000', '-in', `${config.tlsCaDir}/ca.csr`,
       '-signkey', `${config.tlsCaDir}/ca.key`, '-out', `${config.tlsCaDir}/ca.crt`])
