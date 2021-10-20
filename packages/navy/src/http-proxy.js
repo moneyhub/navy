@@ -9,7 +9,6 @@ import {getTlsConfigPath} from './util/tls'
 import {execAsync} from './util/exec-async'
 import {log} from './driver-logging'
 import {getLaunchedNavyNames} from './navy'
-import {getConfig} from './config'
 const debug = require('debug')('navy:httpproxy')
 
 async function updateComposeConfig(navies: Array<string>) {
