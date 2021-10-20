@@ -23,7 +23,7 @@ export async function getTlsConfigPath(create: boolean = false): string {
 }
 
 export async function generateRootCA(): Promise<void> {
-  const config = await getConfig()
+  const config = getConfig()
 
   try {
     await execAsync('openssl', ['ecparam', '-out', `${config.tlsCaDir}/ca.key`, '-name', 'prime256v1', '-genkey'])

@@ -1,5 +1,3 @@
-/* @flow */
-
 import chalk from 'chalk'
 import {NavyError} from '../errors'
 import {getNavy} from '../navy'
@@ -16,8 +14,9 @@ export default async function (services: string, opts: Object): Promise<void> {
   const navy = await getNavy(opts.navy)
   await navy.ensurePluginsLoaded()
   const availableServices = await navy.getAvailableServiceNames()
+  const config = getConfig()
 
-  const config = await getConfig()
+  console.log(config)
   if (!config.tlsCaDir) {
     throw new NavyError('tlsCaDir config value not set')
   }
@@ -25,7 +24,7 @@ export default async function (services: string, opts: Object): Promise<void> {
     if (opts.generateca) {
       await generateRootCA()
     } else {
-      throw new NavyError(`${config.tlsCaDir}/ca.crt or ${config.tlsCaDir}/ca.key missing! ${opts}`)
+      throw new NavyError(`${config.tlsCaDir}/ca.crt or ${config.tlsCaDir}/ca.key missing!`)
     }
   }
   const httpsReadyServices = []
