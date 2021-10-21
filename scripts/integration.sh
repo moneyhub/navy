@@ -7,16 +7,22 @@ echo "This will only take a while the first time you run the tests, subsequent r
 echo ""
 echo ""
 
-DOCKER_TAG=${DOCKER_TAG:-18.09-dind}
-DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.23.1}
+DOCKER_TAG=${DOCKER_TAG:-19.03.14-dind}
+DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.29.2}
 NODE_VERSION=${TRAVIS_NODE_VERSION:-10}
+
+DOCKER_TLS_CERTDIR=""
 
 if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
   echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
 fi
 
+echo "Integration environment docker --version:"
+docker --version
+
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
+  -e DOCKER_TLS_CERTDIR \
   docker:$DOCKER_TAG --storage-driver=overlay
 
 docker build \
@@ -39,15 +45,15 @@ docker run --rm -it --link \
   -v $(pwd)/packages:/usr/src/app/packages \
   -v $(pwd)/test:/usr/src/app/test \
   -v $(pwd)/resources:/usr/src/app/resources \
-  -v $(pwd)/.babelrc:/usr/src/app/.babelrc \
-  --workdir /usr/src/app/test/integration navy-test-runner \
-  ../../node_modules/.bin/cucumberjs --strict --fail-fast \
-    -r ./preload.js \
-    -r ./environment.js \
-    -r ./hooks.js \
-    -r ./chai.js \
-    -r ./features \
-    -r ./steps \
-    ./features "$@"
+  -v $(pwd)/babel.config.js:/usr/src/app/babel.config.js \
+  --workdir /usr/src/app navy-test-runner \
+    ./node_modules/.bin/cucumber-js --fail-fast \
+    -r ./test/integration/preload.js \
+    -r ./test/integration/environment.js \
+    -r ./test/integration/hooks.js \
+    -r ./test/integration/chai.js \
+    -r ./test/integration/features \
+    -r ./test/integration/steps \
+    ./test/integration/features "$@"
 
 docker rm --force navy-test-runner-daemon
