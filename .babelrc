@@ -1,9 +1,0 @@
-{
-  "presets": ["es2015", "stage-0"],
-  "plugins": [
-    "add-module-exports",
-    "transform-flow-strip-types",
-    "transform-runtime",
-    "./resources/babel/transform-error-codes.js"
-  ]
-}

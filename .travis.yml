@@ -3,10 +3,10 @@ sudo: required
 language: node_js
 
 node_js:
-  - 8
   - 10
+  - 14
 
-dist: trusty
+dist: bionic
 
 services:
   - docker
@@ -14,9 +14,9 @@ services:
 env:
   matrix:
     - DOCKER_TAG=18.06-dind
-    - DOCKER_TAG=18.09-dind
+    - DOCKER_TAG=20.10.5-dind
   global:
-    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.23.1
+    - DEBUG='navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.29.2
 
 cache:
   directories:
@@ -28,8 +28,8 @@ matrix:
   include:
     - node_js: 10
       env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.14.0
-    - node-js: 10
-      env: DOCKER_TAG=18.06-dind DOCKER_COMPOSE_VERSION=1.22.0
+    - node-js: 14
+      env: DOCKER_TAG=20.10.5-dind DOCKER_COMPOSE_VERSION=1.29.2
 
 before_install:
   # print versions
