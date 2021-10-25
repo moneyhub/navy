@@ -35,19 +35,20 @@
     "@babel/cli": "^7",
     "@babel/core": "^7",
     "@babel/eslint-parser": "^7",
-    "@babel/preset-env": "^7",
-    "@babel/preset-typescript": "^7",
-    "babel-plugin-add-module-exports": "^1.0.4",
     "@babel/plugin-proposal-function-bind": "7.14.5",
     "@babel/plugin-transform-flow-strip-types": "^7",
     "@babel/plugin-transform-runtime": "^7",
+    "@babel/preset-env": "^7",
+    "@babel/preset-typescript": "^7",
     "@babel/register": "^7",
     "@babel/runtime": "^7",
-    "core-js": "^3",
-    "regenerator-runtime": "0.13.9",
-    "chai": "^4.3.4",
-    "chai-properties": "^1.4.0",
     "@cucumber/cucumber": "^7",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "chai": "^4.3.4",
+    "chai-like": "^1.1.1",
+    "chai-properties": "^1.4.0",
+    "chai-things": "^0.2.0",
+    "core-js": "^3",
     "eslint": "^7",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-chai-friendly": "^0.5.0",
@@ -62,10 +63,9 @@
     "mocha": "^9",
     "node-fetch": "^2.6.5",
     "node-pty": "^0.9.0",
+    "regenerator-runtime": "0.13.9",
     "rimraf": "^2.7.1",
     "strip-ansi": "^3.0.1"
   },
-  "resolutions": {
-    "mkdirp": "^0.5.5"
-  }
+  "resolutions": {}
 }
