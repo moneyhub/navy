@@ -4,7 +4,7 @@
 import {expect, use} from 'chai'
 import {Service} from '../../../../packages/navy/lib'
 
-import {TEST_SERVICE_NAME} from '../../environment'
+import {TEST_SERVICE_NAME, TEST_SERVICE_IMAGE} from '../../environment'
 
 import {Then, When} from '@cucumber/cucumber'
 
@@ -38,6 +38,16 @@ Then(/I should see that the service is running$/, async function () {
   expect(services).to.have.length(1)
   expect(services).to.to.be.an('array').that.contains.something.like(
     { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
+  )
+})
+
+Then(/I should see that one service is running$/, async function () {
+  expect(this.error).to.not.exist
+  const services = await this.navy.ps()
+
+  expect(services).to.have.length(1)
+  expect(services).to.to.be.an('array').that.contains.something.like(
+    { image: TEST_SERVICE_IMAGE, status: Service.Status.RUNNING },
   )
 })
 
