@@ -20,8 +20,8 @@ const loadingLabelMap = {
   resetPort: 'Resetting port mapping...',
 }
 
-function removeFirstLineFromStackTrace(ex) {
-  return ex.stack.split('\n').slice(1).join('\n')
+function removeFirstLineFromStackTrace(stack) {
+  return stack?.split('\n')?.slice(1)?.join('\n')
 }
 
 function wrapper(res) {
