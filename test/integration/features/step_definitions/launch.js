@@ -1,12 +1,15 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-enable chai-friendly/no-unused-expressions */
 
-import {expect} from 'chai'
+import {expect, use} from 'chai'
 import {Service} from '../../../../packages/navy/lib'
 
 import {TEST_SERVICE_NAME} from '../../environment'
 
 import {Then, When} from '@cucumber/cucumber'
+
+use(require('chai-like'))
+use(require('chai-things'))
 
 When(/I launch a service$/, async function () {
   await this.navy.launch([TEST_SERVICE_NAME])
@@ -30,27 +33,35 @@ When(/I start the service$/, async function () {
 
 Then(/I should see that the service is running$/, async function () {
   expect(this.error).to.not.exist
+  const services = await this.navy.ps()
 
-  await expect(this.navy).to.have.services([
+  expect(services).to.have.length(1)
+  expect(services).to.to.be.an('array').that.contains.something.like(
     { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
-  ])
+  )
 })
 
 Then(/I should see that the service is stopped$/, async function () {
   expect(this.error).to.not.exist
+  const services = await this.navy.ps()
 
-  await expect(this.navy).to.have.services([
+  expect(services).to.have.length(1)
+  expect(services).to.to.be.an('array').that.contains.something.like(
     { name: TEST_SERVICE_NAME, status: Service.Status.EXITED },
-  ])
+  )
 })
 
 Then(/I should see that all of the services are running$/, async function () {
   expect(this.error).to.not.exist
+  const services = await this.navy.ps()
 
-  await expect(this.navy).to.have.services([
+  expect(services).to.have.length(2)
+  expect(services).to.to.be.an('array').that.contains.something.like(
     { name: TEST_SERVICE_NAME, status: Service.Status.RUNNING },
+  )
+  expect(services).to.to.be.an('array').that.contains.something.like(
     { name: 'anotherservice', status: Service.Status.RUNNING },
-  ])
+  )
 })
 
 Then(/I should get an exception as the navy hasn't been initialised$/, async function () {
