@@ -2,7 +2,7 @@
   "private": true,
   "name": "navy-monorepo",
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
-  "options": {
+  "config": {
     "mocha": "--require @babel/register packages/*/src/{,**}/__tests__/*.js"
   },
   "engines": {
@@ -14,8 +14,8 @@
     "integration": "./scripts/integration.sh",
     "lint": "eslint .",
     "flow": "flow",
-    "unit": "mocha $npm_package_options_mocha",
-    "unit-watch": "mocha -w $npm_package_options_mocha",
+    "unit": "mocha $npm_package_config_mocha",
+    "unit-watch": "mocha -w $npm_package_config_mocha",
     "test": "./scripts/test.sh",
     "preinstall": "which npx >/dev/null 2>&1 && npx npm-force-resolutions || npm exec -- npm-force-resolutions",
     "prepare": "npm run build",
