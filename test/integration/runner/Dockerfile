@@ -1,9 +1,10 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ARG DOCKER_COMPOSE_VERSION
 ARG NODE_VERSION
 ARG DOCKERHUB_PULL_USERNAME
 ARG DOCKERHUB_PULL_PASSWORD
+ARG DOCKER_TLS_CERTDIR
 
 RUN apt-get update -y && apt-get install -y build-essential git curl
 
@@ -22,6 +23,7 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENV DOCKERHUB_PULL_USERNAME $DOCKERHUB_PULL_USERNAME
 ENV DOCKERHUB_PULL_PASSWORD $DOCKERHUB_PULL_PASSWORD
+ENV DOCKER_TLS_CERTDIR $DOCKER_TLS_CERTDIR
 
 ADD ./test/integration/runner/docker-login.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-login.sh
