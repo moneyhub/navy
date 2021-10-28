@@ -1,7 +1,8 @@
 /* @flow */
 
 import type {Service} from '../service'
-
+import {getCertsPath} from './https'
+import fs from 'fs'
 const BASE = 'nip.io'
 
 function isValidIpv4Addr(ip) {
@@ -22,7 +23,13 @@ export async function createHostForService(service: string, navyNormalisedName: 
 }
 
 export async function createUrlForService(service: string, navyNormalisedName: string, externalIP: string) {
-  return `http://${await createHostForService(service, navyNormalisedName, externalIP)}`
+  const certsPath = getCertsPath()
+  let proto = 'http'
+  const baseUrl = await createHostForService(service, navyNormalisedName, externalIP)
+  if (fs.existsSync(`${certsPath}/${baseUrl}.crt`)) {
+    proto = 'https'
+  }
+  return `${proto}://${await createHostForService(service, navyNormalisedName, externalIP)}`
 }
 
 export function getUrlFromService(service: Service) {
@@ -31,10 +38,15 @@ export function getUrlFromService(service: Service) {
   }
 
   const env = service.raw.Config.Env
+  const certsPath = getCertsPath()
 
   for (const envVar of env) {
     if (envVar.indexOf('VIRTUAL_HOST=') === 0) {
-      return 'http://' + envVar.substring('VIRTUAL_HOST='.length)
+      let proto = 'http'
+      if (fs.existsSync(`${certsPath}/${envVar.substring('VIRTUAL_HOST='.length)}.crt`)) {
+        proto = 'https'
+      }
+      return proto + '://' + envVar.substring('VIRTUAL_HOST='.length)
     }
   }
 

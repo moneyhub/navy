@@ -13,6 +13,7 @@ When(/I should see the current config$/, async function () {
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'dev',
     externalIP: null,
+    tlsRootCaDir: '/root/.navy/tls-root-ca',
   })
 })
 
@@ -38,6 +39,7 @@ Then(/I should see that the default navy is something else$/, async function () 
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'someothernavy',
     externalIP: null,
+    tlsRootCaDir: '/root/.navy/tls-root-ca',
   })
 
   expect(this.status).to.not.contain('dev (default)')
@@ -87,6 +89,7 @@ Then(/I should see that all services were reconfigured with the new external IP/
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'dev',
     externalIP: '192.168.3.105',
+    tlsRootCaDir: '/root/.navy/tls-root-ca',
   })
 
   expect(this.ip.trim()).to.equal('192.168.3.105')

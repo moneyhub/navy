@@ -56,7 +56,6 @@ export default async function (opts: Object): Promise<void> {
   if (opts.json) {
     return console.log(JSON.stringify(ps, null, 2))
   }
-
   if (isSmallConsole) {
     return console.log(table([
       ['ID', 'NAME', 'STATUS', 'PORTS', 'URL'],
