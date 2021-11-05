@@ -74,7 +74,7 @@ export async function generateRootCa(): Promise<void> {
   cert.validity.notAfter.setFullYear(cert.validity.notBefore.getFullYear() + 5)
   const attrs = [{
     name: 'commonName',
-    value: 'navy-dev-ca.local ',
+    value: 'navy-dev-ca.local',
   }, {
     name: 'organizationName',
     value: 'navy-dev',
@@ -103,12 +103,12 @@ export async function generateRootCa(): Promise<void> {
       certificate: pki.certificateToPem(cert),
     }
 
-    fs.writeFileSync(tlsRootCaDir + '/ca.key', pem.privateKey)
-    fs.writeFileSync(tlsRootCaDir + '/ca.pub.key', pem.publicKey)
-    fs.writeFileSync(tlsRootCaDir + '/ca.crt', pem.certificate)
+    fs.writeFileSync(tlsRootCaDir + '/ca.key', pem.privateKey, {mode: 0o400})
+    fs.writeFileSync(tlsRootCaDir + '/ca.pub.key', pem.publicKey, {mode: 0o640})
+    fs.writeFileSync(tlsRootCaDir + '/ca.crt', pem.certificate, {mode: 0o640})
 
-    console.log(chalk.green(`✅ CA Certificate created`))
-    console.log(chalk.green(`📜 Import ${tlsRootCaDir}/ca.crt to your browser to remove 'insecure connection' warning`))
+    console.log(chalk.green(`✅ CA Certificate created at ${tlsRootCaDir}/ca.crt`))
+    console.log(chalk.yellow(`⚠️  Importing a self-signed CA into a browser/truststore/keychain is not advisable ⚠️`))
   } catch (e) {
     throw new NavyError(e)
   }

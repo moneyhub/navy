@@ -236,8 +236,8 @@ program
 program
   .command('https [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
-  .option('-d, --disable <service>', 'Disables https (deletes cert) for a given service', null)
-  .description('Prints or enables web services to listen on HTTPS')
+  .option('-d, --disable <service>', 'disable https (deletes cert) for a given service', null)
+  .description('Prints or enables HTTPS services')
   .action(lazyRequire('./https'))
   .on('--help', () => console.log(`
   Examples:

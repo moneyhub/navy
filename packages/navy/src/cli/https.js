@@ -24,6 +24,8 @@ export default async function (services: string, opts: Object): Promise<void> {
   }
 
   if (!services || services.length === 0) {
+    if (!fs.existsSync(`${configDir}/tls-certs`)) return
+
     const files = fs.readdirSync(`${configDir}/tls-certs`)
     const urls = files.filter((file) => file.endsWith('.crt'))
       .map((crt) => { return `https://${crt.replace('.crt', '')}` })
@@ -31,10 +33,6 @@ export default async function (services: string, opts: Object): Promise<void> {
       console.log(`${url}`)
     }
     return
-  }
-
-  if (!tlsRootCaDir) {
-    throw new NavyError('tlsRootCaDir config value not set')
   }
 
   if (!fs.existsSync(`${tlsRootCaDir}/ca.crt`) || !fs.existsSync(`${tlsRootCaDir}/ca.key`)) {
