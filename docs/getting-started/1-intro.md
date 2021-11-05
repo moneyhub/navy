@@ -90,3 +90,9 @@ That's the "Hello world" of Navy! Now you'll want to make a `docker-compose.yml`
   If you publish port 80 from your service, Navy will automatically provide a URL which you can access the service on without using an IP and random port.
 
   For more information, [see the Navy HTTP Proxy](../http-proxy.md).
+
+- #### HTTPS for *.nip.io
+
+  You can also configure services to accept HTTPS connections via HTTP proxy.
+
+  For more information, [see the Navyfile Config ](../navyfile-config.md) or run `navy https -h`
