@@ -45,10 +45,11 @@ A list of service names in the compose configuration which should be selected by
 
 If using the [built in HTTP proxy](http-proxy.md), you can tell Navy to automatically register a service with the HTTP proxy, if it publishes any port in this list. This overrides port 80 for automatic registration.
 
-### `httpProxy: ?{[key: string]: { port: Number }}`
+### `httpProxy: ?{[key: string]: { port: Number, enableHttps: Boolean }}`
 
 If using the [built in HTTP proxy](http-proxy.md), you can tell Navy what port a service listens for HTTP connections here. If a service publishes port 80, or alternatively a port specified in `httpProxyAutoPorts`, it will automatically be registered with the HTTP proxy, so configuration here is unnecessary.
 
+`enableHttps` is an optional flag that configures the proxy to listen for HTTPS connections for a service.
 ### `ignoreUnauthorizedRequestsForRegistries: ?Array<string>`
 
 A list of URLs for registries which are considered insecure (have an invalid certificate, e.g self signed). Note that this does not tell Navy to communicate with a registry over HTTP, Navy can only communicate with Docker registries over HTTPS at the moment.

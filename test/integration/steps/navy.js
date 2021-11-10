@@ -31,6 +31,10 @@ Given(/I am working with a test navy which has a fixed external port$/, async fu
   this.navy = await setUpNavy('dev', 'with-fixed-port')
 })
 
+Given(/I am working with a test navy which has a service with HTTPS enabled$/, async function () {
+  this.navy = await setUpNavy('dev', 'http-proxy-https-enabled')
+})
+
 Given(/I am working with a nonexistant navy$/, async function () {
   this.navy = getNavy('nonexistanttest')
 })

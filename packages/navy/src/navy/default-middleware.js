@@ -1,7 +1,7 @@
 import developMiddleware from '../middleware/develop'
 import tagOverrideMiddleware from '../middleware/tag-override'
 import portOverrideMiddleware from '../middleware/port-override'
-import addVirtualHostsMiddleware from '../middleware/add-virtual-hosts'
+import addServiceProxyMiddlerware from '../middleware/add-service-proxy-config'
 import setEnvironmentVariables from '../middleware/set-env-vars'
 import setLoggingDriver from '../middleware/set-logging-driver'
 import setImage from '../middleware/set-image'
@@ -15,5 +15,5 @@ export default (navy: Navy) => ([
   setEnvironmentVariables,
   setLoggingDriver,
   setImage,
-  addVirtualHostsMiddleware(navy),
+  addServiceProxyMiddlerware(navy),
 ])

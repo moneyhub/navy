@@ -13,15 +13,17 @@ NODE_VERSION=${TRAVIS_NODE_VERSION:-12}
 
 DOCKER_TLS_CERTDIR=""
 
+DOCKER_SHARED_DIR=$(mktemp -d)
+
 if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
   echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
 fi
 
 echo "Integration environment docker --version:"
 docker --version
-
 docker run -d --name navy-test-runner-daemon --privileged \
   -v $(pwd):/usr/src/app \
+  -v $DOCKER_SHARED_DIR:/root/.navy/tls-certs \
   -e DOCKER_TLS_CERTDIR \
   docker:$DOCKER_TAG --storage-driver=overlay
 
@@ -40,14 +42,15 @@ echo "RUNNING TESTS"
 echo ""
 echo ""
 
-docker run --rm -it --link \
-  navy-test-runner-daemon:docker \
+docker run --rm --link navy-test-runner-daemon:docker \
+  --name navy-test-runner \
+  -v $DOCKER_SHARED_DIR:/root/.navy/tls-certs \
   -v $(pwd)/packages:/usr/src/app/packages \
   -v $(pwd)/test:/usr/src/app/test \
   -v $(pwd)/resources:/usr/src/app/resources \
   -v $(pwd)/babel.config.js:/usr/src/app/babel.config.js \
   --workdir /usr/src/app navy-test-runner \
-    ./node_modules/.bin/cucumber-js --fail-fast \
+    ./node_modules/.bin/cucumber-js --fail-fast --publish-quiet \
     -r ./test/integration/preload.js \
     -r ./test/integration/environment.js \
     -r ./test/integration/hooks.js \

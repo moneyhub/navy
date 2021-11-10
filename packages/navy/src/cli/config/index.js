@@ -8,6 +8,7 @@ import {reconfigureAllNavies} from '../util/reconfigure'
 const NAME_MAP = {
   'default-navy': 'defaultNavy',
   'external-ip': 'externalIP',
+  'tlsCa-dir': 'tlsRootCaDir',
 }
 
 const configWhichNeedsReconfigure = [

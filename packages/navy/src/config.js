@@ -1,33 +1,40 @@
 /* @flow */
 
 import path from 'path'
-import bluebird from 'bluebird'
 import invariant from 'invariant'
-
-import fs from './util/fs'
+import fs from 'fs'
+// $FlowIgnore
+import { promises as fsPromises } from 'fs'
 
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
+export const DEFAULT_TLS_ROOT_CA_DIR = `${getConfigDir()}/tls-root-ca`
 
 const DEFAULT_CONFIG = {
   defaultNavy: DEFAULT_ENVIRONMENT_NAME,
   externalIP: null,
+  tlsRootCaDir: DEFAULT_TLS_ROOT_CA_DIR,
 }
-
-const mkdirp = bluebird.promisify(require('mkdirp'))
 
 export type Config = {
   defaultNavy: ?string,
   externalIP: ?string,
+  tlsRootCaDir: ?string,
 }
 
 let _config: ?Config = null
 
-export function getConfigPath(): string {
+export function getConfigDir(): string {
   const home = process.env.HOME
 
   invariant(home, 'NO_HOME_DIRECTORY')
 
-  return path.join(home, '.navy', 'config.json')
+  return path.join(home, '.navy')
+}
+
+export function getConfigPath(): string {
+  const configDir = getConfigDir()
+
+  return path.join(configDir, 'config.json')
 }
 
 export function getConfig(): Config {
@@ -48,8 +55,8 @@ export function getConfig(): Config {
 export async function setConfig(config: ?Config): Promise<void> {
   if (config == null) config = DEFAULT_CONFIG
 
-  await mkdirp(path.dirname(getConfigPath()))
-  await fs.writeFileAsync(getConfigPath(), JSON.stringify(config, null, 2))
+  await fsPromises.mkdir(path.dirname(getConfigPath()), {recursive: true})
+  await fsPromises.writeFile(getConfigPath(), JSON.stringify(config, null, 2))
 
   // trash cached config
   _config = null

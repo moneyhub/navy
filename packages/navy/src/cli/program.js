@@ -234,6 +234,24 @@ program
   .action(basicCliWrapper('resetTag'))
 
 program
+  .command('https [services...]')
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
+  .option('-d, --disable <service>', 'disable https (deletes cert) for a given service', null)
+  .description('Prints or enables HTTPS services')
+  .action(lazyRequire('./https'))
+  .on('--help', () => console.log(`
+  Examples:
+    List urls of services that listen on https:
+    $ navy https
+
+    Enable https for mywebservice and anotherwebservice services
+    $ navy https mywebservice anotherwebservice
+
+    Disable https for mywebservice
+    $ navy https -d mywebservice
+  `))
+
+program
   .command('use-port <service> <internal> <external>')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Uses a specific external port for the given service and internal port')
