@@ -29,7 +29,7 @@
     "type": "git",
     "url": "git+https://github.com/moneyhub/navy.git"
   },
-  "author": "Momentum Financial Technology Ltd",
+  "author": "Moneyhub Financial Technology Ltd",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7",

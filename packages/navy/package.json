@@ -12,18 +12,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/momentumft/navy.git"
+    "url": "git+https://github.com/moneyhub/navy.git"
   },
   "keywords": [
     "docker",
     "environment"
   ],
-  "author": "Momentum Financial Technology Ltd",
+  "author": "Moneyhub Financial Technology Ltd",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/momentumft/navy/issues"
+    "url": "https://github.com/moneyhub/navy/issues"
   },
-  "homepage": "https://github.com/momentumft/navy#readme",
+  "homepage": "https://github.com/moneyhub/navy#readme",
   "dependencies": {
     "@babel/runtime": "^7",
     "bluebird": "^3.7.2",

@@ -39,6 +39,6 @@ export default async function () {
   console.log(chalk.green(' ✔ Finished tests'))
   console.log()
   console.log(' Please try running Navy again if it wasn\'t working before.')
-  console.log(' If you still have problems, please open an issue at https://github.com/momentumft/navy/issues/new')
+  console.log(' If you still have problems, please open an issue at https://github.com/moneyhub/navy/issues/new')
   console.log()
 }

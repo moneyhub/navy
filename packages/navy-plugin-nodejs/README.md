@@ -27,4 +27,4 @@ This will rewrite your `npm link`'d modules to point directly to the repo which 
 
 Licensed under the MIT License.
 
-[View the full license here](https://raw.githubusercontent.com/momentumft/navy/master/LICENSE).
+[View the full license here](https://raw.githubusercontent.com/moneyhub/navy/master/LICENSE).

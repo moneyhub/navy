@@ -51,11 +51,11 @@ You can customise the functionality of Navy by writing Javascript plugins which 
 $ npm install -g navy
 ```
 
-- [Read more of the documentation on the website](https://momentumft.github.io/navy/)
-- [GitHub page](https://github.com/momentumft/navy)
+- [Read more of the documentation on the website](https://moneyhub.github.io/navy/)
+- [GitHub page](https://github.com/moneyhub/navy)
 
 ## License
 
 Licensed under the MIT License.
 
-[View the full license here](https://raw.githubusercontent.com/momentumft/navy/master/LICENSE).
+[View the full license here](https://raw.githubusercontent.com/moneyhub/navy/master/LICENSE).
