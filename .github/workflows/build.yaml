@@ -29,9 +29,10 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Before tests
         run: node --version
+      - name: Install dependencies
         run: npm ci
+      - name: Bostrap lerna
         run: npm run bootstrap
-
       - name: Test
         run: npm test
 
