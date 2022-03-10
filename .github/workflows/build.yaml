@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-20.04
     name: node ${{ matrix.node }}
     env:
-      DEBUG: 'navy:*' NAVY_DEBUG='navy:*' DOCKER_COMPOSE_VERSION=1.29.2
-
+      DEBUG: 'navy:*'
+      NAVY_DEBUG: 'navy:*'
     strategy:
       fail-fast: false
       matrix:
