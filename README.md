@@ -1,4 +1,4 @@
-Navy [![Build Status](https://img.shields.io/travis/com/moneyhub/navy/master.svg?style=flat)](https://travis-ci.com/github/moneyhub/navy) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/moneyhub/navy.svg)](https://github.com/moneyhub/navy)
+Navy [![Build Status](https://github.com/moneyhub/navy/actions/workflows/build.yaml/badge.svg)](https://github.com/moneyhub/navy/actions/workflows/build.yaml) [![Downloads](https://img.shields.io/npm/dm/navy.svg)](https://npmjs.com/package/navy) [![NPM](https://img.shields.io/npm/v/navy.svg)](https://npmjs.com/package/navy) [![Github Issues](https://img.shields.io/github/license/moneyhub/navy.svg)](https://github.com/moneyhub/navy)
 ==================
 
 > A tool for easy multi-service development powered by Docker Compose
