@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    name: node ${{ matrix.node }}
+    name: node-${{ matrix.node-version }} docker-${{ matrix.docker }} compose-${{ matrix.docker_compose }}
     env:
       DEBUG: 'navy:*'
       NAVY_DEBUG: 'navy:*'
@@ -26,7 +26,7 @@ jobs:
           DOCKER_TAG: ${{matrix.docker}}
           DOCKER_COMPOSE_VERSION: ${matrix.docker_compose}}
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node-version }}
       - name: Before tests
         run: node --version
       - name: Install dependencies
