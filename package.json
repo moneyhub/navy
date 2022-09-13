@@ -58,14 +58,15 @@
     "eslint-plugin-promise": "^5",
     "eslint-plugin-standard": "^5",
     "flow-bin": "^0.75.0",
-    "lerna": "^4",
+    "lerna": "^5.5.1",
     "lodash": "^4.17.21",
-    "mocha": "^9",
+    "mocha": "^10.0.0",
     "node-fetch": "^2.6.5",
     "node-pty": "^0.9.0",
     "regenerator-runtime": "0.13.9",
     "rimraf": "^2.7.1",
     "strip-ansi": "^3.0.1"
   },
-  "resolutions": {}
+  "resolutions": {},
+  "dependencies": {}
 }
