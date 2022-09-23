@@ -63,4 +63,8 @@ declare module "navy" {
   }
 
   export function getNavy(name: string): Navy
+
+  export function getLaunchedNavies(): Promise<Array<Navy>>
+
+  export function getLaunchedNavyNames(): Promise<Array<string>>
 }
