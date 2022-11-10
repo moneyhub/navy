@@ -14,9 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x]
         docker: [18.06-dind, 20.10.5-dind]
-        docker_compose: [1.14.0, 1.29.2]
+        docker_compose: [1.14.0, 1.29.2, v2.10.2]
 
     steps:
       - uses: actions/checkout@v2
