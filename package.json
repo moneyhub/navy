@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "navy-monorepo",
+  "name": "root",
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
   "workspaces": [
     "packages/*"
