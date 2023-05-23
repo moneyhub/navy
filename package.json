@@ -2,11 +2,15 @@
   "private": true,
   "name": "navy-monorepo",
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
+  "workspaces":[
+    "packages/navy-plugin-nodejs",
+    "packages/navy"
+  ],
   "config": {
     "mocha": "--require @babel/register packages/*/src/{,**}/__tests__/*.js"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=16"
   },
   "scripts": {
     "build": "./scripts/build.sh",
