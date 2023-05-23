@@ -2,9 +2,8 @@
   "private": true,
   "name": "navy-monorepo",
   "description": "This is a monorepo. Check packages/navy for the main navy package.",
-  "workspaces":[
-    "packages/navy-plugin-nodejs",
-    "packages/navy"
+  "workspaces": [
+    "packages/*"
   ],
   "config": {
     "mocha": "--require @babel/register packages/*/src/{,**}/__tests__/*.js"
@@ -60,9 +59,8 @@
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11",
     "eslint-plugin-promise": "^5",
-    "eslint-plugin-standard": "^5",
     "flow-bin": "^0.75.0",
-    "lerna": "^5.5.1",
+    "lerna": "^6.6.2",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
     "node-fetch": "^2.6.5",
