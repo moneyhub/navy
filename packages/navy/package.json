@@ -44,7 +44,7 @@
     "pad": "^3.2.0",
     "promise-retry": "^1.1.1",
     "ramda": "^0.28.0",
-    "resolve": "^1.20.0",
+    "resolve": "^1.22.8",
     "rimraf": "^2.7.1",
     "strip-ansi": "^3.0.1",
     "www-authenticate": "^0.6.3"
