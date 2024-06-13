@@ -11,7 +11,7 @@ import type {Navy} from '../../navy'
 
 async function cwdHasValidDockerComposeConfig() {
   try {
-    await execAsync('docker-compose', ['config'], null, { maxBuffer: Infinity, cwd: process.cwd() })
+    await execAsync('docker compose', ['config'], null, { maxBuffer: Infinity, cwd: process.cwd() })
   } catch (ex) {
     return false
   }

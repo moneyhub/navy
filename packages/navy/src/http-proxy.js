@@ -67,7 +67,7 @@ export async function reconfigureHTTPProxy(opts: Object = {}) {
   if (opts.restart) { // proxy needs to be recreated to detect changes (deletes) in /etc/nginx/certs
     if (fs.existsSync(navyInternalYamlFile)) {
       log('Restarting HTTP proxy...')
-      await execAsync('docker-compose',
+      await execAsync('docker compose',
         [
           '-f', navyInternalYamlFile,
           '-p', 'navyinternal', 'rm', '-s', '-f', 'nginx-proxy',
@@ -78,7 +78,7 @@ export async function reconfigureHTTPProxy(opts: Object = {}) {
   if (!opts.navies) opts.navies = await getLaunchedNavyNames()
   await updateComposeConfig(opts.navies)
   log('Configuring HTTP proxy...')
-  await execAsync('docker-compose',
+  await execAsync('docker compose',
     [
       '-f', navyInternalYamlFile,
       '-p', 'navyinternal',
