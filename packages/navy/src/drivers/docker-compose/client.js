@@ -52,7 +52,7 @@ export function createComposeClient(navy: Navy): ComposeClient {
       composeArgs.push(command, ...args)
 
       try {
-        return await execAsync('docker-compose', composeArgs, childProcess => {
+        return await execAsync('docker compose', composeArgs, childProcess => {
           if (!noLog && !pipeLog) {
             childProcess.stdout.on('data', data => log(data))
             childProcess.stderr.on('data', data => log(data))
