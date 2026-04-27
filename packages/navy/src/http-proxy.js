@@ -13,7 +13,7 @@ import {getLaunchedNavyNames} from './navy'
 const DEFAULT_PROXY_IMAGE = 'navycloud/navy-proxy'
 
 export function resolveProxyImage(navyFile: ?Object): string {
-  return process.env.NAVY_PROXY_IMAGE ||
+  return process.env.NAVY_HTTP_PROXY_IMAGE ||
     (navyFile && navyFile.httpProxyImage) ||
     DEFAULT_PROXY_IMAGE
 }
