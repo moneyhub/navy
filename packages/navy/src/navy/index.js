@@ -256,7 +256,7 @@ export class Navy extends EventEmitter2 {
 
     await (await this.safeGetDriver()).launch(validServiceNames, opts)
 
-    await reconfigureHTTPProxy()
+    await reconfigureHTTPProxy({ navyFile: await this.getNavyFile() })
   }
 
   /**
@@ -293,6 +293,7 @@ export class Navy extends EventEmitter2 {
     await reconfigureHTTPProxy({
       navies: (await getLaunchedNavyNames())
         .filter(navy => navy !== this.normalisedName),
+      navyFile: await this.getNavyFile(),
     })
 
     try {
@@ -317,7 +318,7 @@ export class Navy extends EventEmitter2 {
   async start(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
-    await reconfigureHTTPProxy()
+    await reconfigureHTTPProxy({ navyFile: await this.getNavyFile() })
 
     await (await this.safeGetDriver()).start(services)
   }
