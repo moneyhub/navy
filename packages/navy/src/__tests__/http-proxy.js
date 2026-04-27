@@ -41,4 +41,13 @@ describe('resolveProxyImage', function () {
     expect(resolveProxyImage(null)).to.equal('override/image:tag')
   })
 
+  it('should fall back to default when httpProxyImage is an empty string', function () {
+    expect(resolveProxyImage({ httpProxyImage: '' })).to.equal('navycloud/navy-proxy')
+  })
+
+  it('should fall back to default when NAVY_PROXY_IMAGE is an empty string', function () {
+    process.env.NAVY_PROXY_IMAGE = ''
+    expect(resolveProxyImage()).to.equal('navycloud/navy-proxy')
+  })
+
 })
