@@ -10,7 +10,15 @@ import {execAsync} from './util/exec-async'
 import {log} from './driver-logging'
 import {getLaunchedNavyNames} from './navy'
 
-async function updateComposeConfig(navies: Array<string>) {
+const DEFAULT_PROXY_IMAGE = 'navycloud/navy-proxy'
+
+export function resolveProxyImage(navyFile: ?Object): string {
+  return process.env.NAVY_PROXY_IMAGE ||
+    (navyFile && navyFile.httpProxyImage) ||
+    DEFAULT_PROXY_IMAGE
+}
+
+async function updateComposeConfig(navies: Array<string>, navyFile: ?Object) {
   const networks = await docker.listNetworks()
     .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
     .filter(net => {
@@ -47,7 +55,7 @@ async function updateComposeConfig(navies: Array<string>) {
 
     services: {
       'nginx-proxy': {
-        image: 'navycloud/navy-proxy',
+        image: resolveProxyImage(navyFile),
         ports,
         networks: networks.map(net => net.Name),
         volumes,
@@ -76,7 +84,7 @@ export async function reconfigureHTTPProxy(opts: Object = {}) {
   }
 
   if (!opts.navies) opts.navies = await getLaunchedNavyNames()
-  await updateComposeConfig(opts.navies)
+  await updateComposeConfig(opts.navies, opts.navyFile)
   log('Configuring HTTP proxy...')
   await execAsync('docker compose',
     [
