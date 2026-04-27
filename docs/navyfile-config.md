@@ -48,7 +48,7 @@ If using the [built in HTTP proxy](http-proxy.md), you can tell Navy to automati
 
 ### `httpProxyImage: ?string`
 
-Overrides the Docker image used for the [built in HTTP proxy](http-proxy.md). Defaults to `navycloud/navy-proxy` if not set. The `NAVY_PROXY_IMAGE` environment variable takes precedence over this property if both are set.
+Overrides the Docker image used for the [built in HTTP proxy](http-proxy.md). Defaults to `navycloud/navy-proxy` if not set. The `NAVY_HTTP_PROXY_IMAGE` environment variable takes precedence over this property if both are set.
 
 ### `httpProxy: ?{[key: string]: { port: Number, enableHttps: Boolean }}`
 

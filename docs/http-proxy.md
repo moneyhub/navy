@@ -24,7 +24,7 @@ By default, Navy uses the `navycloud/navy-proxy` Docker image for the HTTP proxy
 
 The image is resolved in the following order of precedence:
 
-1. **`NAVY_PROXY_IMAGE` environment variable** - highest precedence. Set this in your shell environment to override the proxy image globally.
+1. **`NAVY_HTTP_PROXY_IMAGE` environment variable** - highest precedence. Set this in your shell environment to override the proxy image globally.
 2. **`httpProxyImage` property in `Navyfile.js`** - per-project override. See the [Navyfile.js reference](navyfile-config.md) for details.
 3. **Default (`navycloud/navy-proxy`)** - used when neither of the above is set, preserving backwards-compatible behaviour.
 
@@ -33,7 +33,7 @@ The image is resolved in the following order of precedence:
 Override via environment variable:
 
 ```bash
-export NAVY_PROXY_IMAGE=myregistry/custom-proxy:latest
+export NAVY_HTTP_PROXY_IMAGE=myregistry/custom-proxy:latest
 navy launch
 ```
 
