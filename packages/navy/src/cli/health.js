@@ -5,7 +5,7 @@ import chalk from 'chalk'
 import { getNavy } from '../'
 import table from '../util/table'
 
-function getStatus(service, state) {
+function getStatus(service: Object, state: ?Object) {
   const health = service.raw && service.raw.State.Health
 
   if (!health) {
@@ -19,7 +19,7 @@ function getStatus(service, state) {
   return statusString
 }
 
-function getHistory(service, state) {
+function getHistory(service: Object, state: ?Object) {
   const health = service.raw && service.raw.State.Health
 
   if (!health) {

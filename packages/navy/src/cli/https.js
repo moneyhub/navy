@@ -9,7 +9,7 @@ import { createCert, generateRootCa, removeCert } from '../util/https'
 import fs from 'fs'
 
 
-export default async function (services: string, opts: Object): Promise<void> {
+export default async function (services: Array<string>, opts: Object): Promise<void> {
   const tlsRootCaDir = getConfig().tlsRootCaDir || DEFAULT_TLS_ROOT_CA_DIR
   const configDir = getConfigDir()
 

@@ -28,7 +28,7 @@ export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<O
     invariant(false, 'PLUGIN_RESOLVE_ERR', navyFile.plugins.join(', '))
   }
 
-  // $FlowIgnore: entry point to plugin has to be dynamic
+  // $FlowFixMe[unsupported-syntax]: entry point to plugin has to be dynamic
   const plugins = pluginPaths.map(pluginPath => require(pluginPath))
 
   return plugins.map((Plugin, index) => {

@@ -6,7 +6,7 @@ import { NavyError } from '../../errors'
 
 import type { Navy } from '../../'
 
-const OPTION_LABEL_MAP = {
+const OPTION_LABEL_MAP: {[string]: string} = {
   configProvider: 'Provider',
   path: 'Directory',
   npmPackage: 'NPM Package',

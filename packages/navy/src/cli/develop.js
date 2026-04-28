@@ -38,13 +38,14 @@ export default async function (service: string, opts: Object): Promise<void> {
   )
 
   const state = (await navy.getState()) || {}
+  const stateServices: {[string]: Object} = state.services || {}
 
   await navy.saveState({
     ...state,
     services: {
-      ...state.services,
+      ...stateServices,
       [service]: {
-        ...(state.services || {})[service],
+        ...stateServices[service],
         _develop: {
           mounts,
           command: navyRc.develop.command,

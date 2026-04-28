@@ -5,7 +5,7 @@ import { getConfig, setConfig } from '../../config'
 import { NavyError } from '../../errors'
 import { reconfigureAllNavies } from '../util/reconfigure'
 
-const NAME_MAP = {
+const NAME_MAP: {[string]: string} = {
   'default-navy': 'defaultNavy',
   'external-ip': 'externalIP',
   'tlsCa-dir': 'tlsRootCaDir',
@@ -33,10 +33,9 @@ program
       throw new NavyError('Invalid config key: ' + key)
     }
 
-    await setConfig({
-      ...(await getConfig()),
-      [configProp]: value,
-    })
+    const updated = { ...(await getConfig()) }
+    updated[configProp] = value
+    await setConfig(updated)
 
     await reconfigureIfNecessary(configProp)
   })
@@ -64,10 +63,9 @@ program
       throw new NavyError('Invalid config key: ' + key)
     }
 
-    await setConfig({
-      ...(await getConfig()),
-      [configProp]: null,
-    })
+    const updated = { ...(await getConfig()) }
+    updated[configProp] = null
+    await setConfig(updated)
 
     await reconfigureIfNecessary(configProp)
   })

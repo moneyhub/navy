@@ -8,7 +8,7 @@ import table from '../util/table'
 
 const SMALL_WINDOW_COLUMNS = 185
 
-function getStatus(service, state) {
+function getStatus(service: Object, state: ?Object) {
   let statusString = service.status === 'exited'
     ? chalk.red(service.status)
     : service.status
@@ -28,7 +28,7 @@ function getStatus(service, state) {
   return statusString
 }
 
-function getPorts(service) {
+function getPorts(service: Object) {
   if (!service || !service.raw || !service.raw.NetworkSettings || !service.raw.NetworkSettings.Ports) {
     return '-'
   }
@@ -43,14 +43,13 @@ function getPorts(service) {
   }).join(', ')
 }
 
-const getDisplayUrl = (serviceUrl) => serviceUrl != null ? serviceUrl : '-'
+const getDisplayUrl = (serviceUrl: ?string) => serviceUrl != null ? serviceUrl : '-'
 
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)
   const ps = await navy.ps()
   const state = await navy.getState()
 
-  // $FlowIgnore getWindowSize not on type
   const isSmallConsole = process.stdout.isTTY && process.stdout.getWindowSize()[0] < SMALL_WINDOW_COLUMNS
 
   if (opts.json) {

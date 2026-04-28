@@ -2,13 +2,13 @@
 
 import { mapValues } from 'lodash'
 
-function getPortConfig(serviceName, state) {
+function getPortConfig(serviceName: string, state: Object): {[string]: string} {
   return state.services[serviceName]
     ? (state.services[serviceName]._ports || {})
     : {}
 }
 
-export default (config: Object, state: Object) => ({
+export default (config: Object, state: Object): Object => ({
   ...config,
   services: mapValues(config.services, (service, serviceName) => {
     const portConfig = getPortConfig(serviceName, state)

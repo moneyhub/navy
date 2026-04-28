@@ -72,5 +72,5 @@ export type State = {
   configProvider?: string,
   path?: string,
   npmPackage?: string,
-  services?: Object,
+  services?: {[string]: Object},
 }

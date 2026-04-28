@@ -1,6 +1,6 @@
 /* @flow */
 
-export default (config: Object, state: Object) => {
+export default (config: Object, state: Object): Object => {
   const newConfig = config
 
   Object.keys(state.services || {}).forEach(function (serviceName) {
