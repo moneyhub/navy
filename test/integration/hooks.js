@@ -1,4 +1,4 @@
-import rimraf from 'rimraf'
+import { rimrafSync } from 'rimraf'
 import { cleanUpNavies } from './util/setup-navy'
 import { setConfig } from '../../packages/navy/src/config'
 
@@ -10,7 +10,7 @@ After(async function () {
   await cleanUpNavies()
 
   if (this.localCopyPath) {
-    rimraf.sync(this.localCopyPath)
+    rimrafSync(this.localCopyPath)
   }
 
   // reset config

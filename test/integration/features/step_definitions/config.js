@@ -1,9 +1,12 @@
+import path from 'path'
 import { expect } from 'chai'
-import { execSync } from 'child_process'
 import Automator from '../../util/cli-automator'
 import { setUpNavy } from '../../util/setup-navy'
+import { getExternalIP } from '../../../../packages/navy/src/util/external-ip'
 
 import { Then, When } from '@cucumber/cucumber'
+
+const expectedTlsCaDir = path.join(process.env.HOME, '.navy', 'tls-root-ca')
 
 When(/I get the current config$/, async function () {
   this.config = await Automator.spawn(['config', 'json']).waitForDone()
@@ -13,7 +16,7 @@ When(/I should see the current config$/, async function () {
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'dev',
     externalIP: null,
-    tlsRootCaDir: '/root/.navy/tls-root-ca',
+    tlsRootCaDir: expectedTlsCaDir,
   })
 })
 
@@ -39,7 +42,7 @@ Then(/I should see that the default navy is something else$/, async function () 
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'someothernavy',
     externalIP: null,
-    tlsRootCaDir: '/root/.navy/tls-root-ca',
+    tlsRootCaDir: expectedTlsCaDir,
   })
 
   expect(this.status).to.not.contain('dev (default)')
@@ -49,11 +52,11 @@ Then(/I should see that the default navy is something else$/, async function () 
 Then(/I should see that the default external IP is connect$/, async function () {
   const output = await Automator.spawn(['external-ip']).waitForDone()
 
-  // find IP of "docker" hostname and assert against that.
-  // when running the integration tests, the docker daemon is available at hostname "docker",
-  // so resolving that to an IP will give us the correct external IP. this is an ever changing
-  // value so cannot be hard coded in the tests
-  expect(output.trim()).to.equal(execSync("getent hosts docker | awk '{ print $1 }'").toString().trim())
+  // The CLI must return whatever getExternalIP() computes from the current
+  // DOCKER_HOST environment. On a default Linux host (unix socket, no DOCKER_HOST)
+  // this will be 127.0.0.1; on Docker Desktop / docker-machine it'll be the
+  // resolved daemon IP.
+  expect(output.trim()).to.equal(await getExternalIP(null))
 })
 
 When(/I override the external IP using an environment variable$/, async function () {
@@ -89,9 +92,8 @@ Then(/I should see that all services were reconfigured with the new external IP/
   expect(JSON.parse(this.config)).to.eql({
     defaultNavy: 'dev',
     externalIP: '192.168.3.105',
-    tlsRootCaDir: '/root/.navy/tls-root-ca',
+    tlsRootCaDir: expectedTlsCaDir,
   })
 
   expect(this.ip.trim()).to.equal('192.168.3.105')
 })
-
