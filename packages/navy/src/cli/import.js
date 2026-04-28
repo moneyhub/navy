@@ -4,9 +4,9 @@ import path from 'path'
 import chalk from 'chalk'
 
 import fs from '../util/fs'
-import {getNavy} from '../'
-import {getImportOptionsForCLI} from '../config-provider'
-import {importNavy} from './util'
+import { getNavy } from '../'
+import { getImportOptionsForCLI } from '../config-provider'
+import { importNavy } from './util'
 
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)

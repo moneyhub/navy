@@ -1,6 +1,6 @@
 /* @flow */
 
-import {mapValues} from 'lodash'
+import { mapValues } from 'lodash'
 
 function getPortConfig(serviceName, state) {
   return state.services[serviceName]
@@ -21,10 +21,12 @@ export default (config: Object, state: Object) => ({
 
     return {
       ...service,
-      ports: hasPortConfig ? [
-        ...inheritedPorts,
-        ...internalPorts.map(internal => `${portConfig[internal]}:${internal}`),
-      ] : service.ports,
+      ports: hasPortConfig
+        ? [
+          ...inheritedPorts,
+          ...internalPorts.map(internal => `${portConfig[internal]}:${internal}`),
+        ]
+        : service.ports,
     }
   }),
 })

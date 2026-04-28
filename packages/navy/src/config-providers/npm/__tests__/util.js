@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
-import {expect} from 'chai'
-import {pathToModule} from '../util'
+import { expect } from 'chai'
+import { pathToModule } from '../util'
 
 describe('npm config provider', function () {
 

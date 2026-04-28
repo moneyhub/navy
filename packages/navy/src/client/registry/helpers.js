@@ -1,4 +1,4 @@
-import {isEmpty} from 'ramda'
+import { isEmpty } from 'ramda'
 
 export const basicAuthentication = (credentials) => {
   if (isEmpty(credentials)) {

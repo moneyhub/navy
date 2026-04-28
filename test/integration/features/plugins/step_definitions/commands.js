@@ -1,7 +1,7 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import Automator from '../../../util/cli-automator'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I run the custom command on the CLI$/, async function () {
   this.output = await Automator.spawn(['run', 'test-command']).waitForDone()

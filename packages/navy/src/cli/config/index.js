@@ -1,9 +1,9 @@
 /* @flow */
 
-import {program} from 'commander'
-import {getConfig, setConfig} from '../../config'
-import {NavyError} from '../../errors'
-import {reconfigureAllNavies} from '../util/reconfigure'
+import { program } from 'commander'
+import { getConfig, setConfig } from '../../config'
+import { NavyError } from '../../errors'
+import { reconfigureAllNavies } from '../util/reconfigure'
 
 const NAME_MAP = {
   'default-navy': 'defaultNavy',

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
-import {expect} from 'chai'
-import {getNIPSubdomain, getUrlFromService, createHostForService, createUrlForService} from '../service-host'
+import { expect } from 'chai'
+import { getNIPSubdomain, getUrlFromService, createHostForService, createUrlForService } from '../service-host'
 
 describe('service-host', function () {
 

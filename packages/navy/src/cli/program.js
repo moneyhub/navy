@@ -1,9 +1,9 @@
-import {program} from 'commander'
+import { program } from 'commander'
 import chalk from 'chalk'
-import {NavyError} from '../errors'
-import {getConfig} from '../config'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
-import {getImportCommandLineOptions} from '../config-provider'
+import { NavyError } from '../errors'
+import { getConfig } from '../config'
+import { startDriverLogging, stopDriverLogging } from '../driver-logging'
+import { getImportCommandLineOptions } from '../config-provider'
 
 const loadingLabelMap = {
   destroy: 'Destroying services...',
@@ -138,7 +138,7 @@ program
   .command('destroy')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Destroys a navy and all related data and services')
-  .action(basicCliWrapper('destroy', {serviceBasedAlias: 'kill'}))
+  .action(basicCliWrapper('destroy', { serviceBasedAlias: 'kill' }))
   .on('--help', () => console.log(`
   This will destroy an entire navy and all of its data and services.
 

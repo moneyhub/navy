@@ -6,7 +6,7 @@ import setEnvironmentVariables from '../middleware/set-env-vars'
 import setLoggingDriver from '../middleware/set-logging-driver'
 import setImage from '../middleware/set-image'
 
-import type {Navy} from './'
+import type { Navy } from './'
 
 export default (navy: Navy) => ([
   developMiddleware,

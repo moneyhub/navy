@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-enable chai-friendly/no-unused-expressions */
 
-import {expect, use} from 'chai'
-import {Service} from '../../../../packages/navy/lib'
+import { expect, use } from 'chai'
+import { Service } from '../../../../packages/navy/lib'
 
-import {TEST_SERVICE_NAME, TEST_SERVICE_IMAGE} from '../../environment'
+import { TEST_SERVICE_NAME, TEST_SERVICE_IMAGE } from '../../environment'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 use(require('chai-like'))
 use(require('chai-things'))

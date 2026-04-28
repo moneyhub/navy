@@ -1,9 +1,9 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {getLANIP} from '../util/get-lan-ip'
-import {setConfig, getConfig} from '../config'
-import {reconfigureAllNavies} from './util/reconfigure'
+import { getLANIP } from '../util/get-lan-ip'
+import { setConfig, getConfig } from '../config'
+import { reconfigureAllNavies } from './util/reconfigure'
 
 export default async function (navy: string): Promise<void> {
   const lanIP = await getLANIP()

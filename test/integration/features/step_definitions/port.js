@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-enable chai-friendly/no-unused-expressions */
 
-import {expect} from 'chai'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { expect } from 'chai'
+import { TEST_SERVICE_NAME } from '../../environment'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I get the internal port for port ([0-9]*) for the service$/, async function (port) {
   this.port = await this.navy.port(TEST_SERVICE_NAME, port)

@@ -1,11 +1,11 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {NavyError} from '../errors'
-import {getNavy} from '../navy'
-import {getConfig, getConfigDir, DEFAULT_TLS_ROOT_CA_DIR} from '../config'
-import {reconfigureHTTPProxy} from '../http-proxy'
-import {createCert, generateRootCa, removeCert} from '../util/https'
+import { NavyError } from '../errors'
+import { getNavy } from '../navy'
+import { getConfig, getConfigDir, DEFAULT_TLS_ROOT_CA_DIR } from '../config'
+import { reconfigureHTTPProxy } from '../http-proxy'
+import { createCert, generateRootCa, removeCert } from '../util/https'
 import fs from 'fs'
 
 
@@ -15,7 +15,7 @@ export default async function (services: string, opts: Object): Promise<void> {
 
   if (opts.disable) {
     await removeCert(opts)
-    await reconfigureHTTPProxy({restart: true})
+    await reconfigureHTTPProxy({ restart: true })
 
     console.log()
     console.log(chalk.green(`✅ HTTPS for service ${opts.disable} is now disabled`))
@@ -51,7 +51,7 @@ export default async function (services: string, opts: Object): Promise<void> {
     }
     const serviceUrl = await navy.url(service)
     try {
-      await createCert({serviceUrl})
+      await createCert({ serviceUrl })
       httpsReadyServices.push(service)
     } catch (error) {
       console.log(error)
@@ -59,7 +59,7 @@ export default async function (services: string, opts: Object): Promise<void> {
     }
   }
 
-  await reconfigureHTTPProxy({restart: true})
+  await reconfigureHTTPProxy({ restart: true })
 
   console.log()
   console.log(chalk.green(`✅ Service(s) ${httpsReadyServices.join(', ')} now accessible via HTTPS🔒`))

@@ -1,8 +1,8 @@
-import {expect} from 'chai'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { expect } from 'chai'
+import { TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I change the tag of the service to a custom one$/, async function () {
   await this.navy.useTag(TEST_SERVICE_NAME, 'latest')

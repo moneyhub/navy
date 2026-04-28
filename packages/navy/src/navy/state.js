@@ -2,7 +2,7 @@
 
 import path from 'path'
 import invariant from 'invariant'
-import {promises as fsp} from 'fs'
+import { promises as fsp } from 'fs'
 
 import fs from '../util/fs'
 
@@ -43,7 +43,7 @@ export async function getState(normalisedEnvName: string): Promise<?State> {
 
 export async function saveState(normalisedEnvName: string, state: State): Promise<void> {
   const statePath = pathToState(normalisedEnvName)
-  await fsp.mkdir(path.dirname(statePath), {recursive: true})
+  await fsp.mkdir(path.dirname(statePath), { recursive: true })
 
   debug('Writing state for env ' + normalisedEnvName, statePath, state)
 
@@ -53,7 +53,7 @@ export async function saveState(normalisedEnvName: string, state: State): Promis
 export async function deleteState(normalisedEnvName: string): Promise<void> {
   debug('Deleting state for env ' + normalisedEnvName)
 
-  await fsp.rm(path.dirname(pathToState(normalisedEnvName)), {recursive: true, force: true})
+  await fsp.rm(path.dirname(pathToState(normalisedEnvName)), { recursive: true, force: true })
 }
 
 /**

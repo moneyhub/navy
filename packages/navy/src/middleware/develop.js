@@ -1,6 +1,6 @@
 /* @flow */
 
-import {middlewareHelpers} from './helpers'
+import { middlewareHelpers } from './helpers'
 
 function rewriteService(service, serviceName, serviceState) {
   if (!serviceState || !serviceState._develop) return service

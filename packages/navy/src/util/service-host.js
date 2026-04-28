@@ -1,7 +1,7 @@
 /* @flow */
 
-import type {Service} from '../service'
-import {getCertsPath} from './https'
+import type { Service } from '../service'
+import { getCertsPath } from './https'
 import fs from 'fs'
 const BASE = 'nip.io'
 

@@ -1,13 +1,13 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import fetch from 'node-fetch'
-import {mkdtempSync, readFileSync} from 'fs'
-import {tmpdir} from 'os'
+import { mkdtempSync, readFileSync } from 'fs'
+import { tmpdir } from 'os'
 import https from 'https'
-import {When, Then, Given} from '@cucumber/cucumber'
+import { When, Then, Given } from '@cucumber/cucumber'
 
 import Automator from '../../util/cli-automator'
-import {retry} from '../../util'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { retry } from '../../util'
+import { TEST_SERVICE_NAME } from '../../environment'
 
 Given(/I set the tlsCa-dir config/, async function () {
   this.tlsRootCaDirPath = mkdtempSync(`${tmpdir()}/navy-tls-root-ca`)
@@ -46,7 +46,7 @@ Then(/I should be able to make a HTTPS request$/, async function () {
   })
   await retry(async () => {
     const url = await this.navy.url(this.serviceForProxy)
-    const res = await fetch(url, {agent})
+    const res = await fetch(url, { agent })
 
     const body = await res.text()
 

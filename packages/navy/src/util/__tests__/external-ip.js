@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
-import {expect} from 'chai'
-import {getExternalIP} from '../external-ip'
+import { expect } from 'chai'
+import { getExternalIP } from '../external-ip'
 
 describe('getExternalIP', function () {
 

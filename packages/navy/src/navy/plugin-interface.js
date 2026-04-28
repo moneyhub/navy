@@ -3,8 +3,8 @@
 import bluebird from 'bluebird'
 import invariant from 'invariant'
 
-import type {ConfigProvider} from '../config-provider'
-import type {Navy} from './'
+import type { ConfigProvider } from '../config-provider'
+import type { Navy } from './'
 
 const resolve = bluebird.promisify(require('resolve'))
 

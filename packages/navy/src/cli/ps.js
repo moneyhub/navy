@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 
-import {getNavy} from '../'
-import {getUrlFromService} from '../util/service-host'
+import { getNavy } from '../'
+import { getUrlFromService } from '../util/service-host'
 import table from '../util/table'
 
 const SMALL_WINDOW_COLUMNS = 185

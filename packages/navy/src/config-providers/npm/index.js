@@ -1,22 +1,22 @@
 /* @flow */
 
 import path from 'path'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
 import invariant from 'invariant'
-import {promises as fsp} from 'fs'
+import { promises as fsp } from 'fs'
 import fs from '../../util/fs'
-import {pathToNavyRoot} from '../../navy/state'
-import {pathToModule} from './util'
+import { pathToNavyRoot } from '../../navy/state'
+import { pathToModule } from './util'
 
-import type {ConfigProvider} from '../../config-provider'
-import type {State} from '../../navy'
-import type {Navy} from '../../navy'
+import type { ConfigProvider } from '../../config-provider'
+import type { State } from '../../navy'
+import type { Navy } from '../../navy'
 
 const npmContext = path.join(pathToNavyRoot(), 'npm')
 const nodeModulesPath = path.join(npmContext, 'node_modules')
 
 async function tryAndInstall(pkgName: string) {
-  await fsp.mkdir(nodeModulesPath, {recursive: true})
+  await fsp.mkdir(nodeModulesPath, { recursive: true })
 
   try {
     // $FlowIgnore some weird bug with execSync

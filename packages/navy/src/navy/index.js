@@ -1,28 +1,28 @@
 /* @flow */
 
 import invariant from 'invariant'
-import {EventEmitter2} from 'eventemitter2'
+import { EventEmitter2 } from 'eventemitter2'
 import retryPromise from 'promise-retry'
 
 import fs from '../util/fs'
-import {resolveDriverFromName} from '../driver'
-import {resolveConfigProviderFromName} from '../config-provider'
-import {normaliseNavyName} from './util'
-import {getState, saveState, deleteState, pathToNavys, pathToNavy} from './state'
-import {getConfig} from '../config'
-import {NavyNotInitialisedError, NavyError} from '../errors'
-import {loadPlugins} from './plugin-interface'
-import {middlewareRunner} from './middleware'
-import {reconfigureHTTPProxy} from '../http-proxy'
-import {getExternalIP} from '../util/external-ip'
-import {createUrlForService, getUrlFromService} from '../util/service-host'
+import { resolveDriverFromName } from '../driver'
+import { resolveConfigProviderFromName } from '../config-provider'
+import { normaliseNavyName } from './util'
+import { getState, saveState, deleteState, pathToNavys, pathToNavy } from './state'
+import { getConfig } from '../config'
+import { NavyNotInitialisedError, NavyError } from '../errors'
+import { loadPlugins } from './plugin-interface'
+import { middlewareRunner } from './middleware'
+import { reconfigureHTTPProxy } from '../http-proxy'
+import { getExternalIP } from '../util/external-ip'
+import { createUrlForService, getUrlFromService } from '../util/service-host'
 
-import type {Driver, CreateDriver} from '../driver'
-import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
-import type {State} from './state'
-import type {ServiceList} from '../service'
+import type { Driver, CreateDriver } from '../driver'
+import type { ConfigProvider, CreateConfigProvider } from '../config-provider'
+import type { State } from './state'
+import type { ServiceList } from '../service'
 
-export type {State}
+export type { State }
 
 export type RetryConfig = {
   factor?: number,
@@ -40,17 +40,17 @@ export class Navy extends EventEmitter2 {
    * The name of the current Navy.
    * @public
    */
-  name: string;
+  name: string
 
   /**
    * The normalised name of the current Navy (name without whitespaces).
    * @public
    */
-  normalisedName: string;
+  normalisedName: string
 
-  _pluginsLoaded: boolean;
-  _registeredCommands: Object;
-  _registeredMiddleware: Array<Function>;
+  _pluginsLoaded: boolean
+  _registeredCommands: Object
+  _registeredMiddleware: Array<Function>
 
   constructor(name: string) {
     super({
@@ -474,7 +474,7 @@ export class Navy extends EventEmitter2 {
   async waitForHealthy(
     services?: Array<string>,
     progressCallback?: Function,
-    retryConfig?: RetryConfig = {factor: 1.1, retries: 30, minTimeout: 200}
+    retryConfig?: RetryConfig = { factor: 1.1, retries: 30, minTimeout: 200 }
   ): Promise<boolean> {
     if (services == null) {
       services = (await this.ps())

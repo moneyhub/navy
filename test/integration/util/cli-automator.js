@@ -1,17 +1,17 @@
 import path from 'path'
 import * as pty from 'node-pty'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
 import stripAnsi from 'strip-ansi'
-import {ENV_NAME} from '../environment'
+import { ENV_NAME } from '../environment'
 
 // from http://stackoverflow.com/questions/17470554/how-to-capture-the-arrow-keys-in-node-js
 const keyCodes = {
-  'up': '\u001b[A',
-  'down': '\u001b[B',
-  'right': '\u001b[C',
-  'left': '\u001b[D',
-  'enter': '\n',
-  'space': ' ',
+  up: '\u001b[A',
+  down: '\u001b[B',
+  right: '\u001b[C',
+  left: '\u001b[D',
+  enter: '\n',
+  space: ' ',
 }
 
 const SYNTHETIC_DELAY_MS = 150
