@@ -15,7 +15,6 @@ export function getCertsPath(create: boolean = false): string {
   if (!fs.existsSync(certsPath)) {
     if (create) {
       debug(`Create ${certsPath} dir`)
-      // $FlowIgnore
       fs.mkdirSync(certsPath, { recursive: true })
     } else {
       return ''
@@ -50,7 +49,6 @@ export async function generateRootCa(): Promise<void> {
   if (!fs.existsSync(tlsRootCaDir)) {
     debug(`Creating ${tlsRootCaDir} Root CA dir`)
     try {
-      // $FlowIgnore
       fs.mkdirSync(tlsRootCaDir, { recursive: true })
     } catch (err) {
       throw new NavyError(err)

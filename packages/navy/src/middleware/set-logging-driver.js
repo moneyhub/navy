@@ -3,7 +3,7 @@
 import { mapValues } from 'lodash'
 
 
-export default (config: Object, state: Object) => ({
+export default (config: Object, state: Object): Object => ({
   ...config,
   services: mapValues(config.services, (serviceConfig, serviceName) => {
     const serviceState = state.services[serviceName] || {}

@@ -15,6 +15,7 @@ export type ComposeClient = {
   exec(command: string, args: any, opts?: Object): Promise<string>,
   getCompiledDockerComposePath(): string,
   getDockerComposeFilePath(): Promise<?string>,
+  getOriginalDockerComposeDirectory(): Promise<?string>,
 }
 
 export type ExecOpts = {

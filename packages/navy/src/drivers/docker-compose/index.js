@@ -32,7 +32,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
   const driver = {
     async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {
-      const additionalArgs = []
+      const additionalArgs: Array<string> = []
 
       debug('Got launch', services, opts)
 
@@ -117,7 +117,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('pull', services)
 
       // only relaunch services which are already running
-      const launchedServiceNames = toLookupTable(await this.getLaunchedServiceNames())
+      const launchedServiceNames = toLookupTable(await driver.getLaunchedServiceNames())
       const servicesToRelaunch = services.filter((name) => launchedServiceNames[name])
 
       if (servicesToRelaunch.length) {
@@ -136,8 +136,8 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async port(service: string, privatePort: number, index: ?number): Promise<?number> {
       if (index == null) index = 1
 
-      const container = (await this.ps(service)).pop()
-      if (!container) {
+      const container = (await driver.ps(service)).pop()
+      if (!container || !container.raw) {
         return null
       }
 
@@ -191,8 +191,8 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
   return driver
 }
 
-function toLookupTable(keys: Array<string>): Object {
-  const lookupTable = {}
+function toLookupTable(keys: Array<string>): {[string]: boolean} {
+  const lookupTable: {[string]: boolean} = {}
   keys.forEach((key) => lookupTable[key] = true)
   return lookupTable
 }

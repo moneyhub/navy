@@ -12,7 +12,7 @@ const debug = require('debug')('navy:updates')
 let spinnerIndex = 0
 let spinnerFrame = dots.frames[0]
 
-function renderStatus(status) {
+function renderStatus(status: ?(boolean | string)) {
   if (status == null) {
     return chalk.yellow(spinnerFrame) + ' ' + chalk.dim('Checking...')
   } else if (status === true) {
@@ -34,7 +34,7 @@ export default async function (opts: Object): Promise<void> {
   const navyFile = await navy.getNavyFile()
   const ps = await navy.ps()
 
-  const updateStatus = {}
+  const updateStatus: {[string]: ?(boolean | string)} = {}
 
   let drawnLines = 0
 

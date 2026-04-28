@@ -3,7 +3,7 @@
 import pad from 'pad'
 import stripAnsi from 'strip-ansi'
 
-export default function table(rows: Array<Array<string>>) {
+export default function table(rows: Array<Array<string>>): string {
   if (rows.length === 0) {
     return ''
   }

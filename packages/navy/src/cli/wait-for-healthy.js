@@ -18,7 +18,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     return
   }
 
-  let healthyStatus = []
+  let healthyStatus: Array<{ service: string, health: string }> = []
 
   let drawnLines = 0
 

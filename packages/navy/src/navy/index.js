@@ -151,7 +151,7 @@ export class Navy extends EventEmitter2 {
     const navyFilePath: string = await configProvider.getNavyFilePath()
 
     try {
-      // $FlowIgnore: entry point to Navyfile.js has to be dynamic
+      // $FlowFixMe[unsupported-syntax]: entry point to Navyfile.js has to be dynamic
       return require(navyFilePath)
     } catch (ex) {
       return null
@@ -387,13 +387,14 @@ export class Navy extends EventEmitter2 {
    */
   async useTag(service: string, tag: string): Promise<void> {
     const state = (await this.getState()) || {}
+    const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...stateServices[service],
           _tag: tag,
         },
       },
@@ -409,13 +410,14 @@ export class Navy extends EventEmitter2 {
    */
   async resetTag(service: string): Promise<void> {
     const state = (await this.getState()) || {}
+    const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...stateServices[service],
           _tag: undefined,
         },
       },
@@ -427,15 +429,17 @@ export class Navy extends EventEmitter2 {
 
   async usePort(service: string, privatePort: number, externalPort: number): Promise<void> {
     const state = (await this.getState()) || {}
+    const stateServices: {[string]: Object} = state.services || {}
+    const existingService: Object = stateServices[service] || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...existingService,
           _ports: {
-            ...((state.services || {})[service] || {})._ports,
+            ...existingService._ports,
             [privatePort]: externalPort,
           },
         },
@@ -448,15 +452,17 @@ export class Navy extends EventEmitter2 {
 
   async resetPort(service: string, privatePort: number): Promise<void> {
     const state = (await this.getState()) || {}
+    const stateServices: {[string]: Object} = state.services || {}
+    const existingService: Object = stateServices[service] || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...existingService,
           _ports: {
-            ...((state.services || {})[service] || {})._ports,
+            ...existingService._ports,
             [privatePort]: undefined,
           },
         },
