@@ -19,7 +19,8 @@ export function resolveProxyImage(navyFile: ?Object): string {
 }
 
 async function updateComposeConfig(navies: Array<string>, navyFile: ?Object) {
-  const networks = await docker.listNetworks()
+  const allNetworks = await docker.listNetworks()
+  const networks = allNetworks
     .filter(net => net.Name.indexOf('_') !== -1) // is docker-compose network?
     .filter(net => {
       for (const navy of navies) {

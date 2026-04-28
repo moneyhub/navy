@@ -1,62 +1,41 @@
+#!/bin/sh
 set -e
 
-echo ""
-echo "SETTING UP ENVIRONMENT"
-echo "This may take several minutes to build the necessary docker containers..."
-echo "This will only take a while the first time you run the tests, subsequent runs should be faster"
-echo ""
-echo ""
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker is not running on the host. Start Docker before running integration tests." >&2
+  exit 1
+fi
 
-DOCKER_TAG=${DOCKER_TAG:-19.03.14-dind}
-DOCKER_COMPOSE_VERSION=${DOCKER_COMPOSE_VERSION:-1.29.2}
-NODE_VERSION=${GITHUB_NODE_VERSION:-16}
+if ! command -v docker-compose >/dev/null 2>&1 && ! docker compose version >/dev/null 2>&1; then
+  echo "docker compose (v1 or v2) must be installed on PATH." >&2
+  exit 1
+fi
 
-DOCKER_TLS_CERTDIR=""
-
-DOCKER_SHARED_DIR=$(mktemp -d)
-
-if [ ! -z "${DOCKERHUB_PULL_USERNAME:-}" ]; then
+if [ -n "${DOCKERHUB_PULL_USERNAME:-}" ]; then
   echo "${DOCKERHUB_PULL_PASSWORD}" | docker login --username "${DOCKERHUB_PULL_USERNAME}" --password-stdin
 fi
 
-echo "Integration environment docker --version:"
-docker --version
-docker run -d --name navy-test-runner-daemon --privileged \
-  -v $(pwd):/usr/src/app \
-  -v $DOCKER_SHARED_DIR:/root/.navy/tls-certs \
-  -e DOCKER_TLS_CERTDIR \
-  docker:$DOCKER_TAG --storage-driver=overlay
+NAVY_TEST_HOME="$(mktemp -d -t navy-integration-XXXXXX)"
+trap 'rm -rf "$NAVY_TEST_HOME"' EXIT
 
-docker build \
-    -t navy-test-runner \
-    -f test/integration/runner/Dockerfile \
-    --build-arg DOCKER_COMPOSE_VERSION=$DOCKER_COMPOSE_VERSION \
-    --build-arg NODE_VERSION=$NODE_VERSION \
-    --build-arg DOCKERHUB_PULL_USERNAME=$DOCKERHUB_PULL_USERNAME \
-    --build-arg DOCKERHUB_PULL_PASSWORD=$DOCKERHUB_PULL_PASSWORD \
-    .
+# Preserve the real Docker config so the `docker compose` plugin (typically
+# installed under $HOME/.docker/cli-plugins) remains discoverable when we
+# point HOME at the temporary test directory below.
+REAL_DOCKER_CONFIG="${DOCKER_CONFIG:-$HOME/.docker}"
 
 echo ""
-echo ""
-echo "RUNNING TESTS"
-echo ""
+echo "RUNNING INTEGRATION TESTS"
+echo "Using isolated HOME: $NAVY_TEST_HOME"
+echo "Using DOCKER_CONFIG: $REAL_DOCKER_CONFIG"
 echo ""
 
-docker run --rm --link navy-test-runner-daemon:docker \
-  --name navy-test-runner \
-  -v $DOCKER_SHARED_DIR:/root/.navy/tls-certs \
-  -v $(pwd)/packages:/usr/src/app/packages \
-  -v $(pwd)/test:/usr/src/app/test \
-  -v $(pwd)/resources:/usr/src/app/resources \
-  -v $(pwd)/babel.config.js:/usr/src/app/babel.config.js \
-  --workdir /usr/src/app navy-test-runner \
-    ./node_modules/.bin/cucumber-js --fail-fast --publish-quiet \
-    -r ./test/integration/preload.js \
-    -r ./test/integration/environment.js \
-    -r ./test/integration/hooks.js \
-    -r ./test/integration/chai.js \
-    -r ./test/integration/features \
-    -r ./test/integration/steps \
-    ./test/integration/features "$@"
-
-docker rm --force navy-test-runner-daemon
+HOME="$NAVY_TEST_HOME" \
+DOCKER_CONFIG="$REAL_DOCKER_CONFIG" \
+  ./node_modules/.bin/cucumber-js --publish-quiet \
+  -r ./test/integration/preload.js \
+  -r ./test/integration/environment.js \
+  -r ./test/integration/hooks.js \
+  -r ./test/integration/chai.js \
+  -r ./test/integration/features \
+  -r ./test/integration/steps \
+  ./test/integration/features "$@"
