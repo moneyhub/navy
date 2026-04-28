@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 import readline from 'readline'
-import {dots} from 'cli-spinners'
-import {getNavy} from '../'
+import { dots } from 'cli-spinners'
+import { getNavy } from '../'
 import table from '../util/table'
 import hasUpdate from '../util/has-update'
 

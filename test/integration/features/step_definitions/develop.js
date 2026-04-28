@@ -1,11 +1,11 @@
 import fetch from 'node-fetch'
-import {expect} from 'chai'
+import { expect } from 'chai'
 
-import {TEST_SERVICE_NAME} from '../../environment'
+import { TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
-import {retry} from '../../util'
+import { retry } from '../../util'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I put the service into development$/, async function () {
   this.cmd = Automator.spawn(['develop'], {

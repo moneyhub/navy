@@ -1,8 +1,8 @@
 import rimraf from 'rimraf'
-import {cleanUpNavies} from './util/setup-navy'
-import {setConfig} from '../../packages/navy/src/config'
+import { cleanUpNavies } from './util/setup-navy'
+import { setConfig } from '../../packages/navy/src/config'
 
-import {After, setDefaultTimeout} from '@cucumber/cucumber'
+import { After, setDefaultTimeout } from '@cucumber/cucumber'
 
 setDefaultTimeout(2 * 60 * 1000)
 

@@ -1,6 +1,6 @@
-import {always as noop} from 'ramda'
-import {execAsync} from '../../util/exec-async'
-import {DEFAULT_REGISTRY, DEFAULT_REGISTRY_AUTH} from '../../domain/container-image'
+import { always as noop } from 'ramda'
+import { execAsync } from '../../util/exec-async'
+import { DEFAULT_REGISTRY, DEFAULT_REGISTRY_AUTH } from '../../domain/container-image'
 
 const getAuthenticationForRegistry = async (registry) => {
   try {
@@ -16,8 +16,8 @@ const getAuthenticationForRegistry = async (registry) => {
     const credentials = JSON.parse(stdout)
 
     return {
-      username: credentials['Username'],
-      password: credentials['Secret'],
+      username: credentials.Username,
+      password: credentials.Secret,
     }
   } catch (exception) {
     return {

@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 import invariant from 'invariant'
-import {getNavy} from '../'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+import { getNavy } from '../'
+import { startDriverLogging, stopDriverLogging } from '../driver-logging'
 
 export default async function (opts: Object): Promise<void> {
   const navy = getNavy(opts.navy)

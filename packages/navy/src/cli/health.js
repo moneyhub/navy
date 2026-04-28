@@ -2,7 +2,7 @@
 
 import chalk from 'chalk'
 
-import {getNavy} from '../'
+import { getNavy } from '../'
 import table from '../util/table'
 
 function getStatus(service, state) {

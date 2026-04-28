@@ -1,9 +1,9 @@
-import {expect} from 'chai'
-import {execSync} from 'child_process'
+import { expect } from 'chai'
+import { execSync } from 'child_process'
 import Automator from '../../util/cli-automator'
-import {setUpNavy} from '../../util/setup-navy'
+import { setUpNavy } from '../../util/setup-navy'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I get the current config$/, async function () {
   this.config = await Automator.spawn(['config', 'json']).waitForDone()

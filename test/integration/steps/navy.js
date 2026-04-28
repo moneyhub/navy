@@ -1,7 +1,7 @@
-import {getNavy} from '../../../packages/navy'
-import {setUpNavy} from '../util/setup-navy'
+import { getNavy } from '../../../packages/navy'
+import { setUpNavy } from '../util/setup-navy'
 
-import {Given} from '@cucumber/cucumber'
+import { Given } from '@cucumber/cucumber'
 
 Given(/I am working with a test navy$/, async function () {
   this.navy = await setUpNavy('dev')

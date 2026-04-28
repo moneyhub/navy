@@ -55,7 +55,7 @@ export function getConfig(): Config {
 export async function setConfig(config: ?Config): Promise<void> {
   if (config == null) config = DEFAULT_CONFIG
 
-  await fsPromises.mkdir(path.dirname(getConfigPath()), {recursive: true})
+  await fsPromises.mkdir(path.dirname(getConfigPath()), { recursive: true })
   await fsPromises.writeFile(getConfigPath(), JSON.stringify(config, null, 2))
 
   // trash cached config

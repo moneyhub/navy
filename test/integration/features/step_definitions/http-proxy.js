@@ -1,10 +1,10 @@
-import {expect} from 'chai'
+import { expect } from 'chai'
 import fetch from 'node-fetch'
 
-import {retry} from '../../util'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { retry } from '../../util'
+import { TEST_SERVICE_NAME } from '../../environment'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I launch a service which exposes port 80$/, async function () {
   await this.navy.launch([TEST_SERVICE_NAME])

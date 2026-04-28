@@ -1,6 +1,6 @@
 /* @flow */
 
-import {mapValues} from 'lodash'
+import { mapValues } from 'lodash'
 
 type ServiceMapper = (service: Object, serviceName: string) => Object
 type ServiceMapperWithState = (service: Object, serviceName: string, serviceState: ?Object) => Object

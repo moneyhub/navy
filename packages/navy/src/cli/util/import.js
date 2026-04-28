@@ -1,10 +1,10 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {startDriverLogging, stopDriverLogging} from '../../driver-logging'
-import {NavyError} from '../../errors'
+import { startDriverLogging, stopDriverLogging } from '../../driver-logging'
+import { NavyError } from '../../errors'
 
-import type {Navy} from '../../'
+import type { Navy } from '../../'
 
 const OPTION_LABEL_MAP = {
   configProvider: 'Provider',

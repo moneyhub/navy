@@ -2,18 +2,18 @@ import * as R from 'ramda'
 import https from 'https'
 import fetch from 'node-fetch'
 import getToken from './get-token'
-import {restSpecification} from '../../domain/oci-api-specification'
+import { restSpecification } from '../../domain/oci-api-specification'
 import getAuthenticationForRegistry from './get-credentials'
-import {basicAuthentication} from './helpers'
+import { basicAuthentication } from './helpers'
 import parsers from 'www-authenticate/lib/parsers'
 
 const handleUnauthorizedResponse = async ({
-  response,
+  response: initialResponse,
   context,
   url,
 }) => {
-  const challenges = response.headers.get('WWW-Authenticate')
-  const {scheme, parms} = new parsers.WWW_Authenticate(challenges)
+  const challenges = initialResponse.headers.get('WWW-Authenticate')
+  const { scheme, parms } = new parsers.WWW_Authenticate(challenges)
 
   if (scheme === 'Basic') {
     throw new Error('Invalid authentication')
@@ -23,25 +23,21 @@ const handleUnauthorizedResponse = async ({
     throw new Error('Invalid authentication')
   }
 
-  try {
-    const token = await getToken(parms, context)
+  const token = await getToken(parms, context)
 
-    const options = R.mergeDeepRight(context, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
-    })
+  const options = R.mergeDeepRight(context, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  })
 
-    const response = await fetch(url, options)
+  const response = await fetch(url, options)
 
-    if (response.status === 401) {
-      throw new Error('Access denied')
-    }
-
-    return response
-  } catch (exception) {
-    throw exception
+  if (response.status === 401) {
+    throw new Error('Access denied')
   }
+
+  return response
 }
 
 const get = async ({
@@ -55,7 +51,7 @@ const get = async ({
 
   const context = R.mergeDeepLeft(options, {
     headers: R.reject(R.isNil, {
-      'Authorization': basicAuthentication(credentials),
+      Authorization: basicAuthentication(credentials),
     }),
 
     agent: new https.Agent({
@@ -63,28 +59,24 @@ const get = async ({
     })
   })
 
-  try {
-    const response = await fetch(url, context)
+  const response = await fetch(url, context)
 
-    switch (response.status) {
-      case 401:
-        return handleUnauthorizedResponse({
-          response,
-          context,
-          url,
-        })
+  switch (response.status) {
+    case 401:
+      return handleUnauthorizedResponse({
+        response,
+        context,
+        url,
+      })
 
-      case 404:
-        throw new Error('Operation not found', {
-          status: 404,
-          body: await response.json()
-        })
+    case 404:
+      throw new Error('Operation not found', {
+        status: 404,
+        body: await response.json()
+      })
 
-      default:
-        return response
-    }
-  } catch (exception) {
-    throw exception
+    default:
+      return response
   }
 }
 

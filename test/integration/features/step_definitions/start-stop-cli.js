@@ -1,9 +1,9 @@
-import {expect, use} from 'chai'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { expect, use } from 'chai'
+import { TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
-import {Service} from '../../../../packages/navy/lib'
+import { Service } from '../../../../packages/navy/lib'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 use(require('chai-like'))
 use(require('chai-things'))

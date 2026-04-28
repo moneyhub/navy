@@ -1,9 +1,9 @@
 /* @flow */
 
-import {find} from 'lodash'
-import {createHostForService} from '../util/service-host'
+import { find } from 'lodash'
+import { createHostForService } from '../util/service-host'
 import { createCert } from '../util/https'
-import type {Navy} from '../navy'
+import type { Navy } from '../navy'
 
 const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   if (navyFile && navyFile.httpProxy && navyFile.httpProxy[serviceName]) {
@@ -54,13 +54,13 @@ export default (navy: Navy) =>
       if (proxyConfig) {
         const hostName = await createHostForService(serviceName, navy.normalisedName, externalIP)
 
-        if (proxyConfig.enableHttps) await createCert({hostName})
+        if (proxyConfig.enableHttps) await createCert({ hostName })
 
         return services[serviceName] = {
           ...service,
           environment: {
-            'VIRTUAL_HOST': hostName,
-            'VIRTUAL_PORT': proxyConfig.port,
+            VIRTUAL_HOST: hostName,
+            VIRTUAL_PORT: proxyConfig.port,
             ...service.environment,
           },
         }

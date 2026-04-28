@@ -4,12 +4,12 @@ import yaml from 'js-yaml'
 
 import fs from '../../util/fs'
 import docker from '../../util/docker-client'
-import {createComposeClient} from './client'
-import {Status as ServiceStatus} from '../../service'
+import { createComposeClient } from './client'
+import { Status as ServiceStatus } from '../../service'
 
-import type {Driver} from '../../driver'
-import type {ServiceList} from '../../service'
-import type {Navy} from '../../navy'
+import type { Driver } from '../../driver'
+import type { ServiceList } from '../../service'
+import type { Navy } from '../../navy'
 
 const debug = require('debug')('navy:docker-compose')
 
@@ -151,7 +151,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async writeConfig(config: Object): Promise<void> {
-      const yamlOut = yaml.dump(config, {skipInvalid: true})
+      const yamlOut = yaml.dump(config, { skipInvalid: true })
       await fs.writeFileAsync(getCompiledDockerComposePath(), yamlOut)
 
       debug('Wrote docker-compose.tmp.yml', yamlOut)

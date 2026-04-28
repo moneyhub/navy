@@ -1,7 +1,7 @@
 /* @flow */
 
-import {getLaunchedNavies} from '../../'
-import {startDriverLogging, stopDriverLogging} from '../../driver-logging'
+import { getLaunchedNavies } from '../../'
+import { startDriverLogging, stopDriverLogging } from '../../driver-logging'
 
 export async function reconfigureAllNavies() {
   const navies = await getLaunchedNavies()

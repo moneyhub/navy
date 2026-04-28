@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import rimraf from 'rimraf'
 
-import {Given} from '@cucumber/cucumber'
+import { Given } from '@cucumber/cucumber'
 
 Given(/I have a local copy of the source code of the launched service$/, function () {
   // create dummy local copy in temp directory

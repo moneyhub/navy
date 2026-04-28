@@ -1,8 +1,8 @@
-import {expect} from 'chai'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { expect } from 'chai'
+import { TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I get the internal port for port ([0-9]*) for the service using the CLI$/, async function (port) {
   this.port = await Automator.spawn(['port', TEST_SERVICE_NAME, port], {

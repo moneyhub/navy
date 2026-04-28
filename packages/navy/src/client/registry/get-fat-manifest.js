@@ -1,5 +1,5 @@
 import getEndpoint from './get-endpoint'
-import {restSpecification, MEDIA_TYPES} from '../../domain/oci-api-specification'
+import { restSpecification, MEDIA_TYPES } from '../../domain/oci-api-specification'
 
 const getFatManifest = async ({
   allowUnauthorizedRequest = false,
@@ -10,7 +10,7 @@ const getFatManifest = async ({
   const endpoint = restSpecification.getManifest(repository, tag)
   const options = {
     headers: {
-      'Accept': MEDIA_TYPES.FAT_MANIFEST,
+      Accept: MEDIA_TYPES.FAT_MANIFEST,
     }
   }
 

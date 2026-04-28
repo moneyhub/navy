@@ -1,5 +1,5 @@
 import path from 'path'
-import {getNavy, getLaunchedNavies} from '../../../packages/navy'
+import { getNavy, getLaunchedNavies } from '../../../packages/navy'
 
 export async function setUpNavy(name = 'dev', testProjectName = 'basic') {
   const navy = getNavy(name)

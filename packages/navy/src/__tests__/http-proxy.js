@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
-import {expect} from 'chai'
-import {resolveProxyImage} from '../http-proxy'
+import { expect } from 'chai'
+import { resolveProxyImage } from '../http-proxy'
 
 describe('resolveProxyImage', function () {
 

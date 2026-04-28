@@ -1,5 +1,5 @@
-import {getConfig} from '../config'
-import {getExternalIP} from '../util/external-ip'
+import { getConfig } from '../config'
+import { getExternalIP } from '../util/external-ip'
 
 export default async () => {
   const config = await getConfig()

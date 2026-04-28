@@ -1,7 +1,7 @@
 /* @flow */
 
-import {getNavy} from '../../'
-import {importNavy} from './import'
+import { getNavy } from '../../'
+import { importNavy } from './import'
 import fileSystemConfigProvider from '../../config-providers/filesystem'
 
 export async function getOrInitialiseNavy(navyName: string) {

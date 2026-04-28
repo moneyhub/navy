@@ -1,6 +1,6 @@
 /* @flow */
 
-import {mapValues} from 'lodash'
+import { mapValues } from 'lodash'
 
 
 export default (config: Object, state: Object) => ({
