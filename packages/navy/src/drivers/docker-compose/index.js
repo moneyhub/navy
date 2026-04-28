@@ -151,7 +151,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async writeConfig(config: Object): Promise<void> {
-      const yamlOut = yaml.safeDump(config, {skipInvalid: true})
+      const yamlOut = yaml.dump(config, {skipInvalid: true})
       await fs.writeFileAsync(getCompiledDockerComposePath(), yamlOut)
 
       debug('Wrote docker-compose.tmp.yml', yamlOut)
@@ -159,7 +159,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
     async getConfig(): Promise<Object> {
       const output = await exec('config', [], { useOriginalDockerComposeFiles: true, noLog: true })
-      const config = yaml.safeLoad(output)
+      const config = yaml.load(output)
 
       return config
     },

@@ -1,4 +1,4 @@
-import findit from 'findit'
+import findit from 'findit2'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'

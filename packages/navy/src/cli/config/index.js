@@ -1,6 +1,6 @@
 /* @flow */
 
-import program from 'commander'
+import {program} from 'commander'
 import {getConfig, setConfig} from '../../config'
 import {NavyError} from '../../errors'
 import {reconfigureAllNavies} from '../util/reconfigure'

@@ -1,4 +1,4 @@
-import program from 'commander'
+import {program} from 'commander'
 import chalk from 'chalk'
 import {NavyError} from '../errors'
 import {getConfig} from '../config'

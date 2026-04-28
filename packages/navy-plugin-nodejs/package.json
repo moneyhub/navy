@@ -23,9 +23,12 @@
     "url": "https://github.com/moneyhub/navy/issues"
   },
   "homepage": "https://github.com/moneyhub/navy#readme",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@babel/runtime": "^7",
-    "findit": "^2.0.0",
+    "findit2": "^2.2.3",
     "lodash.mapvalues": "^4.4.0"
   }
 }
