@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import { expect } from 'chai'
-import { resolveProxyImage } from '../http-proxy'
+import { resolveProxyImage, resolveDockerSocketPath } from '../http-proxy'
 
 describe('resolveProxyImage', function () {
 
@@ -48,6 +48,49 @@ describe('resolveProxyImage', function () {
   it('should fall back to default when NAVY_HTTP_PROXY_IMAGE is an empty string', function () {
     process.env.NAVY_HTTP_PROXY_IMAGE = ''
     expect(resolveProxyImage()).to.equal('navycloud/navy-proxy')
+  })
+
+})
+
+describe('resolveDockerSocketPath', function () {
+
+  let originalDockerHost
+
+  beforeEach(function () {
+    originalDockerHost = process.env.DOCKER_HOST
+    delete process.env.DOCKER_HOST
+  })
+
+  afterEach(function () {
+    if (originalDockerHost === undefined) {
+      delete process.env.DOCKER_HOST
+    } else {
+      process.env.DOCKER_HOST = originalDockerHost
+    }
+  })
+
+  it('should default to /var/run/docker.sock when DOCKER_HOST is not set', function () {
+    expect(resolveDockerSocketPath()).to.equal('/var/run/docker.sock')
+  })
+
+  it('should default to /var/run/docker.sock when DOCKER_HOST is empty', function () {
+    process.env.DOCKER_HOST = ''
+    expect(resolveDockerSocketPath()).to.equal('/var/run/docker.sock')
+  })
+
+  it('should extract the socket path when DOCKER_HOST uses the unix:// scheme', function () {
+    process.env.DOCKER_HOST = 'unix:///home/runner/setup-docker-action-abc/docker.sock'
+    expect(resolveDockerSocketPath()).to.equal('/home/runner/setup-docker-action-abc/docker.sock')
+  })
+
+  it('should fall back to default when DOCKER_HOST is unix:// with no path', function () {
+    process.env.DOCKER_HOST = 'unix://'
+    expect(resolveDockerSocketPath()).to.equal('/var/run/docker.sock')
+  })
+
+  it('should fall back to default when DOCKER_HOST uses tcp:// scheme', function () {
+    process.env.DOCKER_HOST = 'tcp://localhost:2375'
+    expect(resolveDockerSocketPath()).to.equal('/var/run/docker.sock')
   })
 
 })
