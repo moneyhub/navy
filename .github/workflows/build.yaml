@@ -30,6 +30,13 @@ jobs:
         uses: docker/setup-docker-action@b2189fbf2a6592b51fee7cdd93ee2bfaeba733db # v5.1.0
         with:
           version: ${{ matrix.docker }}
+          # Export DOCKER_HOST so the dockerode client used by navy and the
+          # `docker compose` CLI invoked by the navy driver both target the
+          # daemon installed by this action. Without this the action only
+          # configures a Docker CLI context (consumed by `docker compose`),
+          # while dockerode falls back to /var/run/docker.sock and ends up
+          # querying a different daemon, returning no matching containers.
+          set-host: true
 
       - name: Setup Docker Compose
         uses: docker/setup-compose-action@8cccb8c14b6500aaffebff1aa49c502c34d2e5e6 # v2.1.0
