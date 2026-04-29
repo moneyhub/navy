@@ -46,9 +46,16 @@ export default class Automator {
       cols: 130,
       rows: 30,
       cwd,
+      // node-pty merges stdout and stderr into a single stream that we capture
+      // and assert against, so any `debug()` output from the CLI ends up in
+      // the captured output and breaks JSON parsing / equality checks. CI
+      // exports `NAVY_DEBUG=navy:*` to aid test diagnosis, so we silence the
+      // spawned CLI by default. Tests that need CLI debug output can opt back
+      // in by passing `opts.env.NAVY_DEBUG`.
       env: {
         NAVY_NAME: ENV_NAME,
         ...(this.opts.env || process.env),
+        NAVY_DEBUG: this.opts.env?.NAVY_DEBUG ?? 'null',
       },
     })
 
