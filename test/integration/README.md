@@ -21,6 +21,12 @@ Any extra arguments are forwarded to `cucumber-js`, for example to run a single 
 npm run integration -- ./test/integration/features/config.feature
 ```
 
+To run a single scenario, set the `SCENARIO` environment variable to a regular expression that matches the scenario name (this maps to `cucumber-js --name`):
+
+```sh
+SCENARIO='Stopping a service should stop it' npm run integration
+```
+
 ## CI
 
 In GitHub Actions, the matrix in `.github/workflows/build.yaml` drives the Node, Docker engine, and Docker Compose versions via `actions/setup-node`, `docker/setup-docker-action`, and `docker/setup-compose-action` respectively, and then runs `npm test` directly on the runner.

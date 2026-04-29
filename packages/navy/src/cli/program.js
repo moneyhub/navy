@@ -58,6 +58,11 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
   return async function (maybeServices, ...args) {
     const { getNavy } = require('../navy')
 
+    // commander v12 invokes action handlers with a trailing Command instance
+    // appended after the parsed options. Strip it so the rest of this wrapper
+    // can continue to treat the last remaining `args` element as the options.
+    if (args.length > 0) args = args.slice(0, -1)
+
     const opts = args.length === 0 ? maybeServices : args[args.length - 1]
     const otherArgs = args.slice(0, args.length - 1)
     const envName = opts.navy

@@ -15,8 +15,8 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [22.x, 24.x]
-        docker: [24.0.7, 27.3.1]
-        docker_compose: [2.20.3, 2.29.7]
+        docker: [v24.0.7, v27.3.1]
+        docker_compose: [v2.20.3, v2.29.7]
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
