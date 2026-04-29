@@ -23,10 +23,22 @@ trap 'rm -rf "$NAVY_TEST_HOME"' EXIT
 # point HOME at the temporary test directory below.
 REAL_DOCKER_CONFIG="${DOCKER_CONFIG:-$HOME/.docker}"
 
+# Optionally restrict the run to scenarios whose name matches the given
+# regular expression. Useful for iterating on a single scenario, e.g.
+#   SCENARIO='Stopping a service' npm run integration
+# Prepending to "$@" via `set --` keeps `$SCENARIO` as a single argument
+# even if it contains whitespace.
+if [ -n "${SCENARIO:-}" ]; then
+  set -- --name "$SCENARIO" "$@"
+fi
+
 echo ""
 echo "RUNNING INTEGRATION TESTS"
 echo "Using isolated HOME: $NAVY_TEST_HOME"
 echo "Using DOCKER_CONFIG: $REAL_DOCKER_CONFIG"
+if [ -n "${SCENARIO:-}" ]; then
+  echo "Filtering scenarios by name: $SCENARIO"
+fi
 echo ""
 
 HOME="$NAVY_TEST_HOME" \
