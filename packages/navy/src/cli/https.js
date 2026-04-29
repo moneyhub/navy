@@ -15,7 +15,12 @@ export default async function (services: Array<string>, opts: Object): Promise<v
 
   if (opts.disable) {
     await removeCert(opts)
-    await reconfigureHTTPProxy({ restart: true })
+
+    // Guard isInitialised so `--disable` still works when the navy has
+    // never been launched (otherwise getNavyFile throws).
+    const navy = await getNavy(opts.navy)
+    const navyFile = (await navy.isInitialised()) ? await navy.getNavyFile() : undefined
+    await reconfigureHTTPProxy({ restart: true, navyFile })
 
     console.log()
     console.log(chalk.green(`✅ HTTPS for service ${opts.disable} is now disabled`))
@@ -59,7 +64,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     }
   }
 
-  await reconfigureHTTPProxy({ restart: true })
+  await reconfigureHTTPProxy({ restart: true, navyFile: await navy.getNavyFile() })
 
   console.log()
   console.log(chalk.green(`✅ Service(s) ${httpsReadyServices.join(', ')} now accessible via HTTPS🔒`))
