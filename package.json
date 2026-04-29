@@ -43,7 +43,7 @@
     "@babel/preset-typescript": "^7",
     "@babel/register": "^7",
     "@babel/runtime": "^7",
-    "@cucumber/cucumber": "^11.0.0",
+    "@cucumber/cucumber": "^12.8.2",
     "babel-plugin-add-module-exports": "^1.0.4",
     "chai": "^4.3.4",
     "chai-like": "^1.1.1",
@@ -57,7 +57,7 @@
     "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-promise": "^6.6.0",
     "flow-bin": "^0.311.0",
-    "lerna": "^8.0.0",
+    "lerna": "^9.0.7",
     "lodash": "^4.17.21",
     "mocha": "^11.0.0",
     "node-fetch": "^2.6.5",
@@ -66,5 +66,17 @@
     "rimraf": "^5.0.10",
     "strip-ansi": "^6.0.1"
   },
-  "dependencies": {}
+  "overrides": {
+    "mocha": {
+      "diff": "^8.0.3",
+      "serialize-javascript": "^7.0.5"
+    },
+    "lerna": {
+      "nx": {
+        "brace-expansion": "^5.0.5",
+        "follow-redirects": "^1.16.0",
+        "yaml": "^2.8.3"
+      }
+    }
+  }
 }

@@ -43,7 +43,7 @@ echo ""
 
 HOME="$NAVY_TEST_HOME" \
 DOCKER_CONFIG="$REAL_DOCKER_CONFIG" \
-  ./node_modules/.bin/cucumber-js --publish-quiet \
+  ./node_modules/.bin/cucumber-js \
   -r ./test/integration/preload.js \
   -r ./test/integration/environment.js \
   -r ./test/integration/hooks.js \
