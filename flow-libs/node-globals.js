@@ -1,6 +1,7 @@
 declare var process: {
   env: {[key: string]: ?string},
   argv: Array<string>,
+  platform: string,
   stdout: any,
   stderr: any,
   cwd(): string,

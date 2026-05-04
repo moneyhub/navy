@@ -49,3 +49,7 @@ declare module 'url' {
 declare module 'crypto' {
   declare module.exports: any;
 }
+
+declare module 'net' {
+  declare module.exports: any;
+}

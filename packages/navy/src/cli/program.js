@@ -280,6 +280,10 @@ program
   .command('https [services...]')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .option('-d, --disable <service>', 'disable https (deletes cert) for a given service', null)
+  .option('-s, --setup', 'generate the Navy root CA (if needed) and install it in the system trust store')
+  .option('-a, --all', 'enable HTTPS for every service in this navy')
+  .option('-i, --issue <url>', 'issue a TLS certificate and key for a URL (non-Navy service), signed with the Navy root CA')
+  .option('-o, --issue-out <dir>', 'output directory for --issue (default: current working directory)')
   .description('Prints or enables HTTPS services')
   .action(lazyRequire('./https'))
   .on('--help', () => console.log(`
@@ -290,8 +294,18 @@ program
     Enable https for mywebservice and anotherwebservice services
     $ navy https mywebservice anotherwebservice
 
+    Enable https for all services
+    $ navy https --all
+
     Disable https for mywebservice
     $ navy https -d mywebservice
+
+    Generate the Navy root CA and install it for this user (no service names)
+    $ navy https --setup
+
+    Issue a cert for an external host (writes leaf key/cert + navy-root-ca.crt)
+    $ navy https --issue https://api.example.test
+    $ navy https --issue https://api.example.test -o ./tls
   `))
 
 program
