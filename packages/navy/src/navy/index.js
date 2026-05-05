@@ -386,7 +386,8 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async useTag(service: string, tag: string): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
     const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
@@ -409,7 +410,8 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async resetTag(service: string): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
     const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
@@ -428,7 +430,8 @@ export class Navy extends EventEmitter2 {
   }
 
   async usePort(service: string, privatePort: number, externalPort: number): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
     const stateServices: {[string]: Object} = state.services || {}
     const existingService: Object = stateServices[service] || {}
 
@@ -451,7 +454,8 @@ export class Navy extends EventEmitter2 {
   }
 
   async resetPort(service: string, privatePort: number): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
     const stateServices: {[string]: Object} = state.services || {}
     const existingService: Object = stateServices[service] || {}
 

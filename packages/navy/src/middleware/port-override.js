@@ -12,7 +12,6 @@ export default (config: Object, state: Object): Object => ({
   ...config,
   services: mapValues(config.services, (service, serviceName) => {
     const portConfig = getPortConfig(serviceName, state)
-    const hasPortConfig = !!portConfig
     const internalPorts = Object.keys(portConfig).filter(internal => !!portConfig[internal])
 
     const inheritedPorts = service.ports
@@ -21,12 +20,10 @@ export default (config: Object, state: Object): Object => ({
 
     return {
       ...service,
-      ports: hasPortConfig
-        ? [
-          ...inheritedPorts,
-          ...internalPorts.map(internal => `${portConfig[internal]}:${internal}`),
-        ]
-        : service.ports,
+      ports: [
+        ...inheritedPorts,
+        ...internalPorts.map(internal => `${portConfig[internal]}:${internal}`),
+      ],
     }
   }),
 })
