@@ -1,4 +1,4 @@
-import {glob} from './util/fs'
+import { glob } from './util/fs'
 import {
   getContent,
   convertMarkdown,

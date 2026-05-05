@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-enable chai-friendly/no-unused-expressions */
 
-import {expect, use} from 'chai'
-import {find} from 'lodash/fp'
-import {Service} from '../../../../../packages/navy/lib'
+import { expect, use } from 'chai'
+import { find } from 'lodash/fp'
+import { Service } from '../../../../../packages/navy/lib'
 
-import {TEST_SERVICE_NAME} from '../../../environment'
+import { TEST_SERVICE_NAME } from '../../../environment'
 
-import {Then} from '@cucumber/cucumber'
+import { Then } from '@cucumber/cucumber'
 
 use(require('chai-like'))
 use(require('chai-things'))

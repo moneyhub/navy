@@ -1,9 +1,9 @@
-import program from 'commander'
+import { program } from 'commander'
 import chalk from 'chalk'
-import {NavyError} from '../errors'
-import {getConfig} from '../config'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
-import {getImportCommandLineOptions} from '../config-provider'
+import { NavyError } from '../errors'
+import { getConfig } from '../config'
+import { startDriverLogging, stopDriverLogging } from '../driver-logging'
+import { getImportCommandLineOptions } from '../config-provider'
 
 const loadingLabelMap = {
   destroy: 'Destroying services...',
@@ -57,6 +57,11 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
 
   return async function (maybeServices, ...args) {
     const { getNavy } = require('../navy')
+
+    // commander v12 invokes action handlers with a trailing Command instance
+    // appended after the parsed options. Strip it so the rest of this wrapper
+    // can continue to treat the last remaining `args` element as the options.
+    if (args.length > 0) args = args.slice(0, -1)
 
     const opts = args.length === 0 ? maybeServices : args[args.length - 1]
     const otherArgs = args.slice(0, args.length - 1)
@@ -138,7 +143,7 @@ program
   .command('destroy')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Destroys a navy and all related data and services')
-  .action(basicCliWrapper('destroy', {serviceBasedAlias: 'kill'}))
+  .action(basicCliWrapper('destroy', { serviceBasedAlias: 'kill' }))
   .on('--help', () => console.log(`
   This will destroy an entire navy and all of its data and services.
 

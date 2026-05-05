@@ -3,8 +3,8 @@
 import bluebird from 'bluebird'
 import invariant from 'invariant'
 
-import type {ConfigProvider} from '../config-provider'
-import type {Navy} from './'
+import type { ConfigProvider } from '../config-provider'
+import type { Navy } from './'
 
 const resolve = bluebird.promisify(require('resolve'))
 
@@ -28,7 +28,7 @@ export async function loadPlugins(navy: Navy, navyFile: Object): Promise<Array<O
     invariant(false, 'PLUGIN_RESOLVE_ERR', navyFile.plugins.join(', '))
   }
 
-  // $FlowIgnore: entry point to plugin has to be dynamic
+  // $FlowFixMe[unsupported-syntax]: entry point to plugin has to be dynamic
   const plugins = pluginPaths.map(pluginPath => require(pluginPath))
 
   return plugins.map((Plugin, index) => {

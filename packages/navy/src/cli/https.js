@@ -1,21 +1,26 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {NavyError} from '../errors'
-import {getNavy} from '../navy'
-import {getConfig, getConfigDir, DEFAULT_TLS_ROOT_CA_DIR} from '../config'
-import {reconfigureHTTPProxy} from '../http-proxy'
-import {createCert, generateRootCa, removeCert} from '../util/https'
+import { NavyError } from '../errors'
+import { getNavy } from '../navy'
+import { getConfig, getConfigDir, DEFAULT_TLS_ROOT_CA_DIR } from '../config'
+import { reconfigureHTTPProxy } from '../http-proxy'
+import { createCert, generateRootCa, removeCert } from '../util/https'
 import fs from 'fs'
 
 
-export default async function (services: string, opts: Object): Promise<void> {
+export default async function (services: Array<string>, opts: Object): Promise<void> {
   const tlsRootCaDir = getConfig().tlsRootCaDir || DEFAULT_TLS_ROOT_CA_DIR
   const configDir = getConfigDir()
 
   if (opts.disable) {
     await removeCert(opts)
-    await reconfigureHTTPProxy({restart: true})
+
+    // Guard isInitialised so `--disable` still works when the navy has
+    // never been launched (otherwise getNavyFile throws).
+    const navy = await getNavy(opts.navy)
+    const navyFile = (await navy.isInitialised()) ? await navy.getNavyFile() : undefined
+    await reconfigureHTTPProxy({ restart: true, navyFile })
 
     console.log()
     console.log(chalk.green(`✅ HTTPS for service ${opts.disable} is now disabled`))
@@ -51,7 +56,7 @@ export default async function (services: string, opts: Object): Promise<void> {
     }
     const serviceUrl = await navy.url(service)
     try {
-      await createCert({serviceUrl})
+      await createCert({ serviceUrl })
       httpsReadyServices.push(service)
     } catch (error) {
       console.log(error)
@@ -59,7 +64,7 @@ export default async function (services: string, opts: Object): Promise<void> {
     }
   }
 
-  await reconfigureHTTPProxy({restart: true})
+  await reconfigureHTTPProxy({ restart: true, navyFile: await navy.getNavyFile() })
 
   console.log()
   console.log(chalk.green(`✅ Service(s) ${httpsReadyServices.join(', ')} now accessible via HTTPS🔒`))

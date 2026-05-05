@@ -3,22 +3,22 @@
 import path from 'path'
 import invariant from 'invariant'
 import fs from 'fs'
-// $FlowIgnore
 import { promises as fsPromises } from 'fs'
 
 const DEFAULT_ENVIRONMENT_NAME = 'dev'
 export const DEFAULT_TLS_ROOT_CA_DIR = `${getConfigDir()}/tls-root-ca`
 
-const DEFAULT_CONFIG = {
-  defaultNavy: DEFAULT_ENVIRONMENT_NAME,
-  externalIP: null,
-  tlsRootCaDir: DEFAULT_TLS_ROOT_CA_DIR,
-}
-
 export type Config = {
   defaultNavy: ?string,
   externalIP: ?string,
   tlsRootCaDir: ?string,
+  [string]: ?string,
+}
+
+const DEFAULT_CONFIG: Config = {
+  defaultNavy: DEFAULT_ENVIRONMENT_NAME,
+  externalIP: null,
+  tlsRootCaDir: DEFAULT_TLS_ROOT_CA_DIR,
 }
 
 let _config: ?Config = null
@@ -55,7 +55,7 @@ export function getConfig(): Config {
 export async function setConfig(config: ?Config): Promise<void> {
   if (config == null) config = DEFAULT_CONFIG
 
-  await fsPromises.mkdir(path.dirname(getConfigPath()), {recursive: true})
+  await fsPromises.mkdir(path.dirname(getConfigPath()), { recursive: true })
   await fsPromises.writeFile(getConfigPath(), JSON.stringify(config, null, 2))
 
   // trash cached config

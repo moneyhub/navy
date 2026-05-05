@@ -5,7 +5,7 @@ import cleanTemporaryComposeFiles from './clean-compose-files'
 import checkForInvalidState from './invalid-state'
 import checkForInvalidComposeConfig from './invalid-compose-config'
 
-async function run(fns) {
+async function run(fns: Array<() => mixed>) {
   const errors = []
 
   for (const fn of fns) {

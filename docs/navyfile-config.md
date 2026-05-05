@@ -21,6 +21,7 @@ module.exports = {
   httpProxyAutoPorts: [
     4080,
   ],
+  httpProxyImage: 'myregistry/custom-proxy:latest',
   httpProxy: {
     myotherservice: { port: 8080 }
   },
@@ -44,6 +45,10 @@ A list of service names in the compose configuration which should be selected by
 ### `httpProxyAutoPorts: ?Array<Number | string>`
 
 If using the [built in HTTP proxy](http-proxy.md), you can tell Navy to automatically register a service with the HTTP proxy, if it publishes any port in this list. This overrides port 80 for automatic registration.
+
+### `httpProxyImage: ?string`
+
+Overrides the Docker image used for the [built in HTTP proxy](http-proxy.md). Defaults to `navycloud/navy-proxy` if not set. The `NAVY_HTTP_PROXY_IMAGE` environment variable takes precedence over this property if both are set.
 
 ### `httpProxy: ?{[key: string]: { port: Number, enableHttps: Boolean }}`
 

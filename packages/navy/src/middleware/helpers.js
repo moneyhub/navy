@@ -1,22 +1,22 @@
 /* @flow */
 
-import {mapValues} from 'lodash'
+import { mapValues } from 'lodash'
 
 type ServiceMapper = (service: Object, serviceName: string) => Object
 type ServiceMapperWithState = (service: Object, serviceName: string, serviceState: ?Object) => Object
 
 export const middlewareHelpers = {
-  rewriteServices(config: Object, serviceMapperFn: ServiceMapper) {
+  rewriteServices(config: Object, serviceMapperFn: ServiceMapper): Object {
     return {
       ...config,
       services: mapValues(config.services || {}, serviceMapperFn),
     }
   },
 
-  rewriteServicesWithState(config: Object, state: Object, serviceMapperFn: ServiceMapperWithState) {
+  rewriteServicesWithState(config: Object, state: Object, serviceMapperFn: ServiceMapperWithState): Object {
     const normalisedState = state || { services: {} }
 
-    function mapperFn(service, serviceName) {
+    function mapperFn(service: Object, serviceName: string) {
       return serviceMapperFn(service, serviceName, normalisedState.services[serviceName])
     }
 
@@ -26,7 +26,7 @@ export const middlewareHelpers = {
     }
   },
 
-  addVolumes(service: Object, volumes: Array<string>) {
+  addVolumes(service: Object, volumes: Array<string>): Array<string> {
     const normalisedVolumes = service.volumes || []
 
     return [

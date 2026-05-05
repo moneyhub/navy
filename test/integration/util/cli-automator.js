@@ -1,17 +1,17 @@
 import path from 'path'
 import * as pty from 'node-pty'
-import {execSync} from 'child_process'
+import { execSync } from 'child_process'
 import stripAnsi from 'strip-ansi'
-import {ENV_NAME} from '../environment'
+import { ENV_NAME } from '../environment'
 
 // from http://stackoverflow.com/questions/17470554/how-to-capture-the-arrow-keys-in-node-js
 const keyCodes = {
-  'up': '\u001b[A',
-  'down': '\u001b[B',
-  'right': '\u001b[C',
-  'left': '\u001b[D',
-  'enter': '\n',
-  'space': ' ',
+  up: '\u001b[A',
+  down: '\u001b[B',
+  right: '\u001b[C',
+  left: '\u001b[D',
+  enter: '\n',
+  space: ' ',
 }
 
 const SYNTHETIC_DELAY_MS = 150
@@ -46,9 +46,16 @@ export default class Automator {
       cols: 130,
       rows: 30,
       cwd,
+      // node-pty merges stdout and stderr into a single stream that we
+      // capture and assert against, so any `debug()` output from the CLI
+      // ends up in the captured output and breaks JSON parsing / equality
+      // checks. CI exports `NAVY_DEBUG=navy:*` to aid test diagnosis, and
+      // step definitions commonly spread `process.env` when adding their
+      // own variables, so we unconditionally silence the spawned CLI here.
       env: {
         NAVY_NAME: ENV_NAME,
         ...(this.opts.env || process.env),
+        NAVY_DEBUG: 'null',
       },
     })
 

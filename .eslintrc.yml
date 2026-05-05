@@ -3,7 +3,7 @@
 
   extends: "standard"
 
-  plugins: ["flowtype", "import", "chai-friendly"]
+  plugins: ["import", "chai-friendly"]
 
   rules:
     space-before-function-paren: [2, {"anonymous": "always", "named": "never"}]
@@ -21,9 +21,6 @@
     indent-legacy: "off"
 
     no-return-await: "off"
-
-    flowtype/define-flow-type: 2
-    flowtype/use-flow-type: 2
 
     import/no-duplicates: "off"
 

@@ -1,4 +1,32 @@
 Navy has a comprehensive suite of integration tests.
-These tests are supposed to be run inside an isolated environment as it will hijack the home directory and simulate a users environment.
 
-When running the tests with `npm run integration`, `scripts/integration.sh` will build a Docker container to run the tests in. This container is linked to another Docker container. This other container uses the `docker:dind` image, which has a Docker Daemon running inside of it. This essentially means that the entire test suite is testing against an isolated, disposable Docker instance, which means your local Docker won't get hijacked.
+These tests run directly on the host via `npm run integration`. The script (`scripts/integration.sh`) creates a fresh temporary directory and points `HOME` at it for the lifetime of the run, so navy's state directory (`~/.navy`) is isolated and your real `~/.navy` is never touched. The tests do, however, talk to your host's Docker daemon directly - any test navies / containers will be created and torn down against that daemon.
+
+## Prerequisites
+
+- Node.js matching the version range in `package.json` (`engines.node`).
+- A running Docker daemon reachable from your shell (Docker Desktop, Colima, or a native daemon).
+- `docker compose` v2 (preferred) or `docker-compose` v1 available on `PATH`.
+
+## Running
+
+```sh
+npm ci
+npm run integration
+```
+
+Any extra arguments are forwarded to `cucumber-js`, for example to run a single feature:
+
+```sh
+npm run integration -- ./test/integration/features/config.feature
+```
+
+To run a single scenario, set the `SCENARIO` environment variable to a regular expression that matches the scenario name (this maps to `cucumber-js --name`):
+
+```sh
+SCENARIO='Stopping a service should stop it' npm run integration
+```
+
+## CI
+
+In GitHub Actions, the matrix in `.github/workflows/build.yaml` drives the Node, Docker engine, and Docker Compose versions via `actions/setup-node`, `docker/setup-docker-action`, and `docker/setup-compose-action` respectively, and then runs `npm test` directly on the runner.

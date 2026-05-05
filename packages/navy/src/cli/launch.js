@@ -1,8 +1,8 @@
 /* @flow */
 
 import inquirer from 'inquirer'
-import {getOrInitialiseNavy} from './util'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
+import { getOrInitialiseNavy } from './util'
+import { startDriverLogging, stopDriverLogging } from '../driver-logging'
 
 const SELECTED_WEIGHT = 100 // make sure selected services appear at the top
 

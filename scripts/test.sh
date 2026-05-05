@@ -3,5 +3,5 @@ set -e
 
 npm run lint
 npm run flow
-npm run unit
+npm run coverage
 npm run integration

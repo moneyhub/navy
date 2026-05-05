@@ -1,8 +1,8 @@
 /* @flow */
 
-import {middlewareHelpers} from './helpers'
+import { middlewareHelpers } from './helpers'
 
-function rewriteService(service, serviceName, serviceState) {
+function rewriteService(service: Object, serviceName: string, serviceState: ?Object) {
   if (!serviceState || !serviceState._develop) return service
 
   const _serviceState = serviceState
@@ -19,5 +19,5 @@ function rewriteService(service, serviceName, serviceState) {
   }
 }
 
-export default (config: Object, state: Object) =>
+export default (config: Object, state: Object): Object =>
   middlewareHelpers.rewriteServicesWithState(config, state, rewriteService)
