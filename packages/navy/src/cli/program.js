@@ -4,6 +4,7 @@ import { NavyError } from '../errors'
 import { getConfig } from '../config'
 import { startDriverLogging, stopDriverLogging } from '../driver-logging'
 import { getImportCommandLineOptions } from '../config-provider'
+import { mergeActionOptions } from './util/merge-action-options'
 
 const loadingLabelMap = {
   destroy: 'Destroying services...',
@@ -22,6 +23,24 @@ const loadingLabelMap = {
 
 function removeFirstLineFromStackTrace(stack) {
   return stack?.split('\n')?.slice(1)?.join('\n')
+}
+
+function normaliseLazyRequireArgs(args) {
+  if (args.length === 0) return args
+  const last = args[args.length - 1]
+  if (!last || typeof last.optsWithGlobals !== 'function') {
+    return args
+  }
+  const command = last
+  const rest = args.slice(0, -1)
+  if (rest.length === 0) {
+    return rest
+  }
+  const lastOpt = rest[rest.length - 1]
+  if (lastOpt && typeof lastOpt === 'object' && !Array.isArray(lastOpt)) {
+    return [...rest.slice(0, -1), mergeActionOptions(lastOpt, command)]
+  }
+  return rest
 }
 
 function wrapper(res) {
@@ -59,12 +78,22 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
     const { getNavy } = require('../navy')
 
     // commander v12 invokes action handlers with a trailing Command instance
-    // appended after the parsed options. Strip it so the rest of this wrapper
-    // can continue to treat the last remaining `args` element as the options.
-    if (args.length > 0) args = args.slice(0, -1)
+    // appended after the parsed options. Strip it and merge global options
+    // (e.g. `navy -e dev start`) into the opts object.
+    let command = null
+    if (args.length > 0) {
+      const last = args[args.length - 1]
+      if (last && typeof last.optsWithGlobals === 'function') {
+        command = last
+        args = args.slice(0, -1)
+      }
+    }
 
-    const opts = args.length === 0 ? maybeServices : args[args.length - 1]
+    let opts = args.length === 0 ? maybeServices : args[args.length - 1]
     const otherArgs = args.slice(0, args.length - 1)
+    if (command && opts && typeof opts === 'object' && !Array.isArray(opts)) {
+      opts = mergeActionOptions(opts, command)
+    }
     const envName = opts.navy
 
     if (wrapperOpts.serviceBasedAlias && maybeServices.length) {
@@ -115,11 +144,15 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
 function lazyRequire(path) {
   return function (...args) {
     const mod = require(path)
-    return wrapper((mod.default || mod)(...args))
+    const normalised = normaliseLazyRequireArgs(args)
+    return wrapper((mod.default || mod)(...normalised))
   }
 }
 
 const defaultNavy = process.env.NAVY_NAME || getConfig().defaultNavy
+
+program
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
 
 const importCommand = program
   .command('import')

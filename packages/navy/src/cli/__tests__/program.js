@@ -29,6 +29,7 @@ describe('cli/program', function () {
     helpHandlersByCommand = {}
 
     fakeProgram = {
+      option: sandbox.stub().returnsThis(),
       command(spec) {
         const name = spec.split(' ')[0]
         const cmd = {
@@ -168,6 +169,16 @@ describe('cli/program', function () {
       })
 
       expect(consoleLogStub.called).to.equal(true)
+    })
+
+    it('should register a global -e, --navy option on the root program', function () {
+      loadModule()
+
+      expect(fakeProgram.option.calledWith(
+        '-e, --navy [env]',
+        sinon.match.string,
+        'dev',
+      )).to.equal(true)
     })
 
   })
@@ -332,6 +343,15 @@ describe('cli/program', function () {
       expect(navyStub.ensurePluginsLoaded.calledOnce).to.equal(true)
     })
 
+    it('should merge optsWithGlobals so global navy is used when Commander passes the command', async function () {
+      navyStub.start = sandbox.stub().resolves()
+      const fakeCommand = { optsWithGlobals: () => ({ navy: 'from-global' }) }
+
+      await actionsByCommand.start(['web'], { navy: 'subcommand-default' }, fakeCommand)
+
+      expect(getNavyStub.firstCall.args[0]).to.equal('from-global')
+    })
+
     it('should pass undefined when called with an empty service list', async function () {
       navyStub.start = sandbox.stub().resolves()
 
@@ -458,6 +478,7 @@ describe('cli/program', function () {
   function createCapturingProgram() {
     capturedActions = {}
     return {
+      option: sandbox.stub().returnsThis(),
       command(spec) {
         const name = spec.split(' ')[0]
         const cmd = {
