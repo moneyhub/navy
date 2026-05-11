@@ -151,6 +151,11 @@ function lazyRequire(path) {
 
 const defaultNavy = process.env.NAVY_NAME || getConfig().defaultNavy
 
+// Strictly separate parent and subcommand options so an option that isn't
+// declared on a subcommand (e.g. `navy status -e foo`) is reported as
+// unknown rather than silently absorbed by the parent program.
+program.enablePositionalOptions()
+
 program
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
 

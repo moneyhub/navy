@@ -30,6 +30,7 @@ describe('cli/program', function () {
 
     fakeProgram = {
       option: sandbox.stub().returnsThis(),
+      enablePositionalOptions: sandbox.stub().returnsThis(),
       command(spec) {
         const name = spec.split(' ')[0]
         const cmd = {
@@ -181,6 +182,12 @@ describe('cli/program', function () {
       )).to.equal(true)
     })
 
+    it('should enable positional options so unknown subcommand options are rejected', function () {
+      loadModule()
+
+      expect(fakeProgram.enablePositionalOptions.calledOnce).to.equal(true)
+    })
+
   })
 
   describe('lazyRequire wrapped action', function () {
@@ -327,6 +334,93 @@ describe('cli/program', function () {
 
   })
 
+  describe('normaliseLazyRequireArgs (via lazyRequire wrapped action)', function () {
+
+    let importSpy
+
+    function loadWithImportSpy() {
+      importSpy = sandbox.stub().resolves('imported')
+      return proxyquire.noCallThru()('../program', {
+        commander: { program: createCapturingProgram() },
+        '../errors': { NavyError },
+        '../config': { getConfig: getConfigStub },
+        '../driver-logging': {
+          startDriverLogging: startDriverLoggingStub,
+          stopDriverLogging: stopDriverLoggingStub,
+        },
+        '../config-provider': { getImportCommandLineOptions: getImportCommandLineOptionsStub },
+        '../navy': { getNavy: getNavyStub },
+        './import': importSpy,
+        './launch': () => Promise.resolve(),
+        './ps': () => Promise.resolve(),
+        './updates': () => Promise.resolve(),
+        './logs': () => Promise.resolve(),
+        './health': () => Promise.resolve(),
+        './wait-for-healthy': () => Promise.resolve(),
+        './https': () => Promise.resolve(),
+        './open': () => Promise.resolve(),
+        './develop': () => Promise.resolve(),
+        './live': () => Promise.resolve(),
+        './run': () => Promise.resolve(),
+        './refresh-config': () => Promise.resolve(),
+        './status': () => Promise.resolve(),
+        './doctor': () => Promise.resolve(),
+        './config/wrapper': () => Promise.resolve(),
+        './external-ip': () => Promise.resolve(),
+        './lan-ip': () => Promise.resolve(),
+        './local-ip': () => Promise.resolve(),
+      })
+    }
+
+    it('should pass through unchanged when invoked with no arguments at all', async function () {
+      loadWithImportSpy()
+
+      capturedActions.import()
+      await new Promise(resolve => setImmediate(resolve))
+
+      expect(importSpy.calledOnce).to.equal(true)
+      expect(importSpy.firstCall.args).to.eql([])
+    })
+
+    it('should strip the trailing Command instance when no other args were supplied', async function () {
+      loadWithImportSpy()
+      const fakeCommand = { optsWithGlobals: () => ({ navy: 'global' }) }
+
+      capturedActions.import(fakeCommand)
+      await new Promise(resolve => setImmediate(resolve))
+
+      expect(importSpy.calledOnce).to.equal(true)
+      expect(importSpy.firstCall.args).to.eql([])
+    })
+
+    it('should merge inherited globals into the trailing options object before forwarding', async function () {
+      loadWithImportSpy()
+      const fakeCommand = {
+        optsWithGlobals: () => ({ navy: 'from-global', extra: 1 }),
+        getOptionValueSource: () => 'default',
+      }
+
+      capturedActions.import({ navy: 'subcommand-default' }, fakeCommand)
+      await new Promise(resolve => setImmediate(resolve))
+
+      expect(importSpy.calledOnce).to.equal(true)
+      expect(importSpy.firstCall.args).to.have.lengthOf(1)
+      expect(importSpy.firstCall.args[0]).to.eql({ navy: 'from-global', extra: 1 })
+    })
+
+    it('should leave non-object trailing arguments untouched when stripping the command', async function () {
+      loadWithImportSpy()
+      const fakeCommand = { optsWithGlobals: () => ({ navy: 'global' }) }
+
+      capturedActions.import(['web', 'api'], fakeCommand)
+      await new Promise(resolve => setImmediate(resolve))
+
+      expect(importSpy.calledOnce).to.equal(true)
+      expect(importSpy.firstCall.args).to.eql([['web', 'api']])
+    })
+
+  })
+
   describe('basicCliWrapper action', function () {
 
     beforeEach(function () {
@@ -348,6 +442,15 @@ describe('cli/program', function () {
       const fakeCommand = { optsWithGlobals: () => ({ navy: 'from-global' }) }
 
       await actionsByCommand.start(['web'], { navy: 'subcommand-default' }, fakeCommand)
+
+      expect(getNavyStub.firstCall.args[0]).to.equal('from-global')
+    })
+
+    it('should fall back to maybeServices as opts when only an opts object and command are passed', async function () {
+      navyStub.getAvailableServiceNames = sandbox.stub().resolves([])
+      const fakeCommand = { optsWithGlobals: () => ({ navy: 'from-global' }) }
+
+      await actionsByCommand['available-services']({ navy: 'subcommand-default' }, fakeCommand)
 
       expect(getNavyStub.firstCall.args[0]).to.equal('from-global')
     })
@@ -479,6 +582,7 @@ describe('cli/program', function () {
     capturedActions = {}
     return {
       option: sandbox.stub().returnsThis(),
+      enablePositionalOptions: sandbox.stub().returnsThis(),
       command(spec) {
         const name = spec.split(' ')[0]
         const cmd = {

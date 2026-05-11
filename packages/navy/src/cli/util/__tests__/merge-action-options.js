@@ -33,4 +33,24 @@ describe('cli/util/merge-action-options', function () {
     expect(spy.calledOnce).to.equal(true)
   })
 
+  it('should let an explicit subcommand option beat the inherited parent default', function () {
+    const command = {
+      optsWithGlobals: () => ({ navy: 'parent-default' }),
+      getOptionValueSource: key => (key === 'navy' ? 'cli' : 'default'),
+    }
+    const merged = mergeActionOptions({ navy: 'from-subcommand' }, command)
+
+    expect(merged.navy).to.equal('from-subcommand')
+  })
+
+  it('should keep the parent value when the subcommand value came from its default', function () {
+    const command = {
+      optsWithGlobals: () => ({ navy: 'from-parent' }),
+      getOptionValueSource: () => 'default',
+    }
+    const merged = mergeActionOptions({ navy: 'subcommand-default' }, command)
+
+    expect(merged.navy).to.equal('from-parent')
+  })
+
 })
