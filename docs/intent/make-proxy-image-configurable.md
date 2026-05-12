@@ -44,6 +44,8 @@ The behaviour and precedence rules are documented for end users in:
 
 A follow-up commit renamed the environment variable from `NAVY_PROXY_IMAGE` to `NAVY_HTTP_PROXY_IMAGE` so it sits alongside the rest of the HTTP proxy surface area.
 
+The branch also adds a generic environment-variable passthrough for the proxy image, on the same precedence model as the image override. Consumers can declare a static map of variables in `Navyfile.js` via `httpProxyEnv`, or forward names from the navy process env via the `NAVY_HTTP_PROXY_ENV` allowlist. The two sources are merged when both are set, with the env-var allowlist winning on key collisions, and the generated compose config omits the `environment:` block entirely when nothing is configured so existing setups are unaffected. This keeps navy agnostic of any specific consumer while letting downstream projects (e.g. those running a customised proxy image) wire in whatever runtime configuration they need.
+
 ## HTTPS and proxy reconfiguration correctness
 
 While testing the configurable image, a latent bug surfaced: the HTTPS CLI path called `reconfigureHTTPProxy` without forwarding the resolved `navyFile`, which meant a custom `httpProxyImage` was silently dropped whenever HTTPS was toggled. The fix threads `navyFile` through the call chain and is covered by edge-case tests.
@@ -129,6 +131,7 @@ The commits below are listed in chronological order and group naturally into the
 - `18da0bf` chore(deps): remediate npm audit vulnerabilities
 - `13dc678` fix: propagate navyFile through https CLI reconfigureHTTPProxy calls
 - `3d64bfc` test: add c8 coverage tooling and 100% unit test coverage
+- `feat(http-proxy): allow forwarding custom env vars to the proxy container` - generic `httpProxyEnv` / `NAVY_HTTP_PROXY_ENV` passthrough on the proxy compose service, with the allowlist taking precedence on key collisions.
 
 ## Scope appendix - changed files by area
 

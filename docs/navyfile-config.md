@@ -22,6 +22,7 @@ module.exports = {
     4080,
   ],
   httpProxyImage: 'myregistry/custom-proxy:latest',
+  httpProxyEnv: { FOO: 'bar' },
   httpProxy: {
     myotherservice: { port: 8080 }
   },
@@ -49,6 +50,10 @@ If using the [built in HTTP proxy](http-proxy.md), you can tell Navy to automati
 ### `httpProxyImage: ?string`
 
 Overrides the Docker image used for the [built in HTTP proxy](http-proxy.md). Defaults to `navycloud/navy-proxy` if not set. The `NAVY_HTTP_PROXY_IMAGE` environment variable takes precedence over this property if both are set.
+
+### `httpProxyEnv: ?{[key: string]: string}`
+
+A per-project map of environment variables to forward into the [built in HTTP proxy](http-proxy.md) container. Useful when running a custom proxy image that needs runtime configuration. Values are coerced to strings; entries with `null`, `undefined`, or empty-string values are dropped. The `NAVY_HTTP_PROXY_ENV` environment variable (a comma-separated allowlist of names from the navy process env) takes precedence over this property on key collisions. Example: `httpProxyEnv: { FOO: 'bar' }`.
 
 ### `httpProxy: ?{[key: string]: { port: Number, enableHttps: Boolean }}`
 

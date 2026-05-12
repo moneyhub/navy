@@ -19,6 +19,48 @@ export function resolveProxyImage(navyFile: ?Object): string {
     DEFAULT_PROXY_IMAGE
 }
 
+export function resolveProxyEnvFromNavyFile(navyFile: ?Object): {[key: string]: string} {
+  if (!navyFile) return {}
+  const raw: any = navyFile.httpProxyEnv
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {}
+
+  const result: {[key: string]: string} = {}
+  for (const key of Object.keys(raw)) {
+    const value: any = raw[key]
+    if (value === null || value === undefined) continue
+    const coerced = String(value)
+    if (coerced === '') continue
+    result[key] = coerced
+  }
+  return result
+}
+
+export function resolveProxyEnvAllowlist(): {[key: string]: string} {
+  const allowlist = process.env.NAVY_HTTP_PROXY_ENV
+  if (!allowlist) return {}
+
+  const seen: Set<string> = new Set()
+  const result: {[key: string]: string} = {}
+  for (const rawName of allowlist.split(',')) {
+    const name = rawName.trim()
+    if (!name || seen.has(name)) continue
+    seen.add(name)
+    const value = process.env[name]
+    if (typeof value !== 'string' || value === '') continue
+    result[name] = value
+  }
+  return result
+}
+
+export function resolveProxyEnv(navyFile: ?Object): ?{[key: string]: string} {
+  const merged = {
+    ...resolveProxyEnvFromNavyFile(navyFile),
+    ...resolveProxyEnvAllowlist(),
+  }
+  if (Object.keys(merged).length === 0) return null
+  return merged
+}
+
 // Resolve the host path to the Docker socket. The proxy container needs to
 // read events from the same daemon as the rest of navy, so we honour
 // DOCKER_HOST when it points at a unix socket (e.g. on CI where
@@ -66,6 +108,8 @@ async function updateComposeConfig(navies: Array<string>, navyFile: ?Object) {
     volumes.push(`${certsPath}:/etc/nginx/dhparam`) // to persist DH params
   }
 
+  const proxyEnv = resolveProxyEnv(navyFile)
+
   const config = {
     version: '2',
 
@@ -75,6 +119,7 @@ async function updateComposeConfig(navies: Array<string>, navyFile: ?Object) {
         ports,
         networks: networks.map(net => net.Name),
         volumes,
+        ...(proxyEnv ? { environment: proxyEnv } : {}),
         restart: 'always',
       },
     },
