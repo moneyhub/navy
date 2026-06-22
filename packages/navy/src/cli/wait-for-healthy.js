@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 import readline from 'readline'
-import {dots} from 'cli-spinners'
-import {getNavy} from '../'
+import { dots } from 'cli-spinners'
+import { getNavy } from '../'
 
 let spinnerIndex = 0
 let spinnerFrame = dots.frames[0]
@@ -18,7 +18,7 @@ export default async function (services: Array<string>, opts: Object): Promise<v
     return
   }
 
-  let healthyStatus = []
+  let healthyStatus: Array<{ service: string, health: string }> = []
 
   let drawnLines = 0
 

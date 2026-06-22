@@ -4,17 +4,18 @@ import path from 'path'
 import invariant from 'invariant'
 
 import fs from '../../util/fs'
-import {execAsync} from '../../util/exec-async'
-import {log} from '../../driver-logging'
-import {pathToNavy} from '../../navy/state'
+import { execAsync } from '../../util/exec-async'
+import { log } from '../../driver-logging'
+import { pathToNavy } from '../../navy/state'
 
-import type {ConfigProvider} from '../../config-provider'
-import type {Navy} from '../../navy'
+import type { ConfigProvider } from '../../config-provider'
+import type { Navy } from '../../navy'
 
 export type ComposeClient = {
   exec(command: string, args: any, opts?: Object): Promise<string>,
   getCompiledDockerComposePath(): string,
   getDockerComposeFilePath(): Promise<?string>,
+  getOriginalDockerComposeDirectory(): Promise<?string>,
 }
 
 export type ExecOpts = {

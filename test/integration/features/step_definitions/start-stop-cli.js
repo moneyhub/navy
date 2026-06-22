@@ -1,23 +1,23 @@
-import {expect, use} from 'chai'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { expect, use } from 'chai'
+import { ENV_NAME, TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
-import {Service} from '../../../../packages/navy/lib'
+import { Service } from '../../../../packages/navy/lib'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 use(require('chai-like'))
 use(require('chai-things'))
 
 When(/I stop the service via the CLI$/, async function () {
-  this.result = await Automator.spawn(['stop', TEST_SERVICE_NAME]).waitForDone()
+  this.result = await Automator.spawn(['stop', '-e', ENV_NAME, TEST_SERVICE_NAME]).waitForDone()
 })
 
 When(/I start the service via the CLI$/, async function () {
-  this.result = await Automator.spawn(['start', TEST_SERVICE_NAME]).waitForDone()
+  this.result = await Automator.spawn(['start', '-e', ENV_NAME, TEST_SERVICE_NAME]).waitForDone()
 })
 
 When(/I start the navy via the CLI$/, async function () {
-  this.result = await Automator.spawn(['start']).waitForDone()
+  this.result = await Automator.spawn(['start', '-e', ENV_NAME]).waitForDone()
 })
 
 Then(/I should see that just that service is running$/, async function () {

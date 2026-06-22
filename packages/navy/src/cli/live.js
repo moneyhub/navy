@@ -2,8 +2,8 @@
 
 import chalk from 'chalk'
 
-import {getNavy} from '../'
-import {NavyError} from '../errors'
+import { getNavy } from '../'
+import { NavyError } from '../errors'
 import getNavyRc from '../util/navyrc'
 
 export default async function (service: string, opts: Object): Promise<void> {
@@ -34,7 +34,7 @@ export default async function (service: string, opts: Object): Promise<void> {
     services: {
       ...state.services,
       [service]: {
-        ...(state.services || {})[service],
+        ...state.services[service],
         _develop: undefined,
       },
     },

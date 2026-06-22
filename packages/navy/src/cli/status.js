@@ -1,7 +1,7 @@
 import chalk from 'chalk'
-import {getLaunchedNavies} from '../'
+import { getLaunchedNavies } from '../'
 import table from '../util/table'
-import {getConfig} from '../config'
+import { getConfig } from '../config'
 
 function formatNavyName(navy, defaultNavy) {
   if (navy.name === defaultNavy) {

@@ -1,7 +1,7 @@
 /* @flow */
 
-import {getLaunchedNavies} from '../../'
-import {start, fix} from './util'
+import { getLaunchedNavies } from '../../'
+import { start, fix } from './util'
 
 export default async function () {
   start('Checking for dangling Navies')

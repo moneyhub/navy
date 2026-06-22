@@ -2,7 +2,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import showdown from 'showdown'
 import frontMatter from 'front-matter'
-import {fs, mkdirp} from './fs'
+import { fs, mkdirp } from './fs'
 
 const showdownConverter = new showdown.Converter()
 

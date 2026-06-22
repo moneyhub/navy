@@ -1,9 +1,10 @@
-import program from 'commander'
+import { program } from 'commander'
 import chalk from 'chalk'
-import {NavyError} from '../errors'
-import {getConfig} from '../config'
-import {startDriverLogging, stopDriverLogging} from '../driver-logging'
-import {getImportCommandLineOptions} from '../config-provider'
+import { NavyError } from '../errors'
+import { getConfig } from '../config'
+import { startDriverLogging, stopDriverLogging } from '../driver-logging'
+import { getImportCommandLineOptions } from '../config-provider'
+import { mergeActionOptions } from './util/merge-action-options'
 
 const loadingLabelMap = {
   destroy: 'Destroying services...',
@@ -22,6 +23,24 @@ const loadingLabelMap = {
 
 function removeFirstLineFromStackTrace(stack) {
   return stack?.split('\n')?.slice(1)?.join('\n')
+}
+
+function normaliseLazyRequireArgs(args) {
+  if (args.length === 0) return args
+  const last = args[args.length - 1]
+  if (!last || typeof last.optsWithGlobals !== 'function') {
+    return args
+  }
+  const command = last
+  const rest = args.slice(0, -1)
+  if (rest.length === 0) {
+    return rest
+  }
+  const lastOpt = rest[rest.length - 1]
+  if (lastOpt && typeof lastOpt === 'object' && !Array.isArray(lastOpt)) {
+    return [...rest.slice(0, -1), mergeActionOptions(lastOpt, command)]
+  }
+  return rest
 }
 
 function wrapper(res) {
@@ -58,8 +77,23 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
   return async function (maybeServices, ...args) {
     const { getNavy } = require('../navy')
 
-    const opts = args.length === 0 ? maybeServices : args[args.length - 1]
+    // commander v12 invokes action handlers with a trailing Command instance
+    // appended after the parsed options. Strip it and merge global options
+    // (e.g. `navy -e dev start`) into the opts object.
+    let command = null
+    if (args.length > 0) {
+      const last = args[args.length - 1]
+      if (last && typeof last.optsWithGlobals === 'function') {
+        command = last
+        args = args.slice(0, -1)
+      }
+    }
+
+    let opts = args.length === 0 ? maybeServices : args[args.length - 1]
     const otherArgs = args.slice(0, args.length - 1)
+    if (command && opts && typeof opts === 'object' && !Array.isArray(opts)) {
+      opts = mergeActionOptions(opts, command)
+    }
     const envName = opts.navy
 
     if (wrapperOpts.serviceBasedAlias && maybeServices.length) {
@@ -110,11 +144,20 @@ function basicCliWrapper(fnName, wrapperOpts = {}) {
 function lazyRequire(path) {
   return function (...args) {
     const mod = require(path)
-    return wrapper((mod.default || mod)(...args))
+    const normalised = normaliseLazyRequireArgs(args)
+    return wrapper((mod.default || mod)(...normalised))
   }
 }
 
 const defaultNavy = process.env.NAVY_NAME || getConfig().defaultNavy
+
+// Strictly separate parent and subcommand options so an option that isn't
+// declared on a subcommand (e.g. `navy status -e foo`) is reported as
+// unknown rather than silently absorbed by the parent program.
+program.enablePositionalOptions()
+
+program
+  .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
 
 const importCommand = program
   .command('import')
@@ -138,7 +181,7 @@ program
   .command('destroy')
   .option('-e, --navy [env]', `set the navy name to be used [${defaultNavy}]`, defaultNavy)
   .description('Destroys a navy and all related data and services')
-  .action(basicCliWrapper('destroy', {serviceBasedAlias: 'kill'}))
+  .action(basicCliWrapper('destroy', { serviceBasedAlias: 'kill' }))
   .on('--help', () => console.log(`
   This will destroy an entire navy and all of its data and services.
 

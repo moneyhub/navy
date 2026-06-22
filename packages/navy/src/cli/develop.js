@@ -4,8 +4,8 @@ import path from 'path'
 import chalk from 'chalk'
 import invariant from 'invariant'
 
-import {getNavy} from '../'
-import {NavyError} from '../errors'
+import { getNavy } from '../'
+import { NavyError } from '../errors'
 import docker from '../util/docker-client'
 import getNavyRc from '../util/navyrc'
 
@@ -38,13 +38,14 @@ export default async function (service: string, opts: Object): Promise<void> {
   )
 
   const state = (await navy.getState()) || {}
+  const stateServices: {[string]: Object} = state.services || {}
 
   await navy.saveState({
     ...state,
     services: {
-      ...state.services,
+      ...stateServices,
       [service]: {
-        ...(state.services || {})[service],
+        ...stateServices[service],
         _develop: {
           mounts,
           command: navyRc.develop.command,
@@ -69,7 +70,7 @@ export default async function (service: string, opts: Object): Promise<void> {
   const containerId = container.id
 
   const containerObj = docker.getContainer(containerId)
-  containerObj.attach({stream: true, stdout: true, stderr: true})
+  containerObj.attach({ stream: true, stdout: true, stderr: true })
     .then(stream =>
       containerObj.modem.demuxStream(stream, process.stdout, process.stderr)
     )

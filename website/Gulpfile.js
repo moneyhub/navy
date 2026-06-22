@@ -1,5 +1,5 @@
 const gulp = require('gulp')
-const {execSync} = require('child_process')
+const { execSync } = require('child_process')
 
 const exec = (cmd) => execSync(cmd, { stdio: 'inherit' })
 

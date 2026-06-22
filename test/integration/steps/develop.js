@@ -1,14 +1,14 @@
 import path from 'path'
 import fs from 'fs'
-import rimraf from 'rimraf'
+import { rimrafSync } from 'rimraf'
 
-import {Given} from '@cucumber/cucumber'
+import { Given } from '@cucumber/cucumber'
 
 Given(/I have a local copy of the source code of the launched service$/, function () {
   // create dummy local copy in temp directory
   this.localCopyPath = path.join(__dirname, '../../', '.navytestdir/')
 
-  rimraf.sync(this.localCopyPath)
+  rimrafSync(this.localCopyPath)
 
   fs.mkdirSync(this.localCopyPath)
   fs.writeFileSync(path.join(this.localCopyPath, '.navyrc'), `

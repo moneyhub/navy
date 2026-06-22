@@ -1,28 +1,28 @@
 /* @flow */
 
 import invariant from 'invariant'
-import {EventEmitter2} from 'eventemitter2'
+import { EventEmitter2 } from 'eventemitter2'
 import retryPromise from 'promise-retry'
 
 import fs from '../util/fs'
-import {resolveDriverFromName} from '../driver'
-import {resolveConfigProviderFromName} from '../config-provider'
-import {normaliseNavyName} from './util'
-import {getState, saveState, deleteState, pathToNavys, pathToNavy} from './state'
-import {getConfig} from '../config'
-import {NavyNotInitialisedError, NavyError} from '../errors'
-import {loadPlugins} from './plugin-interface'
-import {middlewareRunner} from './middleware'
-import {reconfigureHTTPProxy} from '../http-proxy'
-import {getExternalIP} from '../util/external-ip'
-import {createUrlForService, getUrlFromService} from '../util/service-host'
+import { resolveDriverFromName } from '../driver'
+import { resolveConfigProviderFromName } from '../config-provider'
+import { normaliseNavyName } from './util'
+import { getState, saveState, deleteState, pathToNavys, pathToNavy } from './state'
+import { getConfig } from '../config'
+import { NavyNotInitialisedError, NavyError } from '../errors'
+import { loadPlugins } from './plugin-interface'
+import { middlewareRunner } from './middleware'
+import { reconfigureHTTPProxy } from '../http-proxy'
+import { getExternalIP } from '../util/external-ip'
+import { createUrlForService, getUrlFromService } from '../util/service-host'
 
-import type {Driver, CreateDriver} from '../driver'
-import type {ConfigProvider, CreateConfigProvider} from '../config-provider'
-import type {State} from './state'
-import type {ServiceList} from '../service'
+import type { Driver, CreateDriver } from '../driver'
+import type { ConfigProvider, CreateConfigProvider } from '../config-provider'
+import type { State } from './state'
+import type { ServiceList } from '../service'
 
-export type {State}
+export type { State }
 
 export type RetryConfig = {
   factor?: number,
@@ -40,17 +40,17 @@ export class Navy extends EventEmitter2 {
    * The name of the current Navy.
    * @public
    */
-  name: string;
+  name: string
 
   /**
    * The normalised name of the current Navy (name without whitespaces).
    * @public
    */
-  normalisedName: string;
+  normalisedName: string
 
-  _pluginsLoaded: boolean;
-  _registeredCommands: Object;
-  _registeredMiddleware: Array<Function>;
+  _pluginsLoaded: boolean
+  _registeredCommands: Object
+  _registeredMiddleware: Array<Function>
 
   constructor(name: string) {
     super({
@@ -151,7 +151,7 @@ export class Navy extends EventEmitter2 {
     const navyFilePath: string = await configProvider.getNavyFilePath()
 
     try {
-      // $FlowIgnore: entry point to Navyfile.js has to be dynamic
+      // $FlowFixMe[unsupported-syntax]: entry point to Navyfile.js has to be dynamic
       return require(navyFilePath)
     } catch (ex) {
       return null
@@ -256,7 +256,7 @@ export class Navy extends EventEmitter2 {
 
     await (await this.safeGetDriver()).launch(validServiceNames, opts)
 
-    await reconfigureHTTPProxy()
+    await reconfigureHTTPProxy({ navyFile: await this.getNavyFile() })
   }
 
   /**
@@ -290,9 +290,12 @@ export class Navy extends EventEmitter2 {
       throw new NavyNotInitialisedError(this.name)
     }
 
+    const remainingNavyNames = (await getLaunchedNavyNames())
+      .filter(navy => navy !== this.normalisedName)
+
     await reconfigureHTTPProxy({
-      navies: (await getLaunchedNavyNames())
-        .filter(navy => navy !== this.normalisedName),
+      navies: remainingNavyNames,
+      navyFile: await getNavyFileFromNavies(remainingNavyNames),
     })
 
     try {
@@ -317,7 +320,7 @@ export class Navy extends EventEmitter2 {
   async start(services?: Array<string>): Promise<void> {
     if (!services) services = await this.getLaunchedServiceNames()
 
-    await reconfigureHTTPProxy()
+    await reconfigureHTTPProxy({ navyFile: await this.getNavyFile() })
 
     await (await this.safeGetDriver()).start(services)
   }
@@ -385,14 +388,16 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async useTag(service: string, tag: string): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
+    const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...stateServices[service],
           _tag: tag,
         },
       },
@@ -407,14 +412,16 @@ export class Navy extends EventEmitter2 {
    * @public
    */
   async resetTag(service: string): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
+    const stateServices: {[string]: Object} = state.services || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...stateServices[service],
           _tag: undefined,
         },
       },
@@ -425,16 +432,19 @@ export class Navy extends EventEmitter2 {
   }
 
   async usePort(service: string, privatePort: number, externalPort: number): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
+    const stateServices: {[string]: Object} = state.services || {}
+    const existingService: Object = stateServices[service] || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...existingService,
           _ports: {
-            ...((state.services || {})[service] || {})._ports,
+            ...existingService._ports,
             [privatePort]: externalPort,
           },
         },
@@ -446,16 +456,19 @@ export class Navy extends EventEmitter2 {
   }
 
   async resetPort(service: string, privatePort: number): Promise<void> {
-    const state = (await this.getState()) || {}
+    const state = await this.getState()
+    if (!state) throw new NavyNotInitialisedError(this.name)
+    const stateServices: {[string]: Object} = state.services || {}
+    const existingService: Object = stateServices[service] || {}
 
     await this.saveState({
       ...state,
       services: {
-        ...state.services,
+        ...stateServices,
         [service]: {
-          ...(state.services || {})[service],
+          ...existingService,
           _ports: {
-            ...((state.services || {})[service] || {})._ports,
+            ...existingService._ports,
             [privatePort]: undefined,
           },
         },
@@ -473,7 +486,7 @@ export class Navy extends EventEmitter2 {
   async waitForHealthy(
     services?: Array<string>,
     progressCallback?: Function,
-    retryConfig?: RetryConfig = {factor: 1.1, retries: 30, minTimeout: 200}
+    retryConfig?: RetryConfig = { factor: 1.1, retries: 30, minTimeout: 200 }
   ): Promise<boolean> {
     if (services == null) {
       services = (await this.ps())
@@ -572,6 +585,18 @@ export function getNavy(navyName: ?string): Navy {
   invariant(navyName, 'NO_NAVY_PROVIDED')
 
   return new Navy(navyName)
+}
+
+async function getNavyFileFromNavies(navyNames: Array<string>): Promise<?Object> {
+  for (const navyName of navyNames) {
+    const navy = getNavy(navyName)
+    if (!await navy.isInitialised()) continue
+
+    const navyFile = await navy.getNavyFile()
+    if (navyFile) return navyFile
+  }
+
+  return null
 }
 
 /**

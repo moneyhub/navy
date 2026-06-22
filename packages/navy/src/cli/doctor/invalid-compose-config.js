@@ -1,7 +1,7 @@
 /* @flow */
 
-import {getLaunchedNavies} from '../../'
-import {start, fix, catchInvariant} from './util'
+import { getLaunchedNavies } from '../../'
+import { start, fix, catchInvariant } from './util'
 
 export default async function () {
   start('Checking for Navies with invalid/no compose config')

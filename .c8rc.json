@@ -1,0 +1,24 @@
+{
+  "all": true,
+  "include": [
+    "packages/*/src/**/*.js"
+  ],
+  "exclude": [
+    "**/__tests__/**",
+    "**/node_modules/**",
+    "**/*.d.ts",
+    "packages/*/src/**/index.d.ts"
+  ],
+  "reporter": [
+    "text",
+    "text-summary",
+    "html",
+    "lcov"
+  ],
+  "report-dir": "./coverage",
+  "check-coverage": true,
+  "lines": 100,
+  "branches": 100,
+  "functions": 100,
+  "statements": 100
+}

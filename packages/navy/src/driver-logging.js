@@ -1,4 +1,4 @@
-import {dots} from 'cli-spinners'
+import { dots } from 'cli-spinners'
 import chalk from 'chalk'
 
 let _isDriverLogging = false

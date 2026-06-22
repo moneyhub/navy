@@ -21,7 +21,7 @@ const getToken = async ({
     throw new Error('Invalid authentication')
   }
 
-  const {token} = await response.json()
+  const { token } = await response.json()
   return token
 }
 
