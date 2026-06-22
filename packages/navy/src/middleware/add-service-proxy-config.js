@@ -1,11 +1,11 @@
 /* @flow */
 
-import {find} from 'lodash'
-import {createHostForService} from '../util/service-host'
+import { find } from 'lodash'
+import { createHostForService } from '../util/service-host'
 import { createCert } from '../util/https'
-import type {Navy} from '../navy'
+import type { Navy } from '../navy'
 
-const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
+const getServiceHTTPProxyConfig = (serviceName: string, navyFile: ?Object) => {
   if (navyFile && navyFile.httpProxy && navyFile.httpProxy[serviceName]) {
     return navyFile.httpProxy[serviceName]
   }
@@ -13,7 +13,7 @@ const getServiceHTTPProxyConfig = (serviceName, navyFile) => {
   return null
 }
 
-const serviceGetAutoProxyPortOr80 = (service, navyFile) => {
+const serviceGetAutoProxyPortOr80 = (service: Object, navyFile: ?Object) => {
   const autoPorts: any[] = (navyFile && Array.isArray(navyFile.httpProxyAutoPorts) && navyFile.httpProxyAutoPorts) || ['80']
   return service.ports && find(autoPorts, autoPort => {
     const autoPortString = autoPort.toString()
@@ -32,10 +32,10 @@ const serviceGetAutoProxyPortOr80 = (service, navyFile) => {
   })
 }
 
-export default (navy: Navy) =>
-  async (config: Object, state: Object) => {
+export default (navy: Navy): (config: Object, state: Object) => Promise<Object> =>
+  async (config: Object, state: Object): Promise<Object> => {
     const navyFile = await navy.getNavyFile()
-    const services = {}
+    const services: {[string]: Object} = {}
     const externalIP = await navy.externalIP()
 
     await Promise.all(Object.keys(config.services).map(async serviceName => {
@@ -54,13 +54,13 @@ export default (navy: Navy) =>
       if (proxyConfig) {
         const hostName = await createHostForService(serviceName, navy.normalisedName, externalIP)
 
-        if (proxyConfig.enableHttps) await createCert({hostName})
+        if (proxyConfig.enableHttps) await createCert({ hostName })
 
         return services[serviceName] = {
           ...service,
           environment: {
-            'VIRTUAL_HOST': hostName,
-            'VIRTUAL_PORT': proxyConfig.port,
+            VIRTUAL_HOST: hostName,
+            VIRTUAL_PORT: proxyConfig.port,
             ...service.environment,
           },
         }

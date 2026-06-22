@@ -6,35 +6,45 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     name: node-${{ matrix.node-version }} docker-${{ matrix.docker }} compose-${{ matrix.docker_compose }}
     env:
-      DEBUG: 'navy:*'
-      NAVY_DEBUG: 'navy:*'
+      DEBUG: "navy:*"
+      NAVY_DEBUG: "navy:*"
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14.x, 16.x]
-        docker: [18.06-dind, 20.10.5-dind]
-        docker_compose: [1.14.0, 1.29.2, v2.10.2]
+        node-version: [22.x, 24.x]
+        docker: [v24.0.7, v27.3.1]
+        docker_compose: [v2.20.3, v2.29.7]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        env:
-          DOCKER_TAG: ${{matrix.docker}}
-          DOCKER_COMPOSE_VERSION: ${{matrix.docker_compose}}
-          GITHUB_NODE_VERSION: ${{matrix.node-version}}
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Before tests
-        run: node --version
+
+      - name: Setup Docker
+        uses: docker/setup-docker-action@b2189fbf2a6592b51fee7cdd93ee2bfaeba733db # v5.1.0
+        with:
+          version: ${{ matrix.docker }}
+          # Export DOCKER_HOST so the dockerode client used by navy and the
+          # `docker compose` CLI invoked by the navy driver both target the
+          # daemon installed by this action. Without this the action only
+          # configures a Docker CLI context (consumed by `docker compose`),
+          # while dockerode falls back to /var/run/docker.sock and ends up
+          # querying a different daemon, returning no matching containers.
+          set-host: true
+
+      - name: Setup Docker Compose
+        uses: docker/setup-compose-action@8cccb8c14b6500aaffebff1aa49c502c34d2e5e6 # v2.1.0
+        with:
+          version: ${{ matrix.docker_compose }}
+
       - name: Install dependencies
         run: npm ci
-      - name: Bostrap lerna
-        run: npm run bootstrap
+
       - name: Test
         run: npm test
-
-

@@ -2,14 +2,11 @@
 
 import path from 'path'
 import invariant from 'invariant'
-import bluebird from 'bluebird'
+import { promises as fsp } from 'fs'
 
 import fs from '../util/fs'
 
 const debug = require('debug')('navy:state')
-
-const mkdirp = bluebird.promisify(require('mkdirp'))
-const rimraf = bluebird.promisify(require('rimraf'))
 
 export function pathToNavyRoot(): string {
   const home = process.env.HOME
@@ -46,7 +43,7 @@ export async function getState(normalisedEnvName: string): Promise<?State> {
 
 export async function saveState(normalisedEnvName: string, state: State): Promise<void> {
   const statePath = pathToState(normalisedEnvName)
-  await mkdirp(path.dirname(statePath))
+  await fsp.mkdir(path.dirname(statePath), { recursive: true })
 
   debug('Writing state for env ' + normalisedEnvName, statePath, state)
 
@@ -56,7 +53,7 @@ export async function saveState(normalisedEnvName: string, state: State): Promis
 export async function deleteState(normalisedEnvName: string): Promise<void> {
   debug('Deleting state for env ' + normalisedEnvName)
 
-  await rimraf(path.dirname(pathToState(normalisedEnvName)))
+  await fsp.rm(path.dirname(pathToState(normalisedEnvName)), { recursive: true, force: true })
 }
 
 /**
@@ -75,5 +72,5 @@ export type State = {
   configProvider?: string,
   path?: string,
   npmPackage?: string,
-  services?: Object,
+  services?: {[string]: Object},
 }

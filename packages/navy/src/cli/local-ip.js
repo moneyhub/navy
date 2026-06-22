@@ -1,8 +1,8 @@
 /* @flow */
 
 import chalk from 'chalk'
-import {setConfig, getConfig} from '../config'
-import {reconfigureAllNavies} from './util/reconfigure'
+import { setConfig, getConfig } from '../config'
+import { reconfigureAllNavies } from './util/reconfigure'
 
 export default async function (navy: string): Promise<void> {
   await setConfig({

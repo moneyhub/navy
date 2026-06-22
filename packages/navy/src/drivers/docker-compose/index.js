@@ -4,12 +4,12 @@ import yaml from 'js-yaml'
 
 import fs from '../../util/fs'
 import docker from '../../util/docker-client'
-import {createComposeClient} from './client'
-import {Status as ServiceStatus} from '../../service'
+import { createComposeClient } from './client'
+import { Status as ServiceStatus } from '../../service'
 
-import type {Driver} from '../../driver'
-import type {ServiceList} from '../../service'
-import type {Navy} from '../../navy'
+import type { Driver } from '../../driver'
+import type { ServiceList } from '../../service'
+import type { Navy } from '../../navy'
 
 const debug = require('debug')('navy:docker-compose')
 
@@ -32,7 +32,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
   const driver = {
     async launch(services: Array<string>, opts: ?Object = {}): Promise<void> {
-      const additionalArgs = []
+      const additionalArgs: Array<string> = []
 
       debug('Got launch', services, opts)
 
@@ -117,7 +117,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
       await exec('pull', services)
 
       // only relaunch services which are already running
-      const launchedServiceNames = toLookupTable(await this.getLaunchedServiceNames())
+      const launchedServiceNames = toLookupTable(await driver.getLaunchedServiceNames())
       const servicesToRelaunch = services.filter((name) => launchedServiceNames[name])
 
       if (servicesToRelaunch.length) {
@@ -136,8 +136,8 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     async port(service: string, privatePort: number, index: ?number): Promise<?number> {
       if (index == null) index = 1
 
-      const container = (await this.ps(service)).pop()
-      if (!container) {
+      const container = (await driver.ps(service)).pop()
+      if (!container || !container.raw) {
         return null
       }
 
@@ -151,7 +151,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
     },
 
     async writeConfig(config: Object): Promise<void> {
-      const yamlOut = yaml.safeDump(config, {skipInvalid: true})
+      const yamlOut = yaml.dump(config, { skipInvalid: true })
       await fs.writeFileAsync(getCompiledDockerComposePath(), yamlOut)
 
       debug('Wrote docker-compose.tmp.yml', yamlOut)
@@ -159,7 +159,7 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
 
     async getConfig(): Promise<Object> {
       const output = await exec('config', [], { useOriginalDockerComposeFiles: true, noLog: true })
-      const config = yaml.safeLoad(output)
+      const config = yaml.load(output)
 
       return config
     },
@@ -191,8 +191,8 @@ export default function createDockerComposeDriver(navy: Navy): Driver {
   return driver
 }
 
-function toLookupTable(keys: Array<string>): Object {
-  const lookupTable = {}
+function toLookupTable(keys: Array<string>): {[string]: boolean} {
+  const lookupTable: {[string]: boolean} = {}
   keys.forEach((key) => lookupTable[key] = true)
   return lookupTable
 }

@@ -1,15 +1,15 @@
 /* @flow */
 
-import type {Service} from '../service'
-import {getCertsPath} from './https'
+import type { Service } from '../service'
+import { getCertsPath } from './https'
 import fs from 'fs'
 const BASE = 'nip.io'
 
-function isValidIpv4Addr(ip) {
+function isValidIpv4Addr(ip: string) {
   return /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/g.test(ip)
 }
 
-export async function getNIPSubdomain(externalIP: string) {
+export async function getNIPSubdomain(externalIP: string): Promise<string> {
   if (!isValidIpv4Addr(externalIP)) {
     // invalid IP address, fallback to local
     return `127.0.0.1.${BASE}`
@@ -18,11 +18,11 @@ export async function getNIPSubdomain(externalIP: string) {
   return `${externalIP}.${BASE}`
 }
 
-export async function createHostForService(service: string, navyNormalisedName: string, externalIP: string) {
+export async function createHostForService(service: string, navyNormalisedName: string, externalIP: string): Promise<string> {
   return `${service}.${navyNormalisedName}.${process.env.NAVY_EXTERNAL_SUBDOMAIN || await getNIPSubdomain(externalIP)}`
 }
 
-export async function createUrlForService(service: string, navyNormalisedName: string, externalIP: string) {
+export async function createUrlForService(service: string, navyNormalisedName: string, externalIP: string): Promise<string> {
   const certsPath = getCertsPath()
   let proto = 'http'
   const baseUrl = await createHostForService(service, navyNormalisedName, externalIP)
@@ -32,7 +32,7 @@ export async function createUrlForService(service: string, navyNormalisedName: s
   return `${proto}://${await createHostForService(service, navyNormalisedName, externalIP)}`
 }
 
-export function getUrlFromService(service: Service) {
+export function getUrlFromService(service: ?Service): ?string {
   if (!service || !service.raw || !service.raw.Config || !service.raw.Config.Env) {
     return null
   }

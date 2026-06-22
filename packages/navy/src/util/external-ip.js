@@ -6,7 +6,7 @@ const IPV4_FAMILY = 4
 
 export async function dnsLookup(hostname: string): Promise<string> {
   return await new Promise((resolve, reject) => {
-    dns.lookup(hostname, null, (err, ip, ipFamily) => {
+    dns.lookup(hostname, { family: IPV4_FAMILY }, (err, ip, ipFamily) => {
       if (err || ipFamily !== IPV4_FAMILY) {
         reject(new Error('Failed to lookup hostname "' + hostname + '"'))
       } else {

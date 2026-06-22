@@ -2,7 +2,7 @@
 
 import pkg from '../../package.json'
 import program from './program'
-import {NavyError} from '../errors'
+import { NavyError } from '../errors'
 
 const debug = require('debug')('navy:cli')
 

@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import docker from './docker-client'
 import getFatManifest from '../client/registry/get-fat-manifest'
-import {getImageFromImageWithTag, getRepositoryFromImage, getTagFromImageWithTag, getRegistryFromImage}
+import { getImageFromImageWithTag, getRepositoryFromImage, getTagFromImageWithTag, getRegistryFromImage }
   from '../domain/container-image'
 
 const hasUpdate = async (
@@ -19,7 +19,7 @@ const hasUpdate = async (
   )
 
   try {
-    const {RepoDigests} = await docker.getImage(currentImageId).inspect()
+    const { RepoDigests } = await docker.getImage(currentImageId).inspect()
 
     const manifest = await getFatManifest({
       allowUnauthorizedRequest,

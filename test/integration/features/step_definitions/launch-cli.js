@@ -1,9 +1,9 @@
 import path from 'path'
-import {TEST_SERVICE_NAME} from '../../environment'
+import { TEST_SERVICE_NAME } from '../../environment'
 import Automator from '../../util/cli-automator'
-import {expect} from 'chai'
+import { expect } from 'chai'
 
-import {Then, When} from '@cucumber/cucumber'
+import { Then, When } from '@cucumber/cucumber'
 
 When(/I launch a service from the CLI prompt$/, async function () {
   await Automator.spawn(['import']).waitForDone()

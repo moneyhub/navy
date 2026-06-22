@@ -1,6 +1,6 @@
 /* @flow */
 
-import {exec} from 'child_process'
+import { exec } from 'child_process'
 
 const debug = require('debug')('navy:exec')
 

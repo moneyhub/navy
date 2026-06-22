@@ -3,11 +3,11 @@
 import path from 'path'
 import invariant from 'invariant'
 import fs from '../../util/fs'
-import {execAsync} from '../../util/exec-async'
+import { execAsync } from '../../util/exec-async'
 
-import type {ConfigProvider} from '../../config-provider'
-import type {State} from '../../navy'
-import type {Navy} from '../../navy'
+import type { ConfigProvider } from '../../config-provider'
+import type { State } from '../../navy'
+import type { Navy } from '../../navy'
 
 async function cwdHasValidDockerComposeConfig() {
   try {
@@ -20,7 +20,7 @@ async function cwdHasValidDockerComposeConfig() {
 }
 
 export default function createFileSystemConfigProvider(navy: Navy): ConfigProvider {
-  return {
+  const provider: ConfigProvider = {
     async getNavyPath(): Promise<?string> {
       const envState: ?State = await navy.getState()
 
@@ -37,10 +37,12 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
     },
 
     async getNavyFilePath(): Promise<string> {
-      return path.join(await this.getNavyPath(), 'Navyfile.js')
+      const navyPath = await provider.getNavyPath()
+      invariant(navyPath, 'STATE_NONEXISTANT', navy.name)
+      return path.join(navyPath, 'Navyfile.js')
     },
 
-    async refreshConfig(): Promise<bool> {
+    async refreshConfig(): Promise<boolean> {
       // no-op
       return false
     },
@@ -69,11 +71,13 @@ export default function createFileSystemConfigProvider(navy: Navy): ConfigProvid
       return false
     },
   }
+
+  return provider
 }
 
-createFileSystemConfigProvider.importCliOptions = []
+createFileSystemConfigProvider.importCliOptions = ([]: Array<Array<string>>)
 
-createFileSystemConfigProvider.getImportOptionsForCLI = async (opts) => {
+createFileSystemConfigProvider.getImportOptionsForCLI = async (opts: Object): Promise<Object> => {
   const hasValidComposeConfig = await cwdHasValidDockerComposeConfig()
 
   invariant(hasValidComposeConfig, 'NO_DOCKER_COMPOSE_FILE')
