@@ -87,8 +87,8 @@
 
     <script>
       var serviceName = window.location.hostname.substring(0, window.location.hostname.indexOf('.'))
-      document.getElementById('service-name').innerText = serviceName || '(unknown)'
-      document.getElementById('service-name-cmd').innerText = serviceName || '<service>'
+      document.getElementById('service-name').textContent = serviceName || '(unknown)'
+      document.getElementById('service-name-cmd').textContent = serviceName || '<service>'
 
       var POLL_INTERVAL_MS = 2000
       var CLI_HINT_AFTER_MS = 30000
@@ -102,9 +102,18 @@
         document.getElementById(id).classList.toggle('hidden', !visible)
       }
 
+      function setBlurb(before, codeText, after) {
+        var blurb = document.getElementById('blurb')
+        blurb.textContent = before
+        var code = document.createElement('code')
+        code.textContent = codeText
+        blurb.appendChild(code)
+        if (after) blurb.appendChild(document.createTextNode(after))
+        return blurb
+      }
+
       function renderStatus(data) {
         var title = document.getElementById('title')
-        var blurb = document.getElementById('blurb')
         var meta = document.getElementById('meta')
         var loader = document.getElementById('loader')
         var logsEl = document.getElementById('logs')
@@ -116,8 +125,7 @@
         if (!found || status === 'not_found') {
           document.title = 'Service not found | Navy'
           title.textContent = 'Service not found'
-          blurb.innerHTML = 'No container is registered for <code></code>.'
-          blurb.querySelector('code').textContent = serviceName
+          setBlurb('No container is registered for ', serviceName, '.')
           meta.textContent = (data && data.hint) || 'Try: navy ps'
           loader.classList.add('hidden')
           show('logs', false)
@@ -128,20 +136,17 @@
         if (status === 'exited' || status === 'dead') {
           document.title = 'Service exited | Navy'
           title.textContent = 'Service exited'
-          blurb.innerHTML = 'The container for <code></code> is no longer running.'
-          blurb.querySelector('code').textContent = serviceName
+          setBlurb('The container for ', serviceName, ' is no longer running.')
           loader.classList.add('hidden')
         } else if (status === 'restarting') {
           document.title = 'Service restarting | Navy'
           title.textContent = 'Service restarting\u2026'
-          blurb.innerHTML = 'The container for <code></code> is restarting. Recent logs below.'
-          blurb.querySelector('code').textContent = serviceName
+          setBlurb('The container for ', serviceName, ' is restarting. Recent logs below.')
           loader.classList.remove('hidden')
         } else {
           document.title = 'Waiting for service | Navy'
           title.textContent = 'Waiting for HTTP\u2026'
-          blurb.innerHTML = 'The container for <code></code> is up, but not accepting HTTP requests yet. Recent logs below — this page reloads automatically once it responds.'
-          blurb.querySelector('code').textContent = serviceName
+          setBlurb('The container for ', serviceName, ' is up, but not accepting HTTP requests yet. Recent logs below — this page reloads automatically once it responds.')
           loader.classList.remove('hidden')
         }
 
@@ -195,9 +200,11 @@
 
       function renderUnavailable() {
         setText('title', 'Service is not responding')
-        var blurb = document.getElementById('blurb')
-        blurb.innerHTML = 'The service <code></code> is not accepting HTTP requests, and the proxy could not read its container status. '
-        blurb.querySelector('code').textContent = serviceName
+        var blurb = setBlurb(
+          'The service ',
+          serviceName,
+          ' is not accepting HTTP requests, and the proxy could not read its container status. '
+        )
         var retry = document.createElement('a')
         retry.href = window.location.href
         retry.textContent = 'Retry'
