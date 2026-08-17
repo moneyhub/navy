@@ -2,32 +2,208 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Whoops | Navy</title>
+    <title>Starting up | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/error_page.css" />
+    <link rel="stylesheet" type="text/css" href="/__navy_internal_proxy/error_page.css" />
+    <style>
+      /* 8-bit loading bar to match the pixel logo. */
+      .pixel-loader {
+        --px: 4px;
+        width: calc(var(--px) * 44);
+        height: calc(var(--px) * 4);
+        margin: 24px 0;
+        background: black;
+        box-shadow: 0 0 0 var(--px) white;
+      }
+      .pixel-loader-fill {
+        height: 100%;
+        background: repeating-linear-gradient(
+          to right,
+          white 0 calc(var(--px) * 3),
+          black calc(var(--px) * 3) calc(var(--px) * 4)
+        );
+        animation: pixel-fill 3.2s steps(11, end) infinite;
+      }
+      @keyframes pixel-fill {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pixel-loader-fill {
+          animation: none;
+          width: 100%;
+        }
+      }
+      .hidden { display: none !important; }
+      .meta {
+        color: #6A7277;
+        font-size: 0.9rem;
+        margin: 12px 0 0;
+      }
+      .meta code { color: #c8c8c8; }
+      .logs {
+        margin-top: 20px;
+        max-height: 280px;
+        overflow: auto;
+        padding: 12px;
+        background: #111;
+        box-shadow: 0 0 0 1px #6A7277;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: #c8c8c8;
+      }
+      .hint {
+        margin-top: 24px;
+        color: #6A7277;
+        font-size: 0.9rem;
+      }
+    </style>
   </head>
   <body>
     <div id="logo">Navy</div>
     <div id="content">
-      <h1>Service not found</h1>
+      <h1 id="title">Checking service&hellip;</h1>
 
-      <p>
-        You tried to access the service <code id="service-name"></code> which was not found.
-        Some possible causes of this might be:
+      <div class="pixel-loader" id="loader" aria-hidden="true">
+        <div class="pixel-loader-fill"></div>
+      </div>
 
-        <ul>
-          <li>The service is not running (check with <code>navy ps</code>)</li>
-          <li>The service has crashed</li>
-          <li>A service with the name given doesn't exist</li>
-          <li>You used the wrong IP address in the nip.io URL (check url with <code>navy url [servicename]</code>)</li>
-        </ul>
+      <p id="blurb">
+        Looking up container status for <code id="service-name"></code>&hellip;
+      </p>
+      <p class="meta" id="meta"></p>
+      <pre class="logs hidden" id="logs" aria-live="polite"></pre>
+
+      <p class="hint hidden" id="cli-hint">
+        Still stuck? Check it from a terminal:
+        <code>navy ps</code> &nbsp;
+        <code>navy logs <span id="service-name-cmd"></span></code>
       </p>
     </div>
 
     <script>
       var serviceName = window.location.hostname.substring(0, window.location.hostname.indexOf('.'))
-      document.getElementById('service-name').innerText = serviceName
+      document.getElementById('service-name').innerText = serviceName || '(unknown)'
+      document.getElementById('service-name-cmd').innerText = serviceName || '<service>'
+
+      var POLL_INTERVAL_MS = 2000
+      var CLI_HINT_AFTER_MS = 30000
+      var startedAt = Date.now()
+
+      function setText(id, text) {
+        document.getElementById(id).textContent = text
+      }
+
+      function show(id, visible) {
+        document.getElementById(id).classList.toggle('hidden', !visible)
+      }
+
+      function renderStatus(data) {
+        var title = document.getElementById('title')
+        var blurb = document.getElementById('blurb')
+        var meta = document.getElementById('meta')
+        var loader = document.getElementById('loader')
+        var logsEl = document.getElementById('logs')
+
+        var status = (data && data.status) || 'unknown'
+        var running = !!(data && data.running)
+        var found = !!(data && data.found)
+
+        if (!found || status === 'not_found') {
+          document.title = 'Service not found | Navy'
+          title.textContent = 'Service not found'
+          blurb.innerHTML = 'No container is registered for <code></code>.'
+          blurb.querySelector('code').textContent = serviceName
+          meta.textContent = (data && data.hint) || 'Try: navy ps'
+          loader.classList.add('hidden')
+          show('logs', false)
+          show('cli-hint', true)
+          return
+        }
+
+        if (status === 'exited' || status === 'dead') {
+          document.title = 'Service exited | Navy'
+          title.textContent = 'Service exited'
+          blurb.innerHTML = 'The container for <code></code> is no longer running.'
+          blurb.querySelector('code').textContent = serviceName
+          loader.classList.add('hidden')
+        } else if (status === 'restarting') {
+          document.title = 'Service restarting | Navy'
+          title.textContent = 'Service restarting\u2026'
+          blurb.innerHTML = 'The container for <code></code> is restarting. Recent logs below.'
+          blurb.querySelector('code').textContent = serviceName
+          loader.classList.remove('hidden')
+        } else {
+          document.title = 'Waiting for service | Navy'
+          title.textContent = 'Waiting for HTTP\u2026'
+          blurb.innerHTML = 'The container for <code></code> is up, but not accepting HTTP requests yet. Recent logs below — this page reloads automatically once it responds.'
+          blurb.querySelector('code').textContent = serviceName
+          loader.classList.remove('hidden')
+        }
+
+        var bits = []
+        if (data.container) bits.push('container ' + data.container)
+        bits.push('status ' + status)
+        if (data.exitCode !== null && data.exitCode !== undefined && !running) {
+          bits.push('exit ' + data.exitCode)
+        }
+        if (data.error) bits.push(data.error)
+        meta.textContent = bits.join(' · ')
+
+        if (data.logs) {
+          logsEl.textContent = data.logs
+          show('logs', true)
+          logsEl.scrollTop = logsEl.scrollHeight
+        } else {
+          logsEl.textContent = '(no logs yet)'
+          show('logs', true)
+        }
+
+        if (Date.now() - startedAt >= CLI_HINT_AFTER_MS || status === 'exited' || status === 'dead') {
+          show('cli-hint', true)
+        }
+      }
+
+      function fetchStatus() {
+        return fetch('/__navy_internal_proxy/status', { cache: 'no-store' })
+          .then(function (res) {
+            if (!res.ok) throw new Error('status ' + res.status)
+            return res.json()
+          })
+          .then(renderStatus)
+          .catch(function () {
+            setText('title', 'Waiting for service\u2026')
+            document.getElementById('blurb').innerHTML =
+              'The service <code></code> is not accepting HTTP requests yet. Could not load container logs from the proxy.'
+            document.getElementById('blurb').querySelector('code').textContent = serviceName
+            document.getElementById('loader').classList.remove('hidden')
+            if (Date.now() - startedAt >= CLI_HINT_AFTER_MS) show('cli-hint', true)
+          })
+      }
+
+      function pollReady() {
+        fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+          .then(function (response) {
+            if (response.status !== 502 && response.status !== 503) {
+              window.location.reload()
+              return
+            }
+            schedule()
+          })
+          .catch(function () { schedule() })
+      }
+
+      function schedule() {
+        fetchStatus().then(function () {
+          setTimeout(pollReady, POLL_INTERVAL_MS)
+        })
+      }
+
+      schedule()
     </script>
   </body>
 </html>

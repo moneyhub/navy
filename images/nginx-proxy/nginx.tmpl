@@ -93,12 +93,25 @@ server {
 		internal;
 	}
 
-	location / {
-		return 503;
-	}
-
 	location = /error_page.css {
 		root /usr/share/nginx/html;
+	}
+
+	location /__navy_internal_proxy/error_page.css {
+		root /usr/share/nginx/html;
+		try_files /error_page.css =404;
+	}
+
+	# Available even when no vhost matches (container stopped / not launched).
+	location = /__navy_internal_proxy/status {
+		proxy_pass http://127.0.0.1:9191/status;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_read_timeout 5s;
+	}
+
+	location / {
+		return 503;
 	}
 }
 
@@ -270,6 +283,14 @@ server {
 	location /__navy_internal_proxy/error_page.css {
 		root /usr/share/nginx/html;
 		try_files /error_page.css =404;
+	}
+
+	# Container state + recent logs for the 502 holding page (local Docker sock).
+	location = /__navy_internal_proxy/status {
+		proxy_pass http://127.0.0.1:9191/status;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-Host $host;
+		proxy_read_timeout 5s;
 	}
 
 	location / {
