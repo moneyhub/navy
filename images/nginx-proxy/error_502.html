@@ -7,12 +7,34 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/__navy_internal_proxy/error_page.css" />
     <style>
-      .spinner {
-        display: inline-block;
-        animation: spin 1s linear infinite;
+      /* 8-bit loading bar to match the pixel logo. The fill is animated in
+         discrete steps so it clunks along block by block instead of sliding. */
+      .pixel-loader {
+        --px: 4px;
+        width: calc(var(--px) * 44);
+        height: calc(var(--px) * 4);
+        margin: 24px 0;
+        background: black;
+        box-shadow: 0 0 0 var(--px) white;
       }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
+      .pixel-loader-fill {
+        height: 100%;
+        background: repeating-linear-gradient(
+          to right,
+          white 0 calc(var(--px) * 3),
+          black calc(var(--px) * 3) calc(var(--px) * 4)
+        );
+        animation: pixel-fill 3.2s steps(11, end) infinite;
+      }
+      @keyframes pixel-fill {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .pixel-loader-fill {
+          animation: none;
+          width: 100%;
+        }
       }
       .hint {
         margin-top: 24px;
@@ -27,7 +49,11 @@
   <body>
     <div id="logo">Navy</div>
     <div id="content">
-      <h1 id="title"><span class="spinner">&bull;</span> Waiting for service&hellip;</h1>
+      <h1 id="title">Waiting for service&hellip;</h1>
+
+      <div class="pixel-loader" aria-hidden="true">
+        <div class="pixel-loader-fill"></div>
+      </div>
 
       <p>
         The service <code id="service-name"></code> is not accepting HTTP requests yet.
