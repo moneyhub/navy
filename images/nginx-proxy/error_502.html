@@ -2,25 +2,86 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Whoops | Navy</title>
+    <title>Starting up | Navy</title>
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/__navy_internal_proxy/error_page.css" />
+    <style>
+      .spinner {
+        display: inline-block;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .hint {
+        margin-top: 24px;
+        color: #6A7277;
+        font-size: 0.9rem;
+      }
+      .hint.hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div id="logo">Navy</div>
     <div id="content">
-      <h1>Service is not responding</h1>
+      <h1 id="title"><span class="spinner">&bull;</span> Waiting for service&hellip;</h1>
 
       <p>
-        The service <code id="service-name"></code> is currently not responding to HTTP requests. Please check
-        check whether it is running properly.
+        The service <code id="service-name"></code> is not accepting HTTP requests yet.
+        It is probably still starting up (installing dependencies, running database
+        migrations, or booting). This page will reload automatically once it is ready.
+      </p>
+
+      <p class="hint hidden" id="slow-hint">
+        Still waiting. Some services take a few minutes to start on a cold boot.
+        If this does not clear, check it is running and healthy:
+      </p>
+      <p class="hint hidden" id="slow-commands">
+        <code>navy ps</code> &nbsp; <code>navy logs <span id="service-name-cmd"></span></code>
       </p>
     </div>
 
     <script>
       var serviceName = window.location.hostname.substring(0, window.location.hostname.indexOf('.'))
       document.getElementById('service-name').innerText = serviceName
+      document.getElementById('service-name-cmd').innerText = serviceName
+
+      var POLL_INTERVAL_MS = 2000
+      var SLOW_HINT_AFTER_MS = 30000
+      var startedAt = Date.now()
+
+      function revealSlowHint() {
+        document.getElementById('slow-hint').classList.remove('hidden')
+        document.getElementById('slow-commands').classList.remove('hidden')
+      }
+
+      function poll() {
+        fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
+          .then(function (response) {
+            // 502/503 mean the proxy is still serving this holding page; keep waiting.
+            if (response.status !== 502 && response.status !== 503) {
+              window.location.reload()
+              return
+            }
+            scheduleNextPoll()
+          })
+          .catch(function () {
+            // Network blip while the container comes up: keep polling.
+            scheduleNextPoll()
+          })
+      }
+
+      function scheduleNextPoll() {
+        if (Date.now() - startedAt >= SLOW_HINT_AFTER_MS) {
+          revealSlowHint()
+        }
+        setTimeout(poll, POLL_INTERVAL_MS)
+      }
+
+      scheduleNextPoll()
     </script>
   </body>
 </html>
