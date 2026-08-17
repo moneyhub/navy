@@ -121,6 +121,8 @@
         var status = (data && data.status) || 'unknown'
         var running = !!(data && data.running)
         var found = !!(data && data.found)
+        var hasLogs = !(data && data.logsEnabled === false)
+        var logsSuffix = hasLogs ? ' Recent logs below.' : ''
 
         if (!found || status === 'not_found') {
           document.title = 'Service not found | Navy'
@@ -141,12 +143,12 @@
         } else if (status === 'restarting') {
           document.title = 'Service restarting | Navy'
           title.textContent = 'Service restarting\u2026'
-          setBlurb('The container for ', serviceName, ' is restarting. Recent logs below.')
+          setBlurb('The container for ', serviceName, ' is restarting.' + logsSuffix)
           loader.classList.remove('hidden')
         } else {
           document.title = 'Waiting for service | Navy'
           title.textContent = 'Waiting for HTTP\u2026'
-          setBlurb('The container for ', serviceName, ' is up, but not accepting HTTP requests yet. Recent logs below — this page reloads automatically once it responds.')
+          setBlurb('The container for ', serviceName, ' is up, but not accepting HTTP requests yet.' + logsSuffix + ' This page reloads automatically once it responds.')
           loader.classList.remove('hidden')
         }
 
@@ -159,7 +161,10 @@
         if (data.error) bits.push(data.error)
         meta.textContent = bits.join(' · ')
 
-        if (data.logs) {
+        if (data.logsEnabled === false) {
+          show('logs', false)
+          show('cli-hint', true)
+        } else if (data.logs) {
           logsEl.textContent = data.logs
           show('logs', true)
           logsEl.scrollTop = logsEl.scrollHeight

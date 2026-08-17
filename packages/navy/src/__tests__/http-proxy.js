@@ -190,20 +190,31 @@ describe('resolveProxyEnv', function () {
     }
   })
 
-  it('should return null when both sources are empty', function () {
-    expect(resolveProxyEnv()).to.equal(null)
-    expect(resolveProxyEnv({})).to.equal(null)
+  it('should enable holding page logs by default when both sources are empty', function () {
+    expect(resolveProxyEnv()).to.eql({ NAVY_STATUS_LOGS: '1' })
+    expect(resolveProxyEnv({})).to.eql({ NAVY_STATUS_LOGS: '1' })
+  })
+
+  it('should allow the navyFile to disable holding page logs', function () {
+    const navyFile = { httpProxyEnv: { NAVY_STATUS_LOGS: '0' } }
+    expect(resolveProxyEnv(navyFile)).to.eql({ NAVY_STATUS_LOGS: '0' })
+  })
+
+  it('should allow the allowlist to disable holding page logs', function () {
+    process.env.NAVY_HTTP_PROXY_ENV = 'NAVY_STATUS_LOGS'
+    setEnv('NAVY_STATUS_LOGS', '0')
+    expect(resolveProxyEnv()).to.eql({ NAVY_STATUS_LOGS: '0' })
   })
 
   it('should return only the navyFile entries when no allowlist is set', function () {
     const navyFile = { httpProxyEnv: { FOO: 'bar' } }
-    expect(resolveProxyEnv(navyFile)).to.eql({ FOO: 'bar' })
+    expect(resolveProxyEnv(navyFile)).to.eql({ NAVY_STATUS_LOGS: '1', FOO: 'bar' })
   })
 
   it('should return only the allowlisted entries when navyFile has none', function () {
     process.env.NAVY_HTTP_PROXY_ENV = 'FORWARD_ME'
     setEnv('FORWARD_ME', 'hello')
-    expect(resolveProxyEnv()).to.eql({ FORWARD_ME: 'hello' })
+    expect(resolveProxyEnv()).to.eql({ NAVY_STATUS_LOGS: '1', FORWARD_ME: 'hello' })
   })
 
   it('should merge entries from both sources', function () {
@@ -211,6 +222,7 @@ describe('resolveProxyEnv', function () {
     setEnv('FROM_ENV', 'env-value')
     const navyFile = { httpProxyEnv: { FROM_FILE: 'file-value' } }
     expect(resolveProxyEnv(navyFile)).to.eql({
+      NAVY_STATUS_LOGS: '1',
       FROM_FILE: 'file-value',
       FROM_ENV: 'env-value',
     })
@@ -220,7 +232,7 @@ describe('resolveProxyEnv', function () {
     process.env.NAVY_HTTP_PROXY_ENV = 'SHARED'
     setEnv('SHARED', 'env-value')
     const navyFile = { httpProxyEnv: { SHARED: 'file-value' } }
-    expect(resolveProxyEnv(navyFile)).to.eql({ SHARED: 'env-value' })
+    expect(resolveProxyEnv(navyFile)).to.eql({ NAVY_STATUS_LOGS: '1', SHARED: 'env-value' })
   })
 
 })
@@ -397,13 +409,13 @@ describe('reconfigureHTTPProxy', function () {
     expect(rmCall).to.equal(undefined)
   })
 
-  it('should omit the environment block from the proxy compose service when no env config is provided', async function () {
+  it('should enable holding page logs on the proxy compose service when no env config is provided', async function () {
     listNetworksStub.resolves([])
 
     await reconfigureHTTPProxy({ navies: [] })
 
     const written = yaml.load(writeFileSyncStub.firstCall.args[1])
-    expect(written.services['nginx-proxy']).to.not.have.property('environment')
+    expect(written.services['nginx-proxy'].environment).to.eql({ NAVY_STATUS_LOGS: '1' })
   })
 
   it('should include the merged environment block on the proxy compose service when httpProxyEnv or NAVY_HTTP_PROXY_ENV is set', async function () {
@@ -419,6 +431,7 @@ describe('reconfigureHTTPProxy', function () {
 
       const written = yaml.load(writeFileSyncStub.firstCall.args[1])
       expect(written.services['nginx-proxy'].environment).to.eql({
+        NAVY_STATUS_LOGS: '1',
         FROM_FILE: 'file-value',
         FROM_ENV: 'env-value',
       })

@@ -12,6 +12,12 @@ my $PORT        = $ENV{STATUS_HELPER_PORT} || 9191;
 my $LOG_TAIL    = 80;
 my $MAX_LOGS    = 32_000;
 
+# Container state is safe to expose; log bodies are not. Logs routinely carry
+# tokens and client secrets, and this image is also the base for Navy Manager's
+# cloud proxy, where vhosts are reachable from the public internet. Off unless
+# the operator opts in — the navy CLI sets this for local proxies.
+my $LOGS_ENABLED = ($ENV{NAVY_STATUS_LOGS} || '') =~ /^(1|true|yes)$/i ? 1 : 0;
+
 my $server = IO::Socket::INET->new(
   LocalAddr => '127.0.0.1',
   LocalPort => $PORT,
@@ -72,6 +78,7 @@ sub status_for {
       found   => \0,
       status  => 'not_found',
       logs    => '',
+      logsEnabled => ($LOGS_ENABLED ? \1 : \0),
       hint    => "No container found for compose service \"$service\". Try: navy ps",
     );
   }
@@ -82,9 +89,9 @@ sub status_for {
   my $inspect = docker_json("containers/$id/json") || {};
   my $state   = $inspect->{State} || {};
   my $status  = $state->{Status} || ($container->{State} || 'unknown');
-  my $logs    = demux_logs(docker_raw(
+  my $logs    = $LOGS_ENABLED ? demux_logs(docker_raw(
     "containers/$id/logs?stdout=1&stderr=1&tail=$LOG_TAIL"
-  ));
+  )) : '';
 
   # Readiness is probed server-side with a bare TCP connect. The holding page
   # must never re-request the visitor's own URL to test readiness: replaying it
@@ -105,6 +112,7 @@ sub status_for {
     status     => $status,
     running    => ($state->{Running} ? \1 : \0),
     ready      => ($ready ? \1 : \0),
+    logsEnabled => ($LOGS_ENABLED ? \1 : \0),
     exitCode   => defined $state->{ExitCode} ? 0 + $state->{ExitCode} : undef,
     startedAt  => $state->{StartedAt}  || '',
     finishedAt => $state->{FinishedAt} || '',
