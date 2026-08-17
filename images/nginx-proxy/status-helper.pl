@@ -86,6 +86,12 @@ sub status_for {
     "containers/$id/logs?stdout=1&stderr=1&tail=$LOG_TAIL"
   ));
 
+  # Readiness is probed server-side with a bare TCP connect. The holding page
+  # must never re-request the visitor's own URL to test readiness: replaying it
+  # carries their cookies and re-triggers side effects (an OIDC /login round
+  # trip rewrites the state cookie, breaking the pending /callback).
+  my $ready = $state->{Running} ? upstream_accepts_tcp($inspect) : 0;
+
   if (length($logs) > $MAX_LOGS) {
     $logs = substr($logs, -$MAX_LOGS);
     $logs =~ s/^[^\n]*\n//;
@@ -98,12 +104,53 @@ sub status_for {
     container  => $name,
     status     => $status,
     running    => ($state->{Running} ? \1 : \0),
+    ready      => ($ready ? \1 : \0),
     exitCode   => defined $state->{ExitCode} ? 0 + $state->{ExitCode} : undef,
     startedAt  => $state->{StartedAt}  || '',
     finishedAt => $state->{FinishedAt} || '',
     error      => $state->{Error}      || '',
     logs       => $logs,
   );
+}
+
+# TCP connect only — no HTTP request, so nothing downstream sees a hit.
+sub upstream_accepts_tcp {
+  my ($inspect) = @_;
+  my $net = $inspect->{NetworkSettings} || {};
+  my $ip;
+  my $networks = $net->{Networks} || {};
+  for my $n (sort keys %$networks) {
+    my $addr = $networks->{$n}{IPAddress};
+    if (defined $addr && length $addr) { $ip = $addr; last }
+  }
+  $ip ||= $net->{IPAddress};
+  return 0 unless defined $ip && length $ip;
+
+  my $port = upstream_port($inspect, $net);
+  return 0 unless $port;
+
+  my $sock = IO::Socket::INET->new(
+    PeerAddr => $ip,
+    PeerPort => $port,
+    Proto    => 'tcp',
+    Timeout  => 1,
+  );
+  return 0 unless $sock;
+  close $sock;
+  return 1;
+}
+
+sub upstream_port {
+  my ($inspect, $net) = @_;
+  my $env = ($inspect->{Config} && $inspect->{Config}{Env}) || [];
+  for my $entry (@$env) {
+    return $1 if $entry =~ /^VIRTUAL_PORT=(\d+)$/;
+  }
+  my $ports = $net->{Ports} || {};
+  for my $spec (sort keys %$ports) {
+    return $1 if $spec =~ m{^(\d+)/tcp$};
+  }
+  return 80;
 }
 
 sub find_container {

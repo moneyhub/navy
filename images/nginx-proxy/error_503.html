@@ -168,42 +168,46 @@
         }
       }
 
-      function fetchStatus() {
-        return fetch('/__navy_internal_proxy/status', { cache: 'no-store' })
+      // Readiness comes from the proxy's status endpoint, which TCP-probes the
+      // container. Never re-request window.location.href to test readiness: it
+      // replays the visitor's request with their cookies, which re-triggers
+      // side effects (an OIDC /login replay rewrites the state cookie and
+      // breaks the pending /callback).
+      function poll() {
+        fetch('/__navy_internal_proxy/status', { cache: 'no-store' })
           .then(function (res) {
             if (!res.ok) throw new Error('status ' + res.status)
             return res.json()
           })
-          .then(renderStatus)
-          .catch(function () {
-            setText('title', 'Waiting for service\u2026')
-            document.getElementById('blurb').innerHTML =
-              'The service <code></code> is not accepting HTTP requests yet. Could not load container logs from the proxy.'
-            document.getElementById('blurb').querySelector('code').textContent = serviceName
-            document.getElementById('loader').classList.remove('hidden')
-            if (Date.now() - startedAt >= CLI_HINT_AFTER_MS) show('cli-hint', true)
-          })
-      }
-
-      function pollReady() {
-        fetch(window.location.href, { method: 'HEAD', cache: 'no-store' })
-          .then(function (response) {
-            if (response.status !== 502 && response.status !== 503) {
+          .then(function (data) {
+            if (data && data.ready) {
               window.location.reload()
               return
             }
-            schedule()
+            renderStatus(data)
+            setTimeout(poll, POLL_INTERVAL_MS)
           })
-          .catch(function () { schedule() })
+          .catch(function () {
+            renderUnavailable()
+            setTimeout(poll, POLL_INTERVAL_MS)
+          })
       }
 
-      function schedule() {
-        fetchStatus().then(function () {
-          setTimeout(pollReady, POLL_INTERVAL_MS)
-        })
+      function renderUnavailable() {
+        setText('title', 'Service is not responding')
+        var blurb = document.getElementById('blurb')
+        blurb.innerHTML = 'The service <code></code> is not accepting HTTP requests, and the proxy could not read its container status. '
+        blurb.querySelector('code').textContent = serviceName
+        var retry = document.createElement('a')
+        retry.href = window.location.href
+        retry.textContent = 'Retry'
+        blurb.appendChild(retry)
+        document.getElementById('loader').classList.add('hidden')
+        show('logs', false)
+        show('cli-hint', true)
       }
 
-      schedule()
+      poll()
     </script>
   </body>
 </html>
