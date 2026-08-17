@@ -2,8 +2,22 @@ This is the source code for the nginx proxy image which is used by Navy to provi
 
 The image is based off jwilder/nginx-proxy.
 
-The 502 holding page polls `GET /__navy_internal_proxy/status`, which is answered by `status-helper.pl` over the mounted Docker socket (already mounted for `docker-gen`). It returns the compose service's container state, matched by `com.docker.compose.service`, so the page can distinguish starting from exited without guessing. The helper binds to `127.0.0.1` inside the proxy container; nginx proxies to it.
+## 502 holding page
 
-Readiness (`ready`) is a bare TCP connect from the proxy to the container's port. The page must never test readiness by re-requesting the visitor's own URL: that replays their request with their cookies, and on an OIDC `/login` URL it rewrites the state cookie and breaks the pending `/callback`.
+When an upstream returns 502/503, the proxy serves a holding page that polls for readiness and shows container state (starting vs exited) without guessing.
 
-Recent container logs are only included when `NAVY_STATUS_LOGS` is set to `1`/`true`/`yes`. Logs can contain tokens and client secrets, and this image is the base for Navy Manager's cloud proxy where vhosts are internet-reachable, so the default is off. The navy CLI sets it for locally-run proxies; override it via `httpProxyEnv` in your navy file or the `NAVY_HTTP_PROXY_ENV` allowlist.
+### Opt-in status endpoint
+
+`GET /__navy_internal_proxy/status` is **off by default**. It is only registered in nginx, and `status-helper.pl` only runs, when `NAVY_STATUS_ENDPOINT` is `1`/`true`/`yes`.
+
+This image is also the base for Navy Manager's cloud proxy (`FROM navycloud/navy-proxy`), where vhosts are internet-reachable. Leaving the endpoint off by default means cloud rebuilds do not expose Docker metadata unless they explicitly set the env var.
+
+The navy CLI sets `NAVY_STATUS_ENDPOINT=1` (and `NAVY_STATUS_LOGS=1`) for locally-run proxies. Override via `httpProxyEnv` in a navy file or the `NAVY_HTTP_PROXY_ENV` allowlist.
+
+### Behaviour when enabled
+
+`status-helper.pl` reads the already-mounted Docker socket (same mount `docker-gen` uses), finds the compose service named by the first DNS label of `Host` / `X-Forwarded-Host`, and returns JSON: container state, exit code, and a TCP-only `ready` flag (no HTTP request to the visitor URL — replaying that with cookies broke OIDC `state`).
+
+Recent log bodies are included only when `NAVY_STATUS_LOGS` is also set. Logs can contain tokens and client secrets.
+
+The helper binds to `127.0.0.1` inside the proxy container; nginx proxies to it.

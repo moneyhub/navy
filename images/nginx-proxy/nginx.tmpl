@@ -102,6 +102,8 @@ server {
 		try_files /error_page.css =404;
 	}
 
+	{{/* Opt-in: unauthenticated container status. Off unless NAVY_STATUS_ENDPOINT is set. */}}
+	{{ if or (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "1") (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "true") (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "yes") }}
 	# Available even when no vhost matches (container stopped / not launched).
 	location = /__navy_internal_proxy/status {
 		proxy_pass http://127.0.0.1:9191/status;
@@ -109,6 +111,7 @@ server {
 		proxy_set_header X-Forwarded-Host $host;
 		proxy_read_timeout 5s;
 	}
+	{{ end }}
 
 	location / {
 		return 503;
@@ -285,6 +288,7 @@ server {
 		try_files /error_page.css =404;
 	}
 
+	{{ if or (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "1") (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "true") (eq (or ($.Env.NAVY_STATUS_ENDPOINT) "") "yes") }}
 	# Container state + recent logs for the 502 holding page (local Docker sock).
 	location = /__navy_internal_proxy/status {
 		proxy_pass http://127.0.0.1:9191/status;
@@ -292,6 +296,7 @@ server {
 		proxy_set_header X-Forwarded-Host $host;
 		proxy_read_timeout 5s;
 	}
+	{{ end }}
 
 	location / {
 		{{ if eq $proto "uwsgi" }}

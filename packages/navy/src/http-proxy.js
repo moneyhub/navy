@@ -52,11 +52,15 @@ export function resolveProxyEnvAllowlist(): {[key: string]: string} {
   return result
 }
 
-// The proxy's holding page can show recent container logs. Those can contain
-// tokens, so the image keeps them off by default; a locally-run proxy is only
-// reachable from the developer's own machine, so we opt in here. Overridable
-// via navy file / allowlist so deployments on shared hosts can turn it off.
-const PROXY_ENV_DEFAULTS = { NAVY_STATUS_LOGS: '1' }
+// Holding-page status (+ optional logs) is off in the image by default: this
+// image is also the base for Navy Manager's cloud proxy, where vhosts are
+// internet-reachable. A locally-run proxy is only reachable from the
+// developer's machine, so we opt both in here. Overridable via navy file /
+// allowlist (e.g. set to 0 on shared hosts).
+const PROXY_ENV_DEFAULTS = {
+  NAVY_STATUS_ENDPOINT: '1',
+  NAVY_STATUS_LOGS: '1',
+}
 
 export function resolveProxyEnv(navyFile: ?Object): ?{[key: string]: string} {
   const merged = {

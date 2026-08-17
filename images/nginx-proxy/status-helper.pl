@@ -12,11 +12,14 @@ my $PORT        = $ENV{STATUS_HELPER_PORT} || 9191;
 my $LOG_TAIL    = 80;
 my $MAX_LOGS    = 32_000;
 
-# Container state is safe to expose; log bodies are not. Logs routinely carry
-# tokens and client secrets, and this image is also the base for Navy Manager's
-# cloud proxy, where vhosts are reachable from the public internet. Off unless
-# the operator opts in — the navy CLI sets this for local proxies.
-my $LOGS_ENABLED = ($ENV{NAVY_STATUS_LOGS} || '') =~ /^(1|true|yes)$/i ? 1 : 0;
+# This image is the base for Navy Manager's cloud proxy (public nip.io vhosts).
+# The whole status endpoint is off unless NAVY_STATUS_ENDPOINT is set; log
+# bodies need a second opt-in (NAVY_STATUS_LOGS). The navy CLI enables both for
+# locally-run proxies. Procfile also skips starting this process when unset.
+my $ENDPOINT_ENABLED = ($ENV{NAVY_STATUS_ENDPOINT} || '') =~ /^(1|true|yes)$/i ? 1 : 0;
+my $LOGS_ENABLED     = ($ENV{NAVY_STATUS_LOGS} || '') =~ /^(1|true|yes)$/i ? 1 : 0;
+
+die "status-helper: NAVY_STATUS_ENDPOINT is not enabled\n" unless $ENDPOINT_ENABLED;
 
 my $server = IO::Socket::INET->new(
   LocalAddr => '127.0.0.1',
