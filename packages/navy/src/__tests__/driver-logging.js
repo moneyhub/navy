@@ -167,14 +167,66 @@ describe('driver-logging', function () {
 
   describe('log', function () {
 
-    it('should write the dimmed message to stdout while logging is active', function () {
+    const written = () => stdoutWrite.getCalls().map(c => c.args[0]).join('')
+
+    it('should write the message to stdout while logging is active', function () {
       startDriverLogging('Active')
 
       stdoutWrite.resetHistory()
       log('hello')
 
-      expect(stdoutWrite.calledOnce).to.equal(true)
-      expect(stdoutWrite.firstCall.args[0]).to.contain('hello')
+      expect(written()).to.contain('hello')
+    })
+
+    it('should only show the latest line, without scrolling', function () {
+      startDriverLogging('Active')
+
+      stdoutWrite.resetHistory()
+      log(' abc Downloading 1MB\n abc Downloading 2MB\n')
+
+      expect(written()).to.contain('abc Downloading 2MB')
+      expect(written()).not.to.contain('1MB')
+    })
+
+    it('should keep the latest line on spinner ticks', function () {
+      startDriverLogging('Active')
+      log('pulling')
+
+      stdoutWrite.resetHistory()
+      clock.tick(dots.interval)
+
+      expect(written()).to.contain('pulling')
+    })
+
+    it('should truncate the line to the terminal width', function () {
+      const originalColumns = process.stdout.columns
+      process.stdout.columns = 10
+      startDriverLogging('Active')
+
+      stdoutWrite.resetHistory()
+      log('x'.repeat(50))
+      process.stdout.columns = originalColumns
+
+      expect(written()).to.contain('x'.repeat(9))
+      expect(written()).not.to.contain('x'.repeat(10))
+    })
+
+    it('should not write anything when not a TTY', function () {
+      process.stdout.isTTY = false
+      startDriverLogging('Active')
+
+      stdoutWrite.resetHistory()
+      log('hello')
+
+      expect(stdoutWrite.called).to.equal(false)
+    })
+
+    it('should print the start message once when not a TTY', function () {
+      process.stdout.isTTY = false
+      startDriverLogging('Active')
+      clock.tick(dots.interval * 3)
+
+      expect(consoleLog.getCalls().filter(c => c.args.join(' ').includes('Active'))).to.have.length(1)
     })
 
     it('should be a no-op when logging is not active', function () {

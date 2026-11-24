@@ -5,6 +5,7 @@ let _isDriverLogging = false
 let _spinnerInterval = null
 let _spinnerIndex = 0
 let _message = null
+let _lastLine = ''
 
 function _redraw(opts = {}) {
   let symbol = chalk.cyan(dots.frames[_spinnerIndex])
@@ -26,8 +27,8 @@ function _redraw(opts = {}) {
     return
   }
 
-  process.stdout.write('                                                                        \n')
-  process.stdout.write(` ${symbol} ${opts.success === false ? chalk.red(_message, 'FAILED') : _message}\n`)
+  process.stdout.write(`\x1b[2K${chalk.dim(_lastLine)}\n`)
+  process.stdout.write(`\x1b[2K ${symbol} ${opts.success === false ? chalk.red(_message, 'FAILED') : _message}\n`)
   process.stdout.cursorTo(0)
   process.stdout.moveCursor(0, -2)
 }
@@ -35,6 +36,9 @@ function _redraw(opts = {}) {
 export function startDriverLogging(message: string) {
   _isDriverLogging = true
   _message = message
+  _lastLine = ''
+
+  if (!process.stdout.isTTY) console.log(message)
 
   _redraw()
 
@@ -53,6 +57,7 @@ export function stopDriverLogging(opts = {}) {
   if (!isDriverLogging()) return
 
   _isDriverLogging = false
+  _lastLine = ''
   clearInterval(_spinnerInterval)
 
   _redraw({ success: opts.success != null ? opts.success : true })
@@ -65,7 +70,12 @@ export function isDriverLogging(): boolean {
 }
 
 export function log(message: string) {
-  if (!isDriverLogging()) return
+  if (!isDriverLogging() || !process.stdout.isTTY) return
 
-  process.stdout.write(chalk.dim(message))
+  const line = String(message).split('\n').map(l => l.trim()).filter(Boolean).pop()
+  if (!line) return
+
+  // a wrapped line would break the cursor-up-2 redraw
+  _lastLine = line.slice(0, (process.stdout.columns || 80) - 1)
+  _redraw()
 }
